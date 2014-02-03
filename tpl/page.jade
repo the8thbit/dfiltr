@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+	head
+		title= "Chat Test 0.0.1"
+		script(src='/chat.js')
+		script(src='/socket.io/socket.io.js')
+	body
+		#content(style='width:100%; height:400px; margin: 0; border: solid 1px #999; overflow-y: scroll;')
+		.controls
+			input.field(id='field', style='width:100%;')
+			input.send(id='send', type='button', value='send')
