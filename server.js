@@ -13,7 +13,6 @@
   process.env.OPENSHIFT_NODEJS_PORT;
 //====================================
 
-var port="8080";
 var express = require("express");
 var app = express();
 
@@ -31,7 +30,7 @@ app.use(express.static(__dirname + '/client'));
 //give node a port to listen on 
 var io = require('socket.io').listen(
 	app.listen(
-		PORT_NUM || port,
+		PORT_NUM || PORT_NUM,
    	IP_ADD
 	)
 );
