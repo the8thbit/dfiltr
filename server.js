@@ -14,7 +14,12 @@ app.get("/", function(req, res){
 app.use(express.static(__dirname + '/client'));
 
 //give node a port to listen on 
-var io = require('socket.io').listen(app.listen(port));
+var io = require('socket.io').listen(
+	app.listen(
+		process.env.OPENSHIFT_NODEJS_PORT || port,
+   	process.env.OPENSHIFT_NODEJS_IP
+	)
+);
 console.log("Listening on port " + port);
 
 
