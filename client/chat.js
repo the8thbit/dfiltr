@@ -1,7 +1,8 @@
 window.onload = function() {
  
     var messages = [];
-    var socket = io.connect(process.env.OPENSHIFT_NODEJS_IP);
+ 	 //var socket = io.connect('http://localhost');
+    var socket = io.connect('http://435-teamnoname.rhcloud.com/:8080');
     var field = document.getElementById("field");
     var sendButton = document.getElementById("send");
     var content = document.getElementById("content");
