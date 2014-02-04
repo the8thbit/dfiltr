@@ -1,6 +1,20 @@
+//====================================
+//SERVER CONFIGURATION
+//====================================
+//IP ADDRESS
+  var IP_ADD =
+//localhost;
+  process.env.OPENSHIFT_NODEJS_IP;
+//====================================
+//PORT NUMBER
+  var PORT_ADD = 
+//8080;
+//80;
+  process.env.OPENSHIFT_NODEJS_PORT;
+//====================================
+
 var express = require("express");
 var app = express();
-var port = 8080;
 
 //use jade templates for HTML and CSS
 app.set('views', __dirname + '/tpl');
@@ -14,12 +28,7 @@ app.get("/", function(req, res){
 app.use(express.static(__dirname + '/client'));
 
 //give node a port to listen on 
-var io = require('socket.io').listen(
-	app.listen(
-		process.env.OPENSHIFT_NODEJS_PORT || port,
-   	process.env.OPENSHIFT_NODEJS_IP
-	)
-);
+var io = require('socket.io').listen(app.listen(PORT_ADD, IP_ADD));
 console.log("Listening on port " + port);
 
 
