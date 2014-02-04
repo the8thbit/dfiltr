@@ -31,8 +31,8 @@ app.use(express.static(__dirname + '/client'));
 //give node a port to listen on 
 var io = require('socket.io').listen(
 	app.listen(
-		process.env.OPENSHIFT_NODEJS_PORT || port,
-   	process.env.OPENSHIFT_NODEJS_IP
+		PORT_NUM || port,
+   	IP_ADD
 	)
 );
 console.log("Listening on port " + port);
