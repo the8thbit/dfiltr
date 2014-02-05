@@ -9,11 +9,11 @@
 //PORT NUMBER
   var PORT_NUM = 
 //8080;
+8000;
 //80;
-  process.env.OPENSHIFT_NODEJS_PORT;
+//process.env.OPENSHIFT_NODEJS_PORT;
 //====================================
 
-var port="8080";
 var express = require("express");
 var app = express();
 
@@ -30,12 +30,10 @@ app.use(express.static(__dirname + '/client'));
 
 //give node a port to listen on 
 var io = require('socket.io').listen(
-	app.listen(process.env.OPENSHIFT_NODEJS_PORT, IP_ADD)
+	app.listen(PORT_NUM, IP_ADD)
 );
 
-console.log("Listening on port " + process.env.OPENSHIFT_NODEJS_PORT);
-
-io.set('transports', ['xhr-polling']);
+console.log("Listening on port " + PORT_NUM);
 
 io.sockets.on('connection', function (socket) {
 	console.log("user has connected");
