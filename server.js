@@ -32,7 +32,7 @@ app.use(express.static(__dirname + '/client'));
 var io = require('socket.io').listen(
 	app.listen(process.env.OPENSHIFT_NODEJS_PORT, IP_ADD)
 );
-console.log("Listening on port " + port);
+console.log("Listening on port " + process.env.OPENSHIFT_NODEJS_PORT);
 
 
 io.sockets.on('connection', function (socket) {
