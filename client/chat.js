@@ -1,7 +1,8 @@
 window.onload = function() {
 	var messages = [];
 	//var socket = io.connect('http://localhost:8080');
-	var socket = io.connect("http://" + process.env.OPENSHIFT_NODEJS_IP + ":" + process.env.OPENSHIFT_NODEJS_PORT);
+	var uri = "http://" + process.env.OPENSHIFT_NODEJS_IP + ":" + process.env.OPENSHIFT_NODEJS_PORT;
+	var socket = io.connect(uri);
 	var field = document.getElementById("field");
 	var sendButton = document.getElementById("send");
 	var content = document.getElementById("content");
