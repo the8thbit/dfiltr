@@ -8,9 +8,9 @@
 //======================================
 //PORT NUMBER
   var PORT_NUM = 
-//8080;
+  8080;
 //80;
-  process.env.OPENSHIFT_NODEJS_PORT;
+//process.env.OPENSHIFT_NODEJS_PORT;
 //====================================
 
 var express = require("express");
@@ -30,7 +30,7 @@ app.use(express.static(__dirname + '/client'));
 //give node a port to listen on 
 var io = require('socket.io').listen(
 	app.listen(
-		PORT_NUM || PORT_NUM,
+		PORT_NUM,
    	IP_ADD
 	)
 );
