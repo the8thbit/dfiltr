@@ -9,9 +9,9 @@
 //PORT NUMBER
   var PORT_NUM = 
 //8080;
-//8000;
+8000;
 //80;
-process.env.OPENSHIFT_NODEJS_PORT;
+//process.env.OPENSHIFT_NODEJS_PORT;
 //====================================
 
 var express = require("express");
