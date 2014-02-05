@@ -17,8 +17,6 @@ var port="8080";
 var express = require("express");
 var app = express();
 
-app.set('transports', ['xhr-polling']);
-
 //use jade templates for HTML and CSS
 app.set('views', __dirname + '/tpl');
 app.set('view engine', "jade");
@@ -34,8 +32,10 @@ app.use(express.static(__dirname + '/client'));
 var io = require('socket.io').listen(
 	app.listen(process.env.OPENSHIFT_NODEJS_PORT, IP_ADD)
 );
+
 console.log("Listening on port " + process.env.OPENSHIFT_NODEJS_PORT);
 
+io.set('transports', ['xhr-polling']);
 
 io.sockets.on('connection', function (socket) {
 	console.log("user has connected");
