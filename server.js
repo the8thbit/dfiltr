@@ -17,9 +17,6 @@ var port="8080";
 var express = require("express");
 var app = express();
 
-//use websockets for transport
-app.set("transports", ["websocket"]);
-
 //use jade templates for HTML and CSS
 app.set('views', __dirname + '/tpl');
 app.set('view engine', "jade");
