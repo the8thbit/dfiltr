@@ -33,7 +33,9 @@ var io = require('socket.io').listen(
 	app.listen(PORT_NUM, IP_ADD)
 );
 
-io.set('transports', ['websocket']);
+io.configure(function() {
+	io.set("transports", ["websocket"]);
+});
 
 console.log("Listening on port " + PORT_NUM);
 
