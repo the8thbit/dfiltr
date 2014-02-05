@@ -17,6 +17,8 @@ var port="8080";
 var express = require("express");
 var app = express();
 
+app.set('transports', ['xhr-polling']);
+
 //use jade templates for HTML and CSS
 app.set('views', __dirname + '/tpl');
 app.set('view engine', "jade");
