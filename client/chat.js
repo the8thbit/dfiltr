@@ -8,8 +8,8 @@ window.onload = function() {
 	var content = document.getElementById("content");
  
 	socket.on('message', function (data) {
-		if(data.message) {
-			messages.push(data.message);
+		if(data) {
+			messages.push(data);
 			var html = '';
 			for(var i=0; i<messages.length; i++) {
 				html += messages[i] + '<br />';
