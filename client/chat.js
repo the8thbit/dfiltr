@@ -5,12 +5,12 @@ window.onload = function() {
 //============================
 //IP ADDRESS
   var IP_ADD = 
-"localhost"; //toggle on for local testing
+  "localhost"; //toggle on for local testing
 //"435-teamnoname.rhcloud.com"; //toggle on for openshift deploy
 //----------------------------
 //PORT NUMBER
   var PORT_NUM = 
-8080; //use with localhost
+  8080; //use with localhost
 //80;
 //8000; //neccessary for openshift, as websockets is restricted to this port
 //---------------------------- 
