@@ -1,11 +1,16 @@
 doctype html
-html(lang="en")
+html(lang='en')
 	head
 		title= "Chat Test"
-		script(src='/chat.js')
+		link(rel='stylesheet', type='text/css', href='/tpl/style.css')
+		script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js') 
+		script(src='/client/chat.js')
 		script(src='/socket.io/socket.io.js')
 	body
-		#content(style='width:100%; height:400px; margin: 0; border: solid 1px #999; overflow-y: scroll;')
-		.controls
-			input.field(id='field', style='width:100%;')
-			input.send(id='send', type='button', value='send')
+		#chat-output-wrapper
+			#chat-output
+		#chat-input-wrapper
+			#chat-input
+				#chat-input-field-wrapper
+					textarea#chat-input-field(type='textarea', autofocus='true')
+				input#chat-input-send(type='button', value='send')

@@ -1,11 +1,10 @@
 window.onload = function() {
 	var messages = [];
-	//var socket = io.connect('http://localhost:8080');
-	//var uri = "http://" + process.env.OPENSHIFT_NODEJS_IP + ":" + process.env.OPENSHIFT_NODEJS_PORT;
-	var socket = io.connect("http://435-teamnoname.rhcloud.com:8000/");
-	var field = document.getElementById("field");
-	var sendButton = document.getElementById("send");
-	var content = document.getElementById("content");
+	var socket = io.connect('http://localhost:8080/'); //toggle on for local testing
+	//var socket = io.connect("http://435-teamnoname.rhcloud.com:8000/"); //toggle on for openshift deploy
+	var field = document.getElementById("chat-input-field");
+	var sendButton = document.getElementById("chat-input-send");
+	var content = document.getElementById("chat-output");
  
 	socket.on('message', function (data) {
 		if(data.message) {
@@ -20,9 +19,22 @@ window.onload = function() {
 		}
 	});
  
+	$("textarea").keydown(function(e){
+		if (e.keyCode == 13 && !e.shiftKey) {
+			e.preventDefault();
+			var text = field.value;
+			field.value = '';
+			console.log("you: ", text);
+			socket.emit('send', { message: text });
+			content.scrollTop = content.scrollHeight * 10;
+		}
+	}); 
+
 	sendButton.onclick = function() {
 		var text = field.value;
+		field.value = '';
 		console.log("you: ", text);
 		socket.emit('send', { message: text });
+		content.scrollTop = content.scrollHeight + 1;
 	};
 }
