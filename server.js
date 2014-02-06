@@ -3,30 +3,29 @@
 //====================================
 //IP ADDRESS 
   var IP_ADD =
-//'localhost'; //toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
+ 'localhost'; //toggle on for local testing
+// process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
 //======================================
 //PORT NUMBER
   var PORT_NUM = 
-//8080; //toggle on for local testing
+  8080; //toggle on for local testing
 //80;
-  process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
+//process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
 //====================================
 
 var express = require('express');
 var app = express();
 app.use(express.static(__dirname + '/'));
 
-app.get('/', function(req, res){
-	res.render('page');
-});
-
 //use jade templates for HTML and CSS
 app.set('views', __dirname + '/tpl');
 app.set('view engine', 'jade');
 app.engine('jade', require('jade').__express);
+app.get('/', function(req, res){
+	res.render('page');
+});
 
-//give node a port to listen on 
+//give node a location to listen on 
 var io = require('socket.io').listen(
 	app.listen(PORT_NUM, IP_ADD)
 );
