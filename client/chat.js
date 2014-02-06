@@ -4,15 +4,15 @@ window.onload = function() {
 //CLIENT CONFIGURATION
 //============================
 //IP ADDRESS
-  var IP_ADDRESS = 
-//"localhost"; //toggle on for local testing
-  "435-teamnoname.rhcloud.com"; //toggle on for openshift deploy
+  var IP_ADD = 
+"localhost"; //toggle on for local testing
+//"435-teamnoname.rhcloud.com"; //toggle on for openshift deploy
 //----------------------------
 //PORT NUMBER
   var PORT_NUM = 
-//8080; //use with localhost
+8080; //use with localhost
 //80;
-  8000; //neccessary for openshift, as websockets is restricted to this port
+//8000; //neccessary for openshift, as websockets is restricted to this port
 //---------------------------- 
 
 	var messages = [];
