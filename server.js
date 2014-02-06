@@ -13,6 +13,7 @@
 //process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
 //====================================
 
+//use express
 var express = require('express');
 var app = express();
 app.use(express.static(__dirname + '/'));
@@ -35,9 +36,9 @@ io.configure(function() {
 	io.set('transports', ['websocket']);
 });
 
-console.log('listening at ' + IP_ADD + ' on port ' + PORT_NUM);
+console.log('listening at ' + IP_ADD + ' on port ' + PORT_NUM); //listening at IP on port PORT
 
-
+//chat protocol code
 io.sockets.on('connection', function (socket) {
 	console.log('user has connected');
 	socket.emit('message', { message: 'welcome to the chat' });
