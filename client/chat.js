@@ -44,24 +44,15 @@ window.onload = function() {
 	$("textarea").keydown(function(e){
 		if (e.keyCode == 13 && !e.shiftKey) {
 			e.preventDefault();
-			var text = field.value;
-			field.value = '';
-			if( text && text != '' ) {
-				messages.push(text);
-					var html = '';
-					for(var i=0; i<messages.length; i++) {
-						html += messages[i] + '<br />';
-					}
-				content.innerHTML = html;
-				content.scrollTop = content.scrollHeight * 10;
-				console.log("you: ", text);
-				socket.emit('send', { message: text, id: id });
-			}	
+			sendMessage( field.value );	
 		}
 	}); 
 
 	sendButton.onclick = function() {
-		var text = field.value;
+		sendMessage( field.value );
+	};
+
+	function sendMessage( text ) {
 		field.value = '';
 		if( text && text != '' ) {
 			messages.push(text);

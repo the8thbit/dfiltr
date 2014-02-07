@@ -45,7 +45,7 @@ io.sockets.on('connection', function (socket) {
 	numUsers++;
 	console.log('user has connected');
 	socket.emit('setid', { id: numUsers });
-	socket.emit('message', { message: 'welcome to the chat user ' + numUsers });
+	socket.emit('message', { message: 'welcome to the chat, user number ' + numUsers });
 
 	//when server recieves 'send' send 'message' to clients 
 	socket.on('send', function (data) {
