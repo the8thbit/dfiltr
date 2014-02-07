@@ -52,7 +52,7 @@ window.onload = function() {
 		sendMessage( field.value );
 	};
 
-	function sendMessage( var text ) {
+	function sendMessage( text ) {
 		field.value = '';
 		if( text && text != '' ) {
 			messages.push(text);
