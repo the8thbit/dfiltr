@@ -5,14 +5,14 @@ window.onload = function() {
 //============================
 //IP ADDRESS
   var IP_ADD = 
-//"localhost"; //toggle on for local testing
-  "435-teamnoname.rhcloud.com"; //toggle on for openshift deploy
+  "localhost"; //toggle on for local testing
+//"435-teamnoname.rhcloud.com"; //toggle on for openshift deploy
 //----------------------------
 //PORT NUMBER
   var PORT_NUM = 
-//8080; //use with localhost
+  8080; //use with localhost
 //80;
-  8000; //neccessary for openshift, as websockets is restricted to this port
+//8000; //neccessary for openshift, as websockets is restricted to this port
 //---------------------------- 
 
 	var messages = [];
@@ -20,16 +20,22 @@ window.onload = function() {
 	var field = document.getElementById("chat-input-field");
 	var sendButton = document.getElementById("chat-input-send");
 	var content = document.getElementById("chat-output");
-	var id;
-
-	socket.on('setid', function (data) {
-		if(data.id) {
-			id = data.id;
-		}
-	});
  
+	$("textarea").keydown(function(e){
+		if (e.keyCode == 13 && !e.shiftKey) {
+			e.preventDefault();
+			addMessage( field.value );
+			sendMessage( field.value );
+		}
+	}); 
+
+	sendButton.onclick = function() {
+		addMessage( field.value );
+		sendMessage( field.value );
+	};
+
 	socket.on('message', function (data) {
-		if(data.message && data.id != id && data.message != '') {
+		if(data.message && data.message != '') {
 			messages.push(data.message);
 			var html = '';
 			for(var i=0; i<messages.length; i++) {
@@ -41,19 +47,7 @@ window.onload = function() {
 		}
 	});
  
-	$("textarea").keydown(function(e){
-		if (e.keyCode == 13 && !e.shiftKey) {
-			e.preventDefault();
-			sendMessage( field.value );	
-		}
-	}); 
-
-	sendButton.onclick = function() {
-		sendMessage( field.value );
-	};
-
-	function sendMessage( text ) {
-		field.value = '';
+	addMessage = function( text ) {
 		if( text && text != '' ) {
 			messages.push(text);
 				var html = '';
@@ -61,9 +55,15 @@ window.onload = function() {
 					html += messages[i] + '<br />';
 				}
 			content.innerHTML = html;
-			content.scrollTop = content.scrollHeight * 10;
-			console.log("you: ", text);
-			socket.emit('send', { message: text, id: id });
+		} else {
+			console.log("error transporting message:", data);
 		}
 	};
+
+	sendMessage = function( text ) {
+		field.value = '';
+		content.scrollTop = content.scrollHeight * 10;
+		socket.emit('send', { message: text });
+		console.log("you: ", text);
+	}
 }
