@@ -3,14 +3,14 @@
 //====================================
 //IP ADDRESS 
   var IP_ADD =
-//'localhost'; //toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
+  'localhost'; //toggle on for local testing
+//process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
 //======================================
 //PORT NUMBER
   var PORT_NUM = 
-//8080; //toggle on for local testing
+  8080; //toggle on for local testing
 //80;
-  process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
+//process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
 //====================================
 
 //use express
@@ -39,9 +39,13 @@ io.configure(function() {
 console.log('listening at ' + IP_ADD + ' on port ' + PORT_NUM); //listening at IP on port PORT
 
 //chat protocol code
+var numUsers = 0;
+
 io.sockets.on('connection', function (socket) {
+	numUsers++;
 	console.log('user has connected');
-	socket.emit('message', { message: 'welcome to the chat' });
+	socket.emit('setid', { id: numUsers });
+	socket.emit('message', { message: 'welcome to the chat user ' + numUsers });
 
 	//when server recieves 'send' send 'message' to clients 
 	socket.on('send', function (data) {
