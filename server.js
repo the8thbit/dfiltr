@@ -41,26 +41,57 @@ console.log('listening at ' + IP_ADD + ' on port ' + PORT_NUM); //listening at I
 //chat protocol code
 var sockets = []; //list of all users
 var pool = [];    //pool of unconnected users
-var convos = [];  //hash of socket/socket pairs representing conversations
 
 io.sockets.on('connection', function (socket) {
-	sockets.push(socket);
-	console.log('user has connected');
+	console.log('user connecting...');
+	console.log('| user added to list of users at position ' + sockets.push(socket));
 	socket.emit('message', { message: 'welcome to the chat.' });
 
 	if( pool.length ) {
-		var partner = pool[0];
-		convos[socket] = partner;
-		pool.shift();
-		socket.emit('message', { message: 'Youve been paired with a user.' });
-		partner.emit('message', { message: 'Youve been paired with a user.' });
+		var partner = pool.shift();
+		partner.pool = null;
+		socket.partner = partner;
+		partner.partner = socket;
+		socket.partner.emit('message', { message: 'You\'ve been paired with a user.' });
+		partner.partner.emit('message', { message: 'You\'ve been paired with a user.' });
 	} else {
-		pool.push(socket);
+		socket.pool = pool.push(socket);
 		socket.emit('message', { message: 'Looking for a partner...' });
 	}
 
-	//when server recieves 'send' send 'message' to clients 
+	//when server recieves 'send' relay 'message' to client 
 	socket.on('send', function (data) {
-		convos[socket].emit('message', data);
+		if( socket.partner ) {
+			socket.partner.emit('message', data);
+		} else {
+			socket.emit('message', { message: 'We are having technical difficulties. You don\'t have a partner, but you think you do. Basically, you\'re far more alone than you believe. Let\'s get you someone new to talk to.' });
+			if( !socket.pool ) {
+				socket.pool = pool.push(socket); 
+			}  
+			socket.emit('message', { message: 'Looking for a partner...' });
+		}
+	});
+
+	socket.on('disconnect', function () {		
+		console.log('user disconnecting...');
+
+		if( socket.pool ) {
+			console.log("| user is in pool at position " + socket.pool );
+			console.log("| current size of pool is " + pool.length);
+			console.log("| removing user from pool...");	
+			pool.splice( socket.pool - 1, 1);
+			socket.pool = null;
+			console.log("| current size of pool is " + pool.length);
+		}
+
+		if( socket.partner ) {
+			console.log("| user has a conversational partner");
+			console.log("| disconnecting user from partner...");
+			socket.partner.emit('message', { message: 'Your conversational partner has disconnected.' });
+			socket.partner.partner = null;
+			socket.partner = null;
+		}
+
+		console.log('user disconnected');
 	});
 });
