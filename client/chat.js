@@ -37,24 +37,34 @@ window.onload = function() {
 	socket.on( 'message', function( data ) {
 		addMessage( data.message );
 	});
- 
+
+	//what to do when an event is triggered on the user's socket
+	socket.on( 'event', function( data ) {
+		if( data.type = 'paired to user' ) {
+			document.getElementById( 'chat-input-field' ).style.backgroundColor = 'white';
+			document.getElementById( 'chat-input-field' ).setAttribute( 'readonly', 'false' );
+		}
+	}); 
+
 	addMessage = function( text ) {
 		if( text && text != '' ) {
-			messages.push(text);
+			messages.push( text );
 			var html = '';
 			for( var i=0; i < messages.length; i++ ) {
 				html += messages[i] + '<br />';
 			}
 			content.innerHTML = html;
-		} else {
-			console.log( 'error transporting message:', data );
+		} else if( !text ) {
+			console.log( 'error transporting message' );
 		}
 	};
 
 	sendMessage = function( text ) {
-		field.value = '';
-		content.scrollTop = content.scrollHeight * 10;
-		socket.emit( 'send', { message: text } );
-		console.log( 'you: ', text );
+		if( text != '' ) {		
+			field.value = '';
+			content.scrollTop = content.scrollHeight * 10;
+			socket.emit( 'send', { message: text } );
+			console.log( 'you: ', text );
+		}
 	}
 }

@@ -48,7 +48,7 @@ io.sockets.on( 'connection', function( socket ) {
 	console.log( 'user connecting...' );
 	socket.pos = sockets.push( socket ); //add socket to the server's list of sockets
 	console.log( '| user added to list of users at position ' + sockets.length );
-	socket.emit( 'message', { message: 'welcome to the chat.' } );
+	socket.emit( 'message', { message: 'Welcome to the chat.' } );
 
 	//if there are users in the pool, take one of them and make them your
 	//partner. If not, jump in the pool.
@@ -61,6 +61,8 @@ io.sockets.on( 'connection', function( socket ) {
 		partner.partner = socket; //access the user's conversational partner
 		socket.partner.emit( 'message', { message: 'You\'ve been paired with a user.' } );
 		partner.partner.emit( 'message', { message: 'You\'ve been paired with a user.' } );
+		socket.emit( 'event', { type: 'paired to user' } );
+		partner.emit( 'event', { type: 'paired to user' } );
 	} else {
 		console.log( '| partner could not be found in pool' );
 		socket.pool = pool.push( socket );
