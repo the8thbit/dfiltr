@@ -39,19 +39,28 @@ io.configure(function() {
 console.log('listening at ' + IP_ADD + ' on port ' + PORT_NUM); //listening at IP on port PORT
 
 //chat protocol code
-var connections = [];
+var sockets = []; //list of all users
+var pool = [];    //pool of unconnected users
+var convos = [];  //hash of socket/socket pairs representing conversations
 
 io.sockets.on('connection', function (socket) {
-	connections.push(socket);
+	sockets.push(socket);
 	console.log('user has connected');
 	socket.emit('message', { message: 'welcome to the chat.' });
 
+	if( pool.length ) {
+		var partner = pool[0];
+		convos[socket] = partner;
+		pool.shift();
+		socket.emit('message', { message: 'Youve been paired with a user.' });
+		partner.emit('message', { message: 'Youve been paired with a user.' });
+	} else {
+		pool.push(socket);
+		socket.emit('message', { message: 'Looking for a partner...' });
+	}
+
 	//when server recieves 'send' send 'message' to clients 
 	socket.on('send', function (data) {
-		for(var i = 0; i < connections.length; i++) {
-			if(socket != connections[i] ) { 
-				connections[i].emit('message', data);
-			}
-		}
+		convos[socket].emit('message', data);
 	});
 });
