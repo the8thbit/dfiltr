@@ -3,14 +3,14 @@
 //====================================
 //IP ADDRESS 
   var IP_ADD =
-  'localhost'; //toggle on for local testing
-//process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
+//'localhost'; //toggle on for local testing
+  process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
 //======================================
 //PORT NUMBER
   var PORT_NUM = 
-  8080; //toggle on for local testing
+//8080; //toggle on for local testing
 //80;
-//process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
+  process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
 //====================================
 
 //====================================
