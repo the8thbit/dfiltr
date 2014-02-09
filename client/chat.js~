@@ -58,15 +58,15 @@ window.onload = function() {
 				html += messages[i] + '<br />';
 			}
 			content.innerHTML = html;
+			content.scrollTop = content.scrollHeight * 10;
 		} else if( !text ) {
 			console.log( 'error transporting message' );
 		}
 	};
 
 	sendMessage = function( text ) {
-		if( text != '' ) {		
+		if( text != '' ) {
 			field.value = '';
-			content.scrollTop = content.scrollHeight * 10;
 			socket.emit( 'send', { message: text } );
 			console.log( 'you: ', text );
 		}
