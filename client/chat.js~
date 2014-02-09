@@ -42,7 +42,7 @@ window.onload = function() {
 	socket.on( 'event', function( data ) {
 		if( data.type = 'paired to user' ) {
 			document.getElementById( 'chat-input-field' ).style.backgroundColor = 'white';
-			document.getElementById( 'chat-input-field' ).setAttribute( 'readonly', 'false' );
+			document.getElementById( 'chat-input-field' ).readOnly = false;
 		}
 	}); 
 
@@ -55,7 +55,7 @@ window.onload = function() {
 			}
 			content.innerHTML = html;
 		} else if( !text ) {
-			console.log( 'error transporting message.' );
+			console.log( 'error transporting message' );
 		}
 	};
 

@@ -88,6 +88,7 @@ io.sockets.on( 'connection', function( socket ) {
 		if( socket.partner ) {
 			console.log( '| user has a conversational partner' );
 			console.log( '| disconnecting user from partner...' );
+			socket.emit( 'event', { type: 'partner disconnected' } );
 			socket.partner.emit( 'message', { message: 'Your conversational partner has disconnected.' } );
 			socket.partner.partner = null;
 			socket.partner = null;

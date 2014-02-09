@@ -42,7 +42,12 @@ window.onload = function() {
 	socket.on( 'event', function( data ) {
 		if( data.type = 'paired to user' ) {
 			document.getElementById( 'chat-input-field' ).style.backgroundColor = 'white';
-			document.getElementById( 'chat-input-field' ).setAttribute( 'readonly', 'false' );
+			document.getElementById( 'chat-input-field' ).readOnly = false;
+		}
+
+		if( data.type = 'partner disconnected' ) {
+			document.getElementById( 'chat-input-field' ).style.backgroundColor = '#eeeeee';
+			document.getElementById( 'chat-input-field' ).readOnly = true;
 		}
 	}); 
 
