@@ -40,12 +40,11 @@ window.onload = function() {
 
 	//what to do when an event is triggered on the user's socket
 	socket.on( 'event', function( data ) {
-		if( data.type = 'paired to user' ) {
+		console.log( data.type );
+		if( data.type == 'paired to user' ) {
 			document.getElementById( 'chat-input-field' ).style.backgroundColor = 'white';
 			document.getElementById( 'chat-input-field' ).readOnly = false;
-		}
-
-		if( data.type = 'partner disconnected' ) {
+		} else if( data.type == 'partner disconnected' ) {
 			document.getElementById( 'chat-input-field' ).style.backgroundColor = '#eeeeee';
 			document.getElementById( 'chat-input-field' ).readOnly = true;
 		}
