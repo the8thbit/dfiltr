@@ -45,10 +45,10 @@ var pool = [];    //pool of unpaired users
 
 //what to do when the socket connects (this also bootstraps the rest of the protocol)
 io.sockets.on( 'connection', function( socket ) {
+	socket.emit( 'message', { message: 'Welcome to the chat.' } );
 	console.log( 'user connecting...' );
 	socket.pos = sockets.push( socket ); //add socket to the server's list of sockets
 	console.log( '| user added to list of users at position ' + sockets.length );
-	socket.emit( 'message', { message: 'Welcome to the chat.' } );
 
 	//if there are users in the pool, take one of them and make them your
 	//partner. If not, jump in the pool.
