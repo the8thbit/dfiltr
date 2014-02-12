@@ -30,8 +30,14 @@
   8000;                                 // neccessary for openshift, as websockets is restricted to this port
 //======================================//
 
+
+
+
 //server-side stuff
-module.exports.CLIENT_IP   = CLIENT_IP;
-module.exports.CLIENT_PORT = CLIENT_PORT;
-module.exports.SERVER_IP   = SERVER_IP;
-module.exports.SERVER_PORT = SERVER_PORT;
+if( process.env ) {                          // TOGGLE ON FOR OPENSHIFT DEPLOY
+	module.exports.CLIENT_IP   = CLIENT_IP;
+	module.exports.CLIENT_PORT = CLIENT_PORT;
+	module.exports.SERVER_IP   = SERVER_IP;
+	module.exports.SERVER_PORT = SERVER_PORT;
+}                                            // TOGGLE ON FOR OPENSHIFT DEPLOY
+
