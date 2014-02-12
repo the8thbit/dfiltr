@@ -1,21 +1,8 @@
 //====================================
-//SERVER CONFIGURATION
-//====================================
-//IP ADDRESS 
-  var IP_ADD =
-//'localhost'; //toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_IP; //toggle on for openshift deploy
-//======================================
-//PORT NUMBER
-  var PORT_NUM = 
-//8080; //toggle on for local testing
-//80;
-  process.env.OPENSHIFT_NODEJS_PORT; //toggle on for openshift deploy
-//====================================
-
-//====================================
 //SERVER START UP
 //====================================
+var config = require( './config.js' );
+
 //use express
 var express = require( 'express' );
 var app = express();
@@ -28,14 +15,14 @@ app.engine( 'jade', require( 'jade' ).__express );
 app.get( '/', function( req, res ){ res.render( 'page' ); } );
 
 //use socket.io and give it a location to listen on 
-var io = require( 'socket.io' ).listen( app.listen(PORT_NUM, IP_ADD) );
+var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
 
 //turn websockets on
 io.configure( function() {
 	io.set( 'transports', [ 'websocket' ] );
 } );
 
-console.log( 'listening at ' + IP_ADD + ' on port ' + PORT_NUM ); 
+console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT ); 
 
 //====================================
 //CHAT PROTOCOL
@@ -45,13 +32,13 @@ var pool = [];    //pool of unpaired users
 
 //what to do when the socket connects (this also bootstraps the rest of the protocol)
 io.sockets.on( 'connection', function( socket ) {
-	socket.emit( 'message', { message: 'Welcome to the chat.' } );
 	console.log( 'user connecting...' );
 	socket.pos = sockets.push( socket ); //add socket to the server's list of sockets
 	console.log( '| user added to list of users at position ' + sockets.length );
+	socket.emit( 'message', { message: 'Welcome to the chat.' } );
 
 	//if there are users in the pool, take one of them and make them your
-	//partner. If not, jump in the pool.
+	//partner. If not, jump in the pool.f
 	if( pool.length ) {
 		console.log( '| partner found in pool' );
 		var partner = pool.shift();
@@ -61,8 +48,8 @@ io.sockets.on( 'connection', function( socket ) {
 		partner.partner = socket; //access the user's conversational partner
 		socket.partner.emit( 'message', { message: 'You\'ve been paired with a user.' } );
 		partner.partner.emit( 'message', { message: 'You\'ve been paired with a user.' } );
-		socket.emit( 'event', { type: 'paired to user' } );
-		partner.emit( 'event', { type: 'paired to user' } );
+		socket.emit( 'event', { type: 'partner connected' } );
+		partner.emit( 'event', { type: 'partner connected' } );
 	} else {
 		console.log( '| partner could not be found in pool' );
 		socket.pool = pool.push( socket );
@@ -104,7 +91,7 @@ io.sockets.on( 'connection', function( socket ) {
 		}
 
 		console.log( 'user disconnected' );
-	} );
+	});
 
 	//when server recieves 'send' relay 'message' to client
 	//'send' is a chat message coming from a client, and
@@ -117,5 +104,5 @@ io.sockets.on( 'connection', function( socket ) {
 			if( !socket.pool ) { socket.pool = pool.push( socket ); }  
 			socket.emit( 'message', { message: 'Looking for a partner...' } );
 		}
-	} );
-} );
+	});
+});

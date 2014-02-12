@@ -33,13 +33,24 @@ body {
 	margin-top:0.5%;
 }
 
+#chat-input-disconnect {
+	position:relative;
+	padding: 10px 15px; 
+	float:left;
+	left:-2px;
+	margin-right: 0.41%;
+	width:14%; height:101.5%;
+	background:#4479BA; 
+	color:#FFF; 
+	border:1px solid gray;	
+}
+
 #chat-input-field-wrapper {
 	position:relative; 
 	float:left;
-	width:85.5%; height:100%;
+	width:71%; height:100%;
 	resize: none;
 	border:1px solid gray;
-	font-family:helvetica; 
 }
 
 #chat-input-field {
@@ -48,6 +59,7 @@ body {
 	resize: none;
 	border:0px none;
 	background-color:#eeeeee;
+	font-family:helvetica;
 }
 
 #chat-input-send {

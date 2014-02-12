@@ -1,21 +1,9 @@
-//============================
-//CLIENT CONFIGURATION
-//============================
-//IP ADDRESS
-  var IP_ADD = 
-//"localhost"; //toggle on for local testing
-  "435-teamnoname.rhcloud.com"; //toggle on for openshift deploy
-//----------------------------
-//PORT NUMBER
-  var PORT_NUM = 
-//8080; //use with localhost
-//80;
-  8000; //neccessary for openshift, as websockets is restricted to this port
-//----------------------------
+document.write( '<script type="text/javascript" src="../config.js">' );
+document.write( '<\/script>' );
 
 window.onload = function() {
 	var messages = [];
-	var socket = io.connect( 'http://' + IP_ADD + ':' + PORT_NUM + '/' );
+	var socket = io.connect( 'http://' + 'localhost' + ':' + '8080' + '/' );
 	var field = document.getElementById( 'chat-input-field' );
 	var sendButton = document.getElementById( 'chat-input-send' );
 	var content = document.getElementById( 'chat-output' );
@@ -41,12 +29,14 @@ window.onload = function() {
 	//what to do when an event is triggered on the user's socket
 	socket.on( 'event', function( data ) {
 		console.log( data.type );
-		if( data.type == 'paired to user' ) {
-			document.getElementById( 'chat-input-field' ).style.backgroundColor = 'white';
-			document.getElementById( 'chat-input-field' ).readOnly = false;
+		if( data.type == 'partner connected' ) {
+			content.value = '';
+			field.style.backgroundColor = 'white';
+			field.readOnly = false;
 		} else if( data.type == 'partner disconnected' ) {
-			document.getElementById( 'chat-input-field' ).style.backgroundColor = '#eeeeee';
-			document.getElementById( 'chat-input-field' ).readOnly = true;
+			field.style.backgroundColor = '#eeeeee';
+			field.readOnly = true;
+			field.value = '';
 		}
 	}); 
 
