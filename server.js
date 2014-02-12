@@ -35,10 +35,9 @@ io.sockets.on( 'connection', function( socket ) {
 	console.log( 'user connecting...' );
 	socket.pos = sockets.push( socket ); //add socket to the server's list of sockets
 	console.log( '| user added to list of users at position ' + sockets.length );
-	socket.emit( 'message', { message: 'Welcome to the chat.' } );
 
 	//if there are users in the pool, take one of them and make them your
-	//partner. If not, jump in the pool.f
+	//partner. If not, jump in the pool.
 	if( pool.length ) {
 		console.log( '| partner found in pool' );
 		var partner = pool.shift();
@@ -46,15 +45,15 @@ io.sockets.on( 'connection', function( socket ) {
 		console.log( '| partner removed from pool. Current pool size is: ' + pool.length );
 		socket.partner = partner; //adds a '.partner' var to the socket which can be used to
 		partner.partner = socket; //access the user's conversational partner
-		socket.partner.emit( 'message', { message: 'You\'ve been paired with a user.' } );
-		partner.partner.emit( 'message', { message: 'You\'ve been paired with a user.' } );
+		socket.partner.emit( 'message', { message: 'You\'ve been paired with a user.', type: 'server' } );
+		partner.partner.emit( 'message', { message: 'You\'ve been paired with a user.', type: 'server' } );
 		socket.emit( 'event', { type: 'partner connected' } );
 		partner.emit( 'event', { type: 'partner connected' } );
 	} else {
 		console.log( '| partner could not be found in pool' );
 		socket.pool = pool.push( socket );
 		console.log( '| added user to pool at position ' + socket.pool );
-		socket.emit( 'message', { message: 'Looking for a partner...' } );
+		socket.emit( 'message', { message: 'Looking for a partner...', type: 'server' } );
 	}
 
 	console.log( 'user connected' );
@@ -76,7 +75,7 @@ io.sockets.on( 'connection', function( socket ) {
 			console.log( '| user has a conversational partner' );
 			console.log( '| disconnecting user from partner...' );
 			socket.partner.emit( 'event', { type: 'partner disconnected' } );
-			socket.partner.emit( 'message', { message: 'Your conversational partner has disconnected.' } );
+			socket.partner.emit( 'message', { message: 'Your conversational partner has disconnected.', type: 'server' } );
 			socket.partner.partner = null;
 			socket.partner = null;
 		}
@@ -97,12 +96,13 @@ io.sockets.on( 'connection', function( socket ) {
 	//'send' is a chat message coming from a client, and
 	//'message' is a chat message being sent from the server to a client.
 	socket.on( 'send', function( data ) {
+		data.type = 'partner';
 		if( socket.partner ) {
-			socket.partner.emit( 'message', data );
+			socket.partner.emit( 'message', data  );
 		} else {
-			socket.emit( 'message', { message: 'We are having technical difficulties. You don\'t have a partner, but you think you do. Basically, you\'re far more alone than you believe. Let\'s get you someone new to talk to.' } );
+			socket.emit( 'message', { message: 'We are having technical difficulties. You don\'t have a partner, but you think you do. Basically, you\'re far more alone than you believe. Let\'s get you someone new to talk to.', type: 'server'} );
 			if( !socket.pool ) { socket.pool = pool.push( socket ); }  
-			socket.emit( 'message', { message: 'Looking for a partner...' } );
+			socket.emit( 'message', { message: 'Looking for a partner...', type: 'server' } );
 		}
 	});
 });

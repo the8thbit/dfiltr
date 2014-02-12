@@ -1,6 +1,5 @@
 var process = 'CLIENT'; //necessary hacky code for the unified config file to work
 document.write( '<script type="text/javascript" src="../config.js"><\/script>' );
-document.write( '' );
 
 window.onload = function() {
 	var messages = [];
@@ -12,19 +11,19 @@ window.onload = function() {
 	$( 'textarea' ).keydown( function( e ){
 		if( e.keyCode == 13 && !e.shiftKey ) {
 			e.preventDefault();
-			addMessage( field.value );
+			addMessage( { message: field.value, type:'self' } );
 			sendMessage( field.value );
 		}
 	} ); 
 
 	sendButton.onclick = function() {
-		addMessage( field.value );
+		addMessage( { message: field.value, type:'self' } );
 		sendMessage( field.value );
 	};
 
 	//what to do when the user recieves a message
 	socket.on( 'message', function( data ) {
-		addMessage( data.message );
+		addMessage( data );
 	});
 
 	//what to do when an event is triggered on the user's socket
@@ -41,8 +40,12 @@ window.onload = function() {
 		}
 	}); 
 
-	addMessage = function( text ) {
-		if( text && text != '' ) {
+	addMessage = function( data ) {
+		console.log( data );
+		if( data && data.message && data.message != '' && data.type ) {
+			if( data.type == 'server'  ) { var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
+			if( data.type == 'partner' ) { var text = '<span class="chat-message-partner">' + data.message + '</span>'; }
+			if( data.type == 'self'    ) { var text = '<span class="chat-message-self">'    + data.message + '</span>'; }
 			messages.push( text );
 			var html = '';
 			for( var i=0; i < messages.length; i++ ) {
@@ -50,7 +53,7 @@ window.onload = function() {
 			}
 			content.innerHTML = html;
 			content.scrollTop = content.scrollHeight * 10;
-		} else if( !text ) {
+		} else if( !data || !data.message || !data.type ) {
 			console.log( 'error transporting message' );
 		}
 	};
