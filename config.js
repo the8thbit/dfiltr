@@ -13,7 +13,7 @@
   8080;                                // toggle on for local testing
 //process.env.OPENSHIFT_NODEJS_PORT;   // toggle on for openshift deploy
 //=====================================//
- }                                     // TOGGLE ON FOR OPENSHIFT DEPLOY
+//}                                    // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 
 //=====================================//
