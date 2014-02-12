@@ -1,5 +1,4 @@
-var process;
-var process.env;
+var process = 'CLIENT'; //neccesary hacky code for the unified config file to work
 
 document.write( '<script type="text/javascript" src="../config.js">' );
 document.write( '<\/script>' );
