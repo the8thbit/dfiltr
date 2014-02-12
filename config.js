@@ -1,7 +1,7 @@
 //=====================================//
 //        SERVER CONFIGURATION         //
 //=====================================//
-  if( process.env ) {                      // TOGGLE ON FOR OPENSHIFT DEPLOY
+  if( process ) {                      // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 //IP ADDRESS                           //
   var SERVER_IP =                      //
