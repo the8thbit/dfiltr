@@ -6,6 +6,7 @@ window.onload = function() {
 	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
 	var field = document.getElementById( 'chat-input-field' );
 	var sendButton = document.getElementById( 'chat-input-send' );
+	var discButton = document.getElementById( 'chat-input-disconnect' );
 	var content = document.getElementById( 'chat-output' );
  
 	$( 'textarea' ).keydown( function( e ){
@@ -21,23 +22,26 @@ window.onload = function() {
 		sendMessage( field.value );
 	};
 
+	discButton.onclick = function() {
+		socket.emit( 'partner disconnected' } );
+	};
+
 	//what to do when the user recieves a message
 	socket.on( 'message', function( data ) {
 		addMessage( data );
 	});
 
-	//what to do when an event is triggered on the user's socket
-	socket.on( 'event', function( data ) {
-		console.log( data.type );
-		if( data.type == 'partner connected' ) {
-			content.value = '';
-			field.style.backgroundColor = 'white';
-			field.readOnly = false;
-		} else if( data.type == 'partner disconnected' ) {
-			field.style.backgroundColor = '#eeeeee';
-			field.readOnly = true;
-			field.value = '';
-		}
+	socket.on( 'partner connected', function() {
+		console.log( 'partner connected' );
+		content.value = '';
+		field.style.backgroundColor = 'white';
+		field.readOnly = false;
+	});
+
+	socket.on( 'partner disconnected', function() {
+		field.style.backgroundColor = '#eeeeee';
+		field.readOnly = true;
+		field.value = '';
 	}); 
 
 	addMessage = function( data ) {

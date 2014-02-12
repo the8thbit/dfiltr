@@ -47,8 +47,8 @@ io.sockets.on( 'connection', function( socket ) {
 		partner.partner = socket; //access the user's conversational partner
 		socket.partner.emit( 'message', { message: 'You\'ve been paired with a user.', type: 'server' } );
 		partner.partner.emit( 'message', { message: 'You\'ve been paired with a user.', type: 'server' } );
-		socket.emit( 'event', { type: 'partner connected' } );
-		partner.emit( 'event', { type: 'partner connected' } );
+		socket.emit( 'partner connected' );
+		partner.emit( 'partner connected' );
 	} else {
 		console.log( '| partner could not be found in pool' );
 		socket.pool = pool.push( socket );
@@ -58,7 +58,8 @@ io.sockets.on( 'connection', function( socket ) {
 
 	console.log( 'user connected' );
 
-	//what to do when the user disconnects
+
+	//what to do when the user disconnects (through leaving the page: full disconnect)
 	socket.on( 'disconnect', function() {		
 		console.log( 'user disconnecting...' );
 
@@ -74,7 +75,7 @@ io.sockets.on( 'connection', function( socket ) {
 		if( socket.partner ) {
 			console.log( '| user has a conversational partner' );
 			console.log( '| disconnecting user from partner...' );
-			socket.partner.emit( 'event', { type: 'partner disconnected' } );
+			socket.partner.emit( 'partner disconnected' );
 			socket.partner.emit( 'message', { message: 'Your conversational partner has disconnected.', type: 'server' } );
 			socket.partner.partner = null;
 			socket.partner = null;
@@ -89,7 +90,32 @@ io.sockets.on( 'connection', function( socket ) {
 			console.log( '| current number of sockets is ' + sockets.length );
 		}
 
-		console.log( 'user disconnected' );
+		console.log( 'user disconnected (full)' );
+	});
+
+	//what to do when the user disconnects (through hitting the disconnect button: virtual disconnect)
+	socket.on( 'virtual disconnect', function() {		
+		console.log( 'user disconnecting...' );
+
+		if( socket.pool ) {
+			console.log( '| user is in pool at position ' + socket.pool );
+			console.log( '| current size of pool is ' + pool.length );
+			console.log( '| removing user from pool...' );	
+			pool.splice( socket.pool - 1, 1 );
+			socket.pool = null;
+			console.log( '| current size of pool is ' + pool.length );
+		}
+
+		if( socket.partner ) {
+			console.log( '| user has a conversational partner' );
+			console.log( '| disconnecting user from partner...' );
+			socket.partner.emit( 'partner disconnected' );
+			socket.partner.emit( 'message', { message: 'Your conversational partner has disconnected.', type: 'server' } );
+			socket.partner.partner = null;
+			socket.partner = null;
+		}
+
+		console.log( 'user disconnected (virtual)' );
 	});
 
 	//when server recieves 'send' relay 'message' to client
