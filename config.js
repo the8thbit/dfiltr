@@ -1,7 +1,7 @@
 //=====================================//
 //        SERVER CONFIGURATION         //
 //=====================================//
-//if( process.env ) {                  // TOGGLE ON FOR OPENSHIFT DEPLOY
+  if( process.env ) {                  // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 //IP ADDRESS                           //
   var SERVER_IP =                      //
@@ -13,7 +13,7 @@
 //8080;                                // toggle on for local testing
   process.env.OPENSHIFT_NODEJS_PORT;   // toggle on for openshift deploy
 //=====================================//
-//}                                    // TOGGLE ON FOR OPENSHIFT DEPLOY
+ }                                     // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 
 //=====================================//
@@ -40,4 +40,3 @@ if( process.env ) {                          // TOGGLE ON FOR OPENSHIFT DEPLOY
 	module.exports.SERVER_IP   = SERVER_IP;
 	module.exports.SERVER_PORT = SERVER_PORT;
 }                                            // TOGGLE ON FOR OPENSHIFT DEPLOY
-
