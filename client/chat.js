@@ -5,7 +5,7 @@ document.write( '<\/script>' );
 
 window.onload = function() {
 	var messages = [];
-	var socket = io.connect( 'http://' + 'localhost' + ':' + '8080' + '/' );
+	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
 	var field = document.getElementById( 'chat-input-field' );
 	var sendButton = document.getElementById( 'chat-input-send' );
 	var content = document.getElementById( 'chat-output' );

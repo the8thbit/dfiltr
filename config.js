@@ -1,7 +1,7 @@
 //=====================================//
 //        SERVER CONFIGURATION         //
 //=====================================//
-  if( process.env ) {                      // TOGGLE ON FOR OPENSHIFT DEPLOY
+  if( process.env ) {                  // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 //IP ADDRESS                           //
   var SERVER_IP =                      //
@@ -16,19 +16,19 @@
  }                                     // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 
-//======================================//
-//         CLIENT CONFIGURATION         //
-//======================================//
-//IP ADDRESS                            //
-  var CLIENT_IP =                       //
-//"localhost";                          // toggle on for local testing
-  "435-teamnoname.rhcloud.com";         // toggle on for openshift deploy
-//======================================//
-//PORT NUMBER                           //
-  var CLIENT_PORT =                     //
-//8080;                                 // toggle on for local testing
-  8000;                                 // neccessary for openshift, as websockets is restricted to this port
-//======================================//
+//=====================================//
+//         CLIENT CONFIGURATION        //
+//=====================================//
+//IP ADDRESS                           //
+  var CLIENT_IP =                      //
+//"localhost";                         // toggle on for local testing
+  "435-teamnoname.rhcloud.com";        // toggle on for openshift deploy
+//=====================================//
+//PORT NUMBER                          //
+  var CLIENT_PORT =                    //
+//8080;                                // toggle on for local testing
+  8000;                                // neccessary for openshift, as websockets is restricted to this port
+//=====================================//
 
 
 
