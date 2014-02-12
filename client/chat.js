@@ -1,3 +1,6 @@
+var process;
+var process.env;
+
 document.write( '<script type="text/javascript" src="../config.js">' );
 document.write( '<\/script>' );
 
