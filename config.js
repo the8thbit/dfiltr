@@ -1,6 +1,7 @@
 //=====================================//
 //        SERVER CONFIGURATION         //
 //=====================================//
+//if( process ) {                      // TOGGLE ON FOR OPENSHIFT DEPLOY
 //IP ADDRESS                           //
   var SERVER_IP =                      //
 //'localhost';                         // toggle on for local testing
@@ -10,6 +11,7 @@
   var SERVER_PORT =                    //
 //8080;                                // toggle on for local testing
   process.env.OPENSHIFT_NODEJS_PORT;   // toggle on for openshift deploy
+//}                                    // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 
 //======================================//
@@ -26,6 +28,7 @@
   8000;                                 // neccessary for openshift, as websockets is restricted to this port
 //======================================//
 
+//server-side stuff
 module.exports.CLIENT_IP   = CLIENT_IP;
 module.exports.CLIENT_PORT = CLIENT_PORT;
 module.exports.SERVER_IP   = SERVER_IP;
