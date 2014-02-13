@@ -5,6 +5,7 @@ window.onload = function() {
 	var messages = [];
 	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
 	var field = document.getElementById( 'chat-input-field' );
+	var fieldWrapper = document.getElementById( 'chat-input-field-wrapper' );
 	var sendButton = document.getElementById( 'chat-input-send' );
 	var newButton = document.getElementById( 'chat-input-disconnect' );
 	var content = document.getElementById( 'chat-output' );
@@ -27,8 +28,10 @@ window.onload = function() {
 	newButton.onclick = function() {
 		if( newButton.state == 'DISCONNECT' ) {
 			socket.emit( 'virtual disconnect' );
-			field.style.backgroundColor = '#eeeeee';
+			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
+			fieldWrapper.style.backgroundColor = '#eeeeee';
 			field.readOnly = true;
+			field.style.visibility = 'hidden';
 			field.value = '';
 			newButton.value = 'new discussion';
 			newButton.state = 'NEW';
@@ -48,14 +51,16 @@ window.onload = function() {
 	socket.on( 'partner connected', function() {
 		console.log( 'partner connected' );
 		content.value = '';
-		field.style.backgroundColor = 'white';
+		fieldWrapper.style.backgroundColor = 'white';
 		field.readOnly = false;
+		field.style.visibility = 'visible';
 	});
 
 	socket.on( 'partner disconnected', function() {
 		socket.emit( 'virtual disconnect' );
-		field.style.backgroundColor = '#eeeeee';
+		fieldWrapper.style.backgroundColor = '#eeeeee';
 		field.readOnly = true;
+		field.style.visibility = 'hidden';
 		field.value = '';
 		newButton.value = 'new discussion';
 		newButton.state = 'NEW';
