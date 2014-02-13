@@ -8,7 +8,7 @@ var express = require( 'express' );
 var app = express();
 app.use( express.static( __dirname + '/' ) );
 
-//use jade templates for HTML and CSS
+//use jade templates for HTML
 app.set( 'views', __dirname + '/tpl' );
 app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );

@@ -7,37 +7,25 @@ window.onload = function() {
 	var field = document.getElementById( 'chat-input-field' );
 	var fieldWrapper = document.getElementById( 'chat-input-field-wrapper' );
 	var sendButton = document.getElementById( 'chat-input-send' );
-	var newButton = document.getElementById( 'chat-input-disconnect' );
+	var connectButton = document.getElementById( 'chat-input-disconnect' );
 	var content = document.getElementById( 'chat-output' );
 	
-	newButton.state = 'DISCONNECT';
- 
+	connectButton.state = 'DISCONNECT';
+
+	//ENTER KEY: send message 
 	$( 'textarea' ).keydown( function( e ){
 		if( e.keyCode == 13 && !e.shiftKey ) {
 			e.preventDefault();
 			addMessage( { message: field.value, type:'self' } );
 			sendMessage( field.value );
 		}
-	}); 
+	});
 
+	//ESC KEY: end discussion/start new discussion
 	$( document ).keyup( function( e ){
 		if( e.keyCode == 27 ) {
 			e.preventDefault();
-			if( newButton.state == 'DISCONNECT' ) {
-				socket.emit( 'virtual disconnect' );
-				addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
-				fieldWrapper.style.backgroundColor = '#eeeeee';
-				field.readOnly = true;
-				field.style.visibility = 'hidden';
-				field.value = '';
-				newButton.value = 'new discussion';
-				newButton.state = 'NEW';
-			} else if( newButton.state == 'NEW' ) {
-				clearOutput( );
-				newButton.value = 'disconnect';
-				newButton.state = 'DISCONNECT';
-				socket.emit( 'virtual connection' );
-			}
+			connectToggle( );
 		}
 	});
 
@@ -46,22 +34,8 @@ window.onload = function() {
 		sendMessage( field.value );
 	};
 
-	newButton.onclick = function() {
-		if( newButton.state == 'DISCONNECT' ) {
-			socket.emit( 'virtual disconnect' );
-			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
-			fieldWrapper.style.backgroundColor = '#eeeeee';
-			field.readOnly = true;
-			field.style.visibility = 'hidden';
-			field.value = '';
-			newButton.value = 'new discussion';
-			newButton.state = 'NEW';
-		} else if( newButton.state == 'NEW' ) {
-			clearOutput( );
-			newButton.value = 'disconnect';
-			newButton.state = 'DISCONNECT';
-			socket.emit( 'virtual connection' );
-		}
+	connectButton.onclick = function() {
+		connectToggle( );
 	};
 
 	//what to do when the user recieves a message
@@ -84,8 +58,8 @@ window.onload = function() {
 		field.readOnly = true;
 		field.style.visibility = 'hidden';
 		field.value = '';
-		newButton.value = 'new discussion';
-		newButton.state = 'NEW';
+		connectButton.value = 'new discussion';
+		connectButton.state = 'NEW';
 	}); 
 
 	addMessage = function( data ) {
@@ -112,7 +86,7 @@ window.onload = function() {
 			socket.emit( 'send', { message: text } );
 			console.log( 'you: ', text );
 		}
-	}
+	};
 
 	clearOutput = function( ) {
 		console.log( 'clearing output...' );
@@ -121,4 +95,21 @@ window.onload = function() {
 		content.scrollTop = content.scrollHeight * 10;
 	};
 
+	connectToggle = function( ) {
+		if( connectButton.state == 'DISCONNECT' ) {
+			socket.emit( 'virtual disconnect' );
+			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
+			fieldWrapper.style.backgroundColor = '#eeeeee';
+			field.readOnly = true;
+			field.style.visibility = 'hidden';
+			field.value = '';
+			connectButton.value = 'new discussion';
+			connectButton.state = 'NEW';
+		} else if( connectButton.state == 'NEW' ) {
+			clearOutput( );
+			connectButton.value = 'disconnect';
+			connectButton.state = 'DISCONNECT';
+			socket.emit( 'virtual connection' );
+		}
+	};
 }
