@@ -83,7 +83,8 @@ body {
 	width:14%; height: 102%;
 	background:#FF4C00; 
 	color:#FFFFFF;
-	border:none;	
+	border:none;
+	outline: none;
 }
 
 #chat-input-send {
@@ -97,4 +98,5 @@ body {
 	background:#0B5FA5; 
 	color:#FFFFFF; 
 	border:none;
+	outline: none;
 }

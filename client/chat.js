@@ -18,7 +18,28 @@ window.onload = function() {
 			addMessage( { message: field.value, type:'self' } );
 			sendMessage( field.value );
 		}
-	} ); 
+	}); 
+
+	$(document).keyup( function( e ){
+		if( e.keyCode == 27 ) {
+			e.preventDefault();
+			if( newButton.state == 'DISCONNECT' ) {
+				socket.emit( 'virtual disconnect' );
+				addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
+				fieldWrapper.style.backgroundColor = '#eeeeee';
+				field.readOnly = true;
+				field.style.visibility = 'hidden';
+				field.value = '';
+				newButton.value = 'new discussion';
+				newButton.state = 'NEW';
+			} else if( newButton.state == 'NEW' ) {
+				clearOutput( );
+				newButton.value = 'disconnect';
+				newButton.state = 'DISCONNECT';
+				socket.emit( 'virtual connection' );
+			}
+		}
+	});
 
 	sendButton.onclick = function() {
 		addMessage( { message: field.value, type:'self' } );
