@@ -20,7 +20,7 @@ window.onload = function() {
 		}
 	}); 
 
-	$(document).keyup( function( e ){
+	$( document ).keyup( function( e ){
 		if( e.keyCode == 27 ) {
 			e.preventDefault();
 			if( newButton.state == 'DISCONNECT' ) {
@@ -75,6 +75,7 @@ window.onload = function() {
 		fieldWrapper.style.backgroundColor = 'white';
 		field.readOnly = false;
 		field.style.visibility = 'visible';
+		field.focus();
 	});
 
 	socket.on( 'partner disconnected', function() {
