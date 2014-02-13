@@ -90,12 +90,12 @@ io.sockets.on( 'connection', function( socket ) {
 			console.log( '| current number of sockets is ' + sockets.length );
 		}
 
-		console.log( 'user disconnected (full)' );
+		console.log( 'user disconnected' );
 	});
 
 	//what to do when the user disconnects (through hitting the disconnect button: virtual disconnect)
 	socket.on( 'virtual disconnect', function() {		
-		console.log( 'user disconnecting...' );
+		console.log( 'user disconnecting... (virtual)' );
 
 		if( socket.pool ) {
 			console.log( '| user is in pool at position ' + socket.pool );
@@ -110,6 +110,7 @@ io.sockets.on( 'connection', function( socket ) {
 			console.log( '| user has a conversational partner' );
 			console.log( '| disconnecting user from partner...' );
 			socket.partner.emit( 'partner disconnected' );
+			socket.emit( 'message', { message: 'You have disconnected.', type:'server' } );
 			socket.partner.emit( 'message', { message: 'Your conversational partner has disconnected.', type: 'server' } );
 			socket.partner.partner = null;
 			socket.partner = null;
@@ -117,6 +118,33 @@ io.sockets.on( 'connection', function( socket ) {
 
 		console.log( 'user disconnected (virtual)' );
 	});
+
+	socket.on( 'virtual connection', function() {
+		console.log( 'user connecting... (virtual)' );
+
+		//if there are users in the pool, take one of them and make them your
+		//partner. If not, jump in the pool.
+		if( pool.length ) {
+			console.log( '| partner found in pool' );
+			var partner = pool.shift();
+			partner.pool = null;
+			console.log( '| partner removed from pool. Current pool size is: ' + pool.length );
+			socket.partner = partner; //adds a '.partner' var to the socket which can be used to
+			partner.partner = socket; //access the user's conversational partner
+			socket.partner.emit( 'message', { message: 'You\'ve been paired with a user.', type: 'server' } );
+			partner.partner.emit( 'message', { message: 'You\'ve been paired with a user.', type: 'server' } );
+			socket.emit( 'partner connected' );
+			partner.emit( 'partner connected' );
+		} else {
+			console.log( '| partner could not be found in pool' );
+			socket.pool = pool.push( socket );
+			console.log( '| added user to pool at position ' + socket.pool );
+			socket.emit( 'message', { message: 'Looking for a partner...', type: 'server' } );
+		}
+
+		console.log( 'user connected' );
+	});
+
 
 	//when server recieves 'send' relay 'message' to client
 	//'send' is a chat message coming from a client, and

@@ -8,6 +8,8 @@ window.onload = function() {
 	var sendButton = document.getElementById( 'chat-input-send' );
 	var newButton = document.getElementById( 'chat-input-disconnect' );
 	var content = document.getElementById( 'chat-output' );
+	
+	newButton.state = 'DISCONNECT';
  
 	$( 'textarea' ).keydown( function( e ){
 		if( e.keyCode == 13 && !e.shiftKey ) {
@@ -23,12 +25,19 @@ window.onload = function() {
 	};
 
 	newButton.onclick = function() {
-		socket.emit( 'virtual disconnect' );
-		field.style.backgroundColor = '#eeeeee';
-		field.readOnly = true;
-		field.value = '';
-		addMessage( { message: 'You have disconnected', type:'server' } );
-		discButton.value = 'new discussion';
+		if( newButton.state == 'DISCONNECT' ) {
+			socket.emit( 'virtual disconnect' );
+			field.style.backgroundColor = '#eeeeee';
+			field.readOnly = true;
+			field.value = '';
+			newButton.value = 'new discussion';
+			newButton.state = 'NEW';
+		} else if( newButton.state == 'NEW' ) {
+			clearOutput( );
+			newButton.value = 'disconnect';
+			newButton.state = 'DISCONNECT';
+			socket.emit( 'virtual connection' );
+		}
 	};
 
 	//what to do when the user recieves a message
@@ -44,9 +53,12 @@ window.onload = function() {
 	});
 
 	socket.on( 'partner disconnected', function() {
+		socket.emit( 'virtual disconnect' );
 		field.style.backgroundColor = '#eeeeee';
 		field.readOnly = true;
 		field.value = '';
+		newButton.value = 'new discussion';
+		newButton.state = 'NEW';
 	}); 
 
 	addMessage = function( data ) {
@@ -74,4 +86,12 @@ window.onload = function() {
 			console.log( 'you: ', text );
 		}
 	}
+
+	clearOutput = function( ) {
+		console.log( 'clearing output...' );
+		messages = [];
+		content.innerHTML = '';
+		content.scrollTop = content.scrollHeight * 10;
+	};
+
 }
