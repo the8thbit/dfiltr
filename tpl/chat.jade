@@ -3,7 +3,7 @@ html( lang='en' )
 	head
 		title= 'Chat Test'
 		link( rel='stylesheet' type='text/css' href='/tpl/chat.css' )
-		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' ) 
+		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
 		script( src='/client/chat.js' )
 		script( src='/socket.io/socket.io.js' )
 	body
@@ -13,5 +13,5 @@ html( lang='en' )
 			#chat-input
 				input#chat-input-disconnect( type='button' value='disconnect' )
 				#chat-input-field-wrapper
-					textarea#chat-input-field( type='textarea' readonly='true' )
+					textarea#chat-input-field( type='textarea' )
 				input#chat-input-send( type='button' value='send' )
