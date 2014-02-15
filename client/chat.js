@@ -4,13 +4,14 @@ document.write( '<script type="text/javascript" src="../config.js"><\/script>' )
 window.onload = function() {
 	var messages = [];
 	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
-	var field = $( '#chat-input-field' );
-	var fieldWrapper = $( '#chat-input-field-wrapper' );
-	var sendButton = $( '#chat-input-send' );
-	var connectButton = $( '#chat-input-disconnect' );
-	var content = $( '#chat-output' );
+
+	var inputField = $( '#chat-input-field' );
+	var inputFieldWrapper = $( '#chat-input-field-wrapper' );
+	var inputSend = $( '#chat-input-send' );
+	var inputConnect = $( '#chat-input-connect' );
+	var outputField = $( '#chat-output-field' );
 	
-	connectButton.data( 'state', 'DISCONNECT' );
+	inputConnect.data( 'state', 'DISCONNECT' );
 
 	//===============================================
 	// User Interface
@@ -19,8 +20,8 @@ window.onload = function() {
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ) {
 			e.preventDefault();
-			addMessage( { message: field.prop( 'value' ), type:'self' } );
-			sendMessage( field.prop( 'value' ) );
+			addMessage( { message: inputField.prop( 'value' ), type:'self' } );
+			sendMessage( inputField.prop( 'value' ) );
 		}
 	});
 
@@ -32,12 +33,12 @@ window.onload = function() {
 		}
 	});
 
-	sendButton.on( 'click', function() {
-		addMessage( { message: field.prop( 'value' ), type:'self' } );
-		sendMessage( field.prop( 'value' ) );
+	inputSend.on( 'click', function() {
+		addMessage( { message: inputField.prop( 'value' ), type:'self' } );
+		sendMessage( inputField.prop( 'value' ) );
 	});
 
-	connectButton.on( 'click', function() {
+	inputConnect.on( 'click', function() {
 		connectToggle( );
 	});
 
@@ -53,29 +54,29 @@ window.onload = function() {
 	//what to do when the user finds a chat partner
 	socket.on( 'partner connected', function() {
 		console.log( 'partner connected' );
-		content.prop( 'value', '' );
-		fieldWrapper.css( 'background-color', 'white' );
-		field.prop( 'readOnly', false );
-		field.css( 'visibility', 'visible' );
-		field.focus();
+		outputField.prop( 'value', '' );
+		inputFieldWrapper.css( 'background-color', 'white' );
+		inputField.prop( 'readOnly', false );
+		inputField.css( 'visibility', 'visible' );
+		inputField.focus();
 	});
 
 	//what to do when a chat partner disconnects
 	socket.on( 'partner disconnected', function() {
 		socket.emit( 'virtual disconnect' );
-		fieldWrapper.css( 'background-color', '#eeeeee' );
-		field.prop( 'readOnly', true );
-		field.prop( 'value', '' );
-		field.css( 'visibility', 'hidden' );
-		connectButton.prop( 'value', 'new discussion' );
-		connectButton.data( 'state', 'NEW' );
+		inputFieldWrapper.css( 'background-color', '#eeeeee' );
+		inputField.prop( 'readOnly', true );
+		inputField.prop( 'value', '' );
+		inputField.css( 'visibility', 'hidden' );
+		inputConnect.prop( 'value', 'new discussion' );
+		inputConnect.data( 'state', 'NEW' );
 	}); 
 
 
 	//===============================================
 	// Internal Functions
 	//===============================================
-	//adds a new line to the output pane
+	//adds a new line to the output field
 	addMessage = function( data ) {
 		console.log( data );
 		if( data && data.message && data.message != '' && data.type ) {
@@ -87,8 +88,8 @@ window.onload = function() {
 			for( var i=0; i < messages.length; i++ ) {
 				html += messages[i] + '<br />';
 			}
-			content.html( html );
-			content.scrollTop( content.height() );
+			outputField.html( html );
+			outputField.scrollTop( outputField.height() );
 		} else if( !data || !data.message || !data.type ) {
 			console.log( 'error transporting message' );
 		}
@@ -97,35 +98,35 @@ window.onload = function() {
 	//sends a message to partner
 	sendMessage = function( text ) {
 		if( text != '' ) {
-			field.prop( 'value', '' );
+			inputField.prop( 'value', '' );
 			socket.emit( 'send', { message: text } );
 			console.log( 'you: ', text );
 		}
 	};
 
-	//clears the chat output window
+	//clears the output field
 	clearOutput = function( ) {
-		console.log( 'clearing output...' );
+		console.log( 'clearing outputinputField...' );
 		messages = [];
-		content.html( '' );
-		content.scrollTop( content.height() );
+		outputField.html( '' );
+		outputField.scrollTop( outputField.height() );
 	};
 
 	//this function will either create a new virtual connection, or end the current virtual connection
 	connectToggle = function( ) {
-		if( connectButton.data( 'state' ) == 'DISCONNECT' ) {
+		if( inputConnect.data( 'state' ) == 'DISCONNECT' ) {
 			socket.emit( 'virtual disconnect' );
 			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
-			fieldWrapper.css( 'background-color', '#eeeeee' );
-			field.prop( 'readOnly', true );
-			field.prop( 'value', '' );
-			field.css( 'visibility', 'hidden' );
-			connectButton.prop( 'value', 'new discussion' );
-			connectButton.data( 'state', 'NEW' );
-		} else if( connectButton.data( 'state' ) == 'NEW' ) {
+			inputFieldWrapper.css( 'background-color', '#eeeeee' );
+			inputField.prop( 'readOnly', true );
+			inputField.prop( 'value', '' );
+			inputField.css( 'visibility', 'hidden' );
+			inputConnect.prop( 'value', 'new discussion' );
+			inputConnect.data( 'state', 'NEW' );
+		} else if( inputConnect.data( 'state' ) == 'NEW' ) {
 			clearOutput( );
-			connectButton.prop( 'value', 'disconnect' );
-			connectButton.data( 'state', 'DISCONNECT' );
+			inputConnect.prop( 'value', 'disconnect' );
+			inputConnect.data( 'state', 'DISCONNECT' );
 			socket.emit( 'virtual connection' );
 		}
 	};

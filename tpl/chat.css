@@ -16,6 +16,10 @@ body {
 }
 
 #chat-output {
+
+}
+
+#chat-output-field {
 	position:absolute;
 	top:0; left:0; 
 	width:98%; height:98%; 
@@ -73,7 +77,7 @@ body {
 	outline: none;
 }
 
-#chat-input-disconnect {
+#chat-input-connect {
 	position: relative;
 	padding: 10px 15px; 
 	float:left;
