@@ -2,16 +2,16 @@ var process = 'CLIENT'; //necessary hacky code for the unified config file to wo
 document.write( '<script type="text/javascript" src="../config.js"><\/script>' );
 
 window.onload = function() {
-	var messages = [];
 	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
+	var messages = []; //the list of all messages to the user
 
-	var inputField = $( '#chat-input-field' );
-	var inputFieldWrapper = $( '#chat-input-field-wrapper' );
-	var inputSend = $( '#chat-input-send' );
-	var inputConnect = $( '#chat-input-connect' );
-	var outputField = $( '#chat-output-field' );
+	var inputField =        $( '#chat-input-field' );         //the textarea that the user can type into and send messages from
+	var inputFieldWrapper = $( '#chat-input-field-wrapper' ); //the wrapper for the aforementioned textarea
+	var inputSend =         $( '#chat-input-send' );          //the button used to send messages
+	var inputConnect =      $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
+	var outputField =       $( '#chat-output-field' );        //the place where conversations go
 	
-	inputConnect.data( 'state', 'DISCONNECT' );
+	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
 
 	//===============================================
 	// User Interface
@@ -113,6 +113,7 @@ window.onload = function() {
 	};
 
 	//this function will either create a new virtual connection, or end the current virtual connection
+	//depending upon the state of inputConnect
 	connectToggle = function( ) {
 		if( inputConnect.data( 'state' ) == 'DISCONNECT' ) {
 			socket.emit( 'virtual disconnect' );
