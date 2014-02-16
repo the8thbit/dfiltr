@@ -36,6 +36,7 @@ window.onload = function() {
 	inputSend.on( 'click', function() {
 		addMessage( { message: inputField.prop( 'value' ), type:'self' } );
 		sendMessage( inputField.prop( 'value' ) );
+		inputField.load( '/modules/test' );
 	});
 
 	inputConnect.on( 'click', function() {
@@ -54,7 +55,7 @@ window.onload = function() {
 	//what to do when the user finds a chat partner
 	socket.on( 'partner connected', function() {
 		console.log( 'partner connected' );
-		outputField.prop( 'value', '' );
+		output.prop( 'value', '' );
 		inputFieldWrapper.css( 'background-color', 'white' );
 		inputField.prop( 'readOnly', false );
 		inputField.css( 'visibility', 'visible' );
@@ -88,8 +89,8 @@ window.onload = function() {
 			for( var i=0; i < messages.length; i++ ) {
 				html += messages[i] + '<br />';
 			}
-			outputField.html( html );
-			outputField.scrollTop( outputField.height() );
+			output.html( html );
+			output.scrollTop( output.height() );
 		} else if( !data || !data.message || !data.type ) {
 			console.log( 'error transporting message' );
 		}
@@ -108,8 +109,8 @@ window.onload = function() {
 	clearOutput = function( ) {
 		console.log( 'clearing outputinputField...' );
 		messages = [];
-		outputField.html( '' );
-		outputField.scrollTop( outputField.height() );
+		output.html( '' );
+		output.scrollTop( output.height() );
 	};
 
 	//this function will either create a new virtual connection, or end the current virtual connection

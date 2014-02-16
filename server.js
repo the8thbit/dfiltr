@@ -12,7 +12,8 @@ app.use( express.static( __dirname + '/' ) );
 app.set( 'views', __dirname + '/tpl' );
 app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );
-app.get( '/', function( req, res ){ res.render( 'chat' ); } );
+app.get( '/chat', function( req, res ){ res.render( 'chat' ); } );
+app.get( '/modules/test', function( req, res ){ res.render( 'modules/test' ); } );
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );

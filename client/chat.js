@@ -36,6 +36,7 @@ window.onload = function() {
 	inputSend.on( 'click', function() {
 		addMessage( { message: inputField.prop( 'value' ), type:'self' } );
 		sendMessage( inputField.prop( 'value' ) );
+		inputFieldWrapper.load( '/modules/test' );
 	});
 
 	inputConnect.on( 'click', function() {

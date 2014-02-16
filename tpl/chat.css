@@ -55,6 +55,7 @@ body {
 	text-align:right;
 	float:left;
 	width:71%; height:100%;
+	min-height:70px;
 	background-color:#eeeeee;
 	border:1px solid gray;
 }
