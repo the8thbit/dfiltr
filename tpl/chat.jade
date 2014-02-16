@@ -8,11 +8,10 @@ html( lang='en' )
 		script( src='/socket.io/socket.io.js' )
 	body
 		#chat-output-wrapper
-			#chat-output
-				#chat-output-field  //........................................//the place where conversations go
+			#chat-output  
 		#chat-input-wrapper
 			#chat-input
-				input#chat-input-connect( type='button' value='disconnect' )  //the button used to connect/disconnect from a discussion
-				#chat-input-field-wrapper  //.................................//the wrapper for the textarea below
-					textarea#chat-input-field( type='textarea' )  //...........//the textarea that the user can type into and send messages from
-				input#chat-input-send( type='button' value='send' )  //.......//the button used to send messages
+				input#chat-input-connect( type='button' value='disconnect' )  
+				#chat-input-field-wrapper
+					textarea#chat-input-field  
+				input#chat-input-send( type='button' value='send' )

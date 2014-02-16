@@ -9,7 +9,7 @@ window.onload = function() {
 	var inputFieldWrapper = $( '#chat-input-field-wrapper' ); //the wrapper for the aforementioned textarea
 	var inputSend =         $( '#chat-input-send' );          //the button used to send messages
 	var inputConnect =      $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
-	var outputField =       $( '#chat-output-field' );        //the place where conversations go
+	var output =            $( '#chat-output' );              //the place where conversations go
 	
 	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
 

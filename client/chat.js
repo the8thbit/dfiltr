@@ -9,7 +9,7 @@ window.onload = function() {
 	var inputFieldWrapper = $( '#chat-input-field-wrapper' ); //the wrapper for the aforementioned textarea
 	var inputSend =         $( '#chat-input-send' );          //the button used to send messages
 	var inputConnect =      $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
-	var outputField =       $( '#chat-output-field' );        //the place where conversations go
+	var output =            $( '#chat-output' );              //the place where conversations go
 	
 	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
 
@@ -54,7 +54,7 @@ window.onload = function() {
 	//what to do when the user finds a chat partner
 	socket.on( 'partner connected', function() {
 		console.log( 'partner connected' );
-		outputField.prop( 'value', '' );
+		output.prop( 'value', '' );
 		inputFieldWrapper.css( 'background-color', 'white' );
 		inputField.prop( 'readOnly', false );
 		inputField.css( 'visibility', 'visible' );
@@ -88,8 +88,8 @@ window.onload = function() {
 			for( var i=0; i < messages.length; i++ ) {
 				html += messages[i] + '<br />';
 			}
-			outputField.html( html );
-			outputField.scrollTop( outputField.height() );
+			output.html( html );
+			output.scrollTop( output.height() );
 		} else if( !data || !data.message || !data.type ) {
 			console.log( 'error transporting message' );
 		}
@@ -108,8 +108,8 @@ window.onload = function() {
 	clearOutput = function( ) {
 		console.log( 'clearing outputinputField...' );
 		messages = [];
-		outputField.html( '' );
-		outputField.scrollTop( outputField.height() );
+		output.html( '' );
+		output.scrollTop( output.height() );
 	};
 
 	//this function will either create a new virtual connection, or end the current virtual connection
