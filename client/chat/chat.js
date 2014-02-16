@@ -1,5 +1,5 @@
 var process = 'CLIENT'; //necessary hacky code for the unified config file to work
-document.write( '<script type="text/javascript" src="../config.js"><\/script>' );
+document.write( '<script type="text/javascript" src="../../config.js"><\/script>' );
 
 window.onload = function() {
 	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
@@ -36,7 +36,7 @@ window.onload = function() {
 	inputSend.on( 'click', function() {
 		addMessage( { message: inputField.prop( 'value' ), type:'self' } );
 		sendMessage( inputField.prop( 'value' ) );
-		inputFieldWrapper.load( '/modules/test' );
+		inputFieldWrapper.load( '/modules/ratings' );
 	});
 
 	inputConnect.on( 'click', function() {
