@@ -10,8 +10,18 @@ window.onload = function() {
 	var inputSend =         $( '#chat-input-send' );          //the button used to send messages
 	var inputConnect =      $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
 	var output =            $( '#chat-output' );              //the place where conversations go
-	
+
 	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
+
+	$( '.chat-input-button' ).fadeTo( 0, 0.7 );
+
+	$( '.chat-input-button' ).hover( 
+		function() {
+			$( this ).fadeTo( 'fast' , 1.0 );
+		}, function() {
+			$( this ).fadeTo( 'fast' , 0.7 );
+		}
+	)
 
 	//===============================================
 	// User Interface
@@ -53,6 +63,7 @@ window.onload = function() {
 
 	//what to do when the user finds a chat partner
 	socket.on( 'partner connected', function() {
+		socket.connected = true;
 		console.log( 'partner connected' );
 		output.prop( 'value', '' );
 		inputFieldWrapper.css( 'background-color', 'white' );
@@ -63,6 +74,7 @@ window.onload = function() {
 
 	//what to do when a chat partner disconnects
 	socket.on( 'partner disconnected', function() {
+		inputFieldWrapper.load( '/modules/ratings', function() { modRatingsInit(); } );
 		socket.emit( 'virtual disconnect' );
 		inputFieldWrapper.css( 'background-color', '#eeeeee' );
 		inputField.prop( 'readOnly', true );
@@ -116,6 +128,10 @@ window.onload = function() {
 	//depending upon the state of inputConnect
 	connectToggle = function() {
 		if( inputConnect.data( 'state' ) == 'DISCONNECT' ) {
+			if( socket.connected ) {
+				inputFieldWrapper.load( '/modules/ratings', function() { modRatingsInit(); } );
+			}
+			socket.connected = false;
 			socket.emit( 'virtual disconnect' );
 			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
 			inputFieldWrapper.css( 'background-color', '#eeeeee' );
@@ -124,11 +140,9 @@ window.onload = function() {
 			inputField.css( 'visibility', 'hidden' );
 			inputConnect.prop( 'value', 'new discussion' );
 			inputConnect.data( 'state', 'NEW' );
-			inputFieldWrapper.load( '/modules/ratings', function() {
-				modRatingsInit();
-			});
 		} else if( inputConnect.data( 'state' ) == 'NEW' ) {
 			clearOutput( );
+			inputFieldWrapper.html( inputField );
 			inputConnect.prop( 'value', 'disconnect' );
 			inputConnect.data( 'state', 'DISCONNECT' );
 			socket.emit( 'virtual connection' );

@@ -1,11 +1,12 @@
-script( src='/client/modules/ratings/ratings.js' )
-
 #mod-ratings
-	#mod-ratings-head if applicable, please rate your discussion so that we can find you better matches
+	#mod-ratings-head If applicable, please rate your discussion so that we can find you better matches.
 	table#mod-ratings-buttons
 		td
-			img#mod-ratings-delta-img( class='mod-ratings-button' src='/assets/delta_small.png' )
+			img#mod-ratings-delta( class='mod-ratings-button' src='/assets/delta_small.png' )
 		td
-			img#mod-ratings-same-img( class='mod-ratings-button' src='/assets/same_small.png' )
+			img#mod-ratings-same( class='mod-ratings-button' src='/assets/same_small.png' )
 		td
-			img#mod-ratings-flag-img( class='mod-ratings-button' src='/assets/flag_small.png' )
+			img#mod-ratings-flag( class='mod-ratings-button' src='/assets/flag_small.png' )
+
+script( src='/client/modules/ratings/ratings.js' )
+link( rel='stylesheet' type='text/css' href='/client/modules/ratings/ratings.css' )

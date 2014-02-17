@@ -11,7 +11,8 @@ html( lang='en' )
 			#chat-output  
 		#chat-input-wrapper
 			#chat-input
-				input#chat-input-connect( type='button' value='disconnect' )  
+				input#chat-input-connect( class='chat-input-button' type='button' value='disconnect' )  
 				#chat-input-field-wrapper
-					textarea#chat-input-field
-				input#chat-input-send( type='button' value='send' )
+					#chat-input-field-container
+						textarea#chat-input-field
+				input#chat-input-send( class='chat-input-button' type='button' value='send' )
