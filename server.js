@@ -13,7 +13,7 @@ app.set( 'views', __dirname + '/client' );
 app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );
 
-app.get( '/chat', function( req, res ){ res.render( 'chat/chat' ); } );
+app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
 app.get( '/modules/ratings', function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
 
 //use socket.io and give it a location to listen on 
