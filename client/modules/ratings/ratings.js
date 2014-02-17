@@ -16,29 +16,21 @@ $( '.mod-ratings-button' ).hover(
 	}
 )
 
-$( '#mod-ratings-delta' ).hover( 
-	function() {
-		$( '#mod-ratings-head' ).html( 'Delta: Your partner convinced you to change your view.' );
-	}, function() {
-		$( '#mod-ratings-head' ).html( modRatingsHeadHTML );
-	}
-)
+$( '#mod-ratings-buttons' ).hover( function() {}, function() {
+	$( '#mod-ratings-head' ).html( modRatingsHeadHTML );
+})
 
-$( '#mod-ratings-same' ).hover( 
-	function() {
-		$( '#mod-ratings-head' ).html( 'Congruence: You and your partner began the discussion with the same view.' );
-	}, function() {
-		$( '#mod-ratings-head' ).html( modRatingsHeadHTML );
-	}
-)
+$( '#mod-ratings-delta' ).hover( function() {
+	$( '#mod-ratings-head' ).html( 'Delta: Your partner convinced you to change your view.' );
+})
 
-$( '#mod-ratings-flag' ).hover( 
-	function() {
-		$( '#mod-ratings-head' ).html( 'Flag: Your partner was a spammer or some other type of malicious user.' );
-	}, function() {
-		$( '#mod-ratings-head' ).html( modRatingsHeadHTML );
-	}
-)
+$( '#mod-ratings-same' ).hover( function() {
+	$( '#mod-ratings-head' ).html( 'Congruence: You and your partner began the discussion with the same view.' );
+})
+
+$( '#mod-ratings-flag' ).hover( function() {
+	$( '#mod-ratings-head' ).html( 'Flag: Your partner was a spammer or some other type of malicious user.' );
+})
 
 $( '.mod-ratings-button' ).on( 'click', function() {
 	$( '#mod-ratings-buttons' ).prop( 'disabled', true );
