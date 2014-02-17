@@ -31,11 +31,11 @@ body {
 }
 
 .chat-message-partner {
-	color: #B95014; 
+	color: #FF4C00; 
 }
 
 .chat-message-self {
-	color: #164379;
+	color: #0B5FA5;
 }
 
 #chat-input-wrapper {
