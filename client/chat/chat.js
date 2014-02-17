@@ -36,11 +36,10 @@ window.onload = function() {
 	inputSend.on( 'click', function() {
 		addMessage( { message: inputField.prop( 'value' ), type:'self' } );
 		sendMessage( inputField.prop( 'value' ) );
-		inputFieldWrapper.load( '/modules/ratings' );
 	});
 
 	inputConnect.on( 'click', function() {
-		connectToggle( );
+		connectToggle();
 	});
 
 
@@ -106,7 +105,7 @@ window.onload = function() {
 	};
 
 	//clears the output field
-	clearOutput = function( ) {
+	clearOutput = function() {
 		console.log( 'clearing outputinputField...' );
 		messages = [];
 		output.html( '' );
@@ -115,7 +114,7 @@ window.onload = function() {
 
 	//this function will either create a new virtual connection, or end the current virtual connection
 	//depending upon the state of inputConnect
-	connectToggle = function( ) {
+	connectToggle = function() {
 		if( inputConnect.data( 'state' ) == 'DISCONNECT' ) {
 			socket.emit( 'virtual disconnect' );
 			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
@@ -125,6 +124,9 @@ window.onload = function() {
 			inputField.css( 'visibility', 'hidden' );
 			inputConnect.prop( 'value', 'new discussion' );
 			inputConnect.data( 'state', 'NEW' );
+			inputFieldWrapper.load( '/modules/ratings', function() {
+				modRatingsInit();
+			});
 		} else if( inputConnect.data( 'state' ) == 'NEW' ) {
 			clearOutput( );
 			inputConnect.prop( 'value', 'disconnect' );
