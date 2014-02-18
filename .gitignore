@@ -6,7 +6,6 @@
 *.exe
 *.o
 *.so
-*.css #using .styl instead
 
 # Packages #
 ############
