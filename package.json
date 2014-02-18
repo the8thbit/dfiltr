@@ -4,8 +4,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"dependencies": {
-		"express": "3.4.8",
-		"socket.io": "0.9.16",
-		"jade": "latest"
+		"express": "latest",
+		"socket.io": "latest",
+		"jade": "latest",
+		"stylus": "latest"
 	}
 }

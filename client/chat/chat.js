@@ -13,6 +13,20 @@ window.onload = function() {
 
 	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
 
+	//===============================================
+	// User Interface
+	//===============================================
+	function resizeOutput() {
+		$( '#chat-output-wrapper' ).css( { 'height': $( window ).height() - 160 } );
+		inputFieldWrapper.css( { 'height': 130 } );
+	}
+
+	resizeOutput();
+
+	window.onresize = function(event) {
+		resizeOutput();
+	}
+
 	$( '.chat-input-button' ).fadeTo( 0, 0.7 );
 
 	$( '.chat-input-button' ).hover( 
@@ -23,9 +37,7 @@ window.onload = function() {
 		}
 	)
 
-	//===============================================
-	// User Interface
-	//===============================================
+
 	$( document ).keydown( function( e ){
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ) {

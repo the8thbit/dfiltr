@@ -4,15 +4,15 @@
 var config = require( './config.js' );
 
 var express = require( 'express' );
-stylus = require('stylus');
+stylus = require( 'stylus' );
 
 var app = express();
 
-function compile(str, path) { 
-	return stylus(str) .set('filename', path); 
+function compile( str, path ) { 
+	return stylus( str ).set( 'filename', path ); 
 } 
 
-app.use(stylus.middleware( { src: __dirname + '/' , compile: compile } ))
+app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) )
 app.use( express.static( __dirname + '/' ) );
 
 //use jade templates for HTML
