@@ -1,20 +1,17 @@
 #mod-ratings {
-	margin: 0 auto;
-	visibility: hidden;
+  margin: 0 auto;
+  visibility: hidden;
 }
-
 #mod-ratings-buttons {
-	margin: 0 auto;
+  margin: 0 auto;
 }
-
 #mod-ratings-head {
-	text-align: center;
-	margin: 10px;
-	font-weight: bold;
+  text-align: center;
+  margin: 10px;
+  font-weight: bold;
 }
-
 .mod-ratings-button {
-	margin-left: 10px;
-	margin-right: 10px;
-	text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  text-align: center;
 }
