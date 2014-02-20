@@ -102,7 +102,7 @@ window.onload = function() {
 
 	//what to do when a chat partner disconnects
 	socket.on( 'partner disconnected', function() {
-		inputFieldWrapper.load( '/modules/ratings', function() { modRatingsInit(); } );
+		inputFieldWrapper.load( '/modules/ratings', function() { ratings.init(); } );
 		socket.emit( 'virtual disconnect' );
 		inputFieldWrapper.css( 'background-color', '#eeeeee' );
 		inputField.prop( 'readOnly', true );
@@ -157,7 +157,7 @@ window.onload = function() {
 	connectToggle = function() {
 		if( inputConnect.data( 'state' ) == 'DISCONNECT' ) {
 			if( socket.connected ) {
-				inputFieldWrapper.load( '/modules/ratings', function() { modRatingsInit(); } );
+				inputFieldWrapper.load( '/modules/ratings', function() { ratings.init(); } );
 			}
 			socket.connected = false;
 			socket.emit( 'virtual disconnect' );
