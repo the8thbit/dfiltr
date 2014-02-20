@@ -16,7 +16,7 @@ ratings.flag.onHover  = 'Flag: Your partner was a spammer or some other type of 
 ratings.flag.onClick  = 'Spammers? On <i>my</i> chat? It\'s more likely than you think.'
 
 //=============================================================================
-// stabalizeHTML: makes the header remain as one 
+// stabalizeHTML: makes the header stay as one message regardless of events
 //=============================================================================
 ratings.stabalizeHTML = function( html ) {
 	this.head.html( html );
@@ -36,6 +36,7 @@ ratings.init = function() {
 	this.button.fadeTo( 0 , 0.7 );
 }
 
+//fade buttons in when we hover over them
 ratings.button.hover( 
 	function() { //hover enter
 		$( this ).fadeTo( 'fast' , 1.0 );
@@ -44,20 +45,14 @@ ratings.button.hover(
 	}
 )
 
+//change header text when we hover over a button
+ratings.delta.hover( function() { ratings.head.html( ratings.delta.onHover ); } )
+ratings.same.hover(  function() { ratings.head.html( ratings.same.onHover );  } )
+ratings.flag.hover(  function() { ratings.head.html( ratings.flag.onHover );  } )
+
+//set the header back to default when user has moves mouse away from buttons
 ratings.buttons.hover( function() {}, function() { //hover exit
 	ratings.head.html( ratings.defaultHTML );
-})
-
-ratings.delta.hover( function() { //hover enter
-	ratings.head.html( ratings.delta.onHover );
-})
-
-ratings.same.hover( function() { //hover enter
-	ratings.head.html( ratings.same.onHover );
-})
-
-ratings.flag.hover( function() { //hover enter
-	ratings.head.html( ratings.flag.onHover );
 })
 
 ratings.button.on( 'click', function() { 
