@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="logo.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="169.14423"
-     inkscape:cy="832.78311"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="1044.0942"
+     inkscape:cy="514.09979"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -53,22 +53,22 @@
      id="layer1">
     <text
        xml:space="preserve"
-       style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="141.42136"
-       y="228.07771"
+       style="font-size:99.39297485px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="74.934196"
+       y="611.62012"
        id="text3007"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3009"
-         x="141.42136"
-         y="228.07771"
-         style="font-size:30px;-inkscape-font-specification:Ubuntu Medium;font-family:Ubuntu;font-weight:500;font-style:normal;font-stretch:normal;font-variant:normal"><tspan
-           style="letter-spacing:-0.90000000000000002px;fill:#0b5fa5;fill-opacity:1"
+         x="74.934196"
+         y="611.62012"
+         style="font-size:248.48243713px;font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-family:Ubuntu;-inkscape-font-specification:Ubuntu Medium"><tspan
+           style="letter-spacing:-7.45447254px;fill:#0b5fa5;fill-opacity:1"
            id="tspan3559">d</tspan><tspan
-           style="letter-spacing:1px;fill:#0b5fa5;fill-opacity:1"
+           style="letter-spacing:8.28274727px;fill:#0b5fa5;fill-opacity:1"
            id="tspan3231">f</tspan><tspan
            id="tspan3561"
-           style="letter-spacing:-0.50000000000000000px;fill:#0b5fa5;fill-opacity:1">i</tspan><tspan
+           style="letter-spacing:-4.14137363px;fill:#0b5fa5;fill-opacity:1">i</tspan><tspan
            style="letter-spacing:0px;fill:#0b5fa5;fill-opacity:1"
            id="tspan3011">l</tspan><tspan
            style="fill:#0b5fa5;fill-opacity:1"

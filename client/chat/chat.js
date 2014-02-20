@@ -11,20 +11,36 @@ window.onload = function() {
 	var inputConnect =      $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
 	var output =            $( '#chat-output' );              //the place where conversations go
 
+	var margin = $( '#chat-wrapper' ).css( 'margin-left' )[0];
+	var dockHeight = $( '#chat-dock-wrapper' ).outerHeight();
+	var inputHeight = $( '#chat-input-wrapper' ).outerHeight();
+
 	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
 
 	//===============================================
 	// User Interface
 	//===============================================
-	function resizeOutput() {
-		$( '#chat-output-wrapper' ).css( { 'height': $( window ).height() - ( 130 + 40 + 5 + 5 + 5 ) } );
-		inputFieldWrapper.css( { 'width': $( window ).width() - ( inputConnect.outerWidth() + inputSend.outerWidth() + 20 ) } );
+	function resize() {
+		$( '#chat-output-wrapper' ).css( { 'height': 
+			$( window ).height() - ( 
+				inputHeight + 
+				dockHeight +
+				margin * 3
+			)
+		});
+		inputFieldWrapper.css( { 'width': 
+			$( window ).width() - ( 
+				inputConnect.outerWidth() + 
+				inputSend.outerWidth() + 
+				margin * 4 
+			) 
+		});
 	}
 
-	resizeOutput();
+	resize();
 
 	window.onresize = function(event) {
-		resizeOutput();
+		resize();
 	}
 
 	$( '.chat-input-button' ).fadeTo( 0, 0.7 );
