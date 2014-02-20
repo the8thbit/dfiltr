@@ -10,12 +10,27 @@ body {
   font-size: 14pt;
   margin: 0;
   padding: 0;
+  background-color: #eee;
+  background: -webkit-linear-gradient(#eee, #fff);
+/* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#eee, #fff);
+/* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#eee, #fff);
+/* For Firefox 3.6 to 15 */
+  background: linear-gradient(#eee, #fff);
+/* Standard syntax */
 }
 #chat-dock-wrapper {
   position: relative;
   height: 40px;
-  border-bottom: solid 1px #999;
+  border-bottom: solid 1px #0b5fa5;
   margin-bottom: 5px;
+  background-color: #fff;
+}
+#logo {
+  position: relative;
+  margin: 5px;
+  margin-left: 10px;
 }
 #chat-wrapper {
   margin-left: 5px;
@@ -23,6 +38,7 @@ body {
 }
 #chat-output-wrapper {
   position: relative;
+  background-color: #fff;
 }
 #chat-output {
   position: absolute;
@@ -45,6 +61,7 @@ body {
   position: relative;
   height: 130px;
   margin-top: 5px;
+  margin-bottom: 5px;
 }
 #chat-input {
   position: absolute;
