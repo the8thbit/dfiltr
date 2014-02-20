@@ -55,6 +55,7 @@ ratings.buttons.hover( function() {}, function() { //hover exit
 	ratings.head.html( ratings.defaultHTML );
 })
 
+//remove buttons when one is clicked
 ratings.button.on( 'click', function() { 
 	ratings.buttons.prop( 'disabled', true );
 	ratings.buttons.fadeTo( 'slow' , 0, function() {
@@ -62,14 +63,6 @@ ratings.button.on( 'click', function() {
 	});
 })
 
-ratings.delta.on( 'click', function() {
-	ratings.stabalizeHTML( ratings.delta.onClick );
-})
-
-ratings.same.on( 'click', function() {
-	ratings.stabalizeHTML( ratings.same.onClick );
-})
-
-ratings.flag.on( 'click', function() {
-	ratings.stabalizeHTML( ratings.flag.onClick );
-})
+ratings.delta.on( 'click', function() { ratings.stabalizeHTML( ratings.delta.onClick ); })
+ratings.same.on(  'click', function() { ratings.stabalizeHTML( ratings.same.onClick );  })
+ratings.flag.on(  'click', function() { ratings.stabalizeHTML( ratings.flag.onClick );  })
