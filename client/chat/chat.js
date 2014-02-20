@@ -17,8 +17,8 @@ window.onload = function() {
 	// User Interface
 	//===============================================
 	function resizeOutput() {
-		$( '#chat-output-wrapper' ).css( { 'height': $( window ).height() - 160 } );
-		inputFieldWrapper.css( { 'height': 130 } );
+		$( '#chat-output-wrapper' ).css( { 'height': $( window ).height() - ( 130 + 40 + 5 + 5 + 5 ) } );
+		inputFieldWrapper.css( { 'width': $( window ).width() - ( inputConnect.outerWidth() + inputSend.outerWidth() + 20 ) } );
 	}
 
 	resizeOutput();

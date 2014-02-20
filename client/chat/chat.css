@@ -1,27 +1,36 @@
-html {
-  height: 100%;
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 body {
-  height: 95%;
+  height: 100%;
+  width: 100%;
   font-family: Helvetica;
   font-size: 14pt;
+  margin: 0;
+  padding: 0;
+}
+#chat-dock-wrapper {
+  position: relative;
+  height: 40px;
+  border-bottom: solid 1px #999;
+  margin-bottom: 5px;
+}
+#chat-wrapper {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 #chat-output-wrapper {
   position: relative;
-  margin-top: 0.5%;
-  padding: 5px;
 }
 #chat-output {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 98%;
-  height: 98%;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
   border: solid 1px #999;
   overflow: auto;
-  padding-top: 0.5%;
-  padding-left: 1%;
-  padding-right: 1%;
 }
 .chat-message-server {
   font-weight: bold;
@@ -34,30 +43,28 @@ body {
 }
 #chat-input-wrapper {
   position: relative;
-  height: 135px;
+  height: 130px;
+  margin-top: 5px;
 }
 #chat-input {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  margin-top: 5px;
 }
 #chat-input-field-wrapper {
   position: relative;
   text-align: right;
   float: left;
-  width: 72%;
   height: 100%;
+  margin: 0;
   background-color: #eee;
   border: 1px solid #808080;
 }
 #chat-input-field {
   display: inline-block;
   position: relative;
-  margin: 0 auto;
-  width: 99%;
+  padding: 5px;
+  width: 100%;
   height: 130px;
   border: 0px none;
   font-family: helvetica;
@@ -69,13 +76,12 @@ body {
 }
 #chat-input-connect {
   position: relative;
-  padding: 10px 15px;
   float: left;
   font-weight: bold;
   font-size: 12pt;
-  margin-right: 0.5%;
+  margin-right: 5px;
   width: 13.5%;
-  height: 97.5%;
+  height: 100%;
   background: #ff4c00;
   color: #fff;
   border: none;
@@ -83,13 +89,11 @@ body {
 }
 #chat-input-send {
   position: relative;
-  padding: 10px 15px;
   float: right;
-  right: -2px;
   font-weight: bold;
   font-size: 12pt;
   width: 13.5%;
-  height: 97.5%;
+  height: 100%;
   background: #0b5fa5;
   color: #fff;
   border: none;

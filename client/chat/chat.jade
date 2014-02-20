@@ -2,17 +2,20 @@ doctype html
 html( lang='en' )
 	head
 		title= 'Chat Test'
+		link( rel='stylesheet' type='text/css' href='/client/reset.css' )
 		link( rel='stylesheet' type='text/css' href='/client/chat/chat.css' )
 		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
 		script( src='/client/chat/chat.js' )
 		script( src='/socket.io/socket.io.js' )
 	body
-		#chat-output-wrapper
-			#chat-output  
-		#chat-input-wrapper
-			#chat-input
-				input#chat-input-connect( class='chat-input-button' type='button' value='disconnect' )  
-				#chat-input-field-wrapper
-					#chat-input-field-container
-						textarea#chat-input-field
-				input#chat-input-send( class='chat-input-button' type='button' value='send' )
+		#chat-dock-wrapper
+		#chat-wrapper
+			#chat-output-wrapper
+				#chat-output  
+			#chat-input-wrapper
+				#chat-input
+					input#chat-input-connect( class='chat-input-button' type='button' value='disconnect' )  
+					#chat-input-field-wrapper
+						#chat-input-field-container
+							textarea#chat-input-field
+					input#chat-input-send( class='chat-input-button' type='button' value='send' )
