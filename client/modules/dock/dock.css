@@ -19,7 +19,6 @@
 #dock-row1-col3 {
   vertical-align: middle;
   color: #0b5fa5;
-  width: auto;
 }
 #dock-logo {
   margin-left: 10px;
@@ -40,7 +39,6 @@
   font-size: 11pt;
   margin-right: 10px;
   font-weight: bold;
-  width: auto;
 }
 #dock-username {
   text-align: right;
