@@ -3,10 +3,31 @@ table#dock
 		td#dock-row1-col1
 			img#dock-logo( src='/assets/logo/logo.png' )
 		td#dock-row1-col2
-			div#dock-stats 
-				| 0 ∆ &nbsp; 0 ☆ &nbsp; 0 ✉
-			div#dock-username
-				| username
+			div#dock-links
+				a#dock-links-home( class='dock-link' class='dock-faded' href='' )
+					| home
+				a#dock-links-blog( class='dock-link' class='dock-faded' href='' )
+					| blog 
+				a#dock-links-score( class='dock-link' class='dock-faded' href='' )
+					| users
+				a#dock-links-score( class='dock-link' class='dock-faded' href='' )
+					| discussions
+				a#dock-links-faq( class='dock-link' class='dock-faded' href='' )
+					| faq 
+				a#dock-links-contact( class='dock-link' class='dock-faded' href='' )
+					| contact 
+				
+		td#dock-row1-col3
+			div#dock-stats( class='dock-faded' )
+				a( href = '#' )
+					| 0 ∆ &nbsp; 
+				a( href = '#' )
+					| 0 ☆ &nbsp; 
+				a( href = '#' )
+					| 0 ✉
+			div#dock-username( class='dock-faded' )
+				a( href='#' )
+					| username
 
 script( src='/client/modules/dock/dock.js' )
 link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )

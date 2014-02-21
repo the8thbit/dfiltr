@@ -137,7 +137,7 @@ window.onload = function() {
 				html += chat.messages[i] + '<br />';
 			}
 			chat.output.html( html );
-			chat.output.scrollTop( 999999 );
+			chat.output.scrollTop( 99999999 );
 		}
 	};
 
@@ -155,7 +155,7 @@ window.onload = function() {
 		console.log( 'clearing outputinputField...' );
 		chat.messages = [];
 		this.html( '' );
-		this.scrollTop( 999999 );
+		this.scrollTop( 99999999 );
 	};
 
 	//this function will either create a new virtual connection, or end the current virtual connection
