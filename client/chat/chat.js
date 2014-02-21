@@ -41,6 +41,8 @@ window.onload = function() {
 		chat.resize();
 	}
 
+	chat.dock.load( '/modules/dock' );
+
 	chat.input.button.fadeTo( 0, 0.7 );
 
 	chat.input.connectButton.hover(

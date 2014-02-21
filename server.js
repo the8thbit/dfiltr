@@ -22,6 +22,7 @@ app.engine( 'jade', require( 'jade' ).__express );
 
 app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
 app.get( '/modules/ratings', function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
+app.get( '/modules/dock', function( req, res ){ res.render( 'modules/dock/dock' ); } );
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
