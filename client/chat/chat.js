@@ -2,82 +2,86 @@ var process = 'CLIENT'; //necessary hacky code for the unified config file to wo
 document.write( '<script type="text/javascript" src="../../config.js"><\/script>' );
 
 window.onload = function() {
-	var socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
-	var messages = []; //the list of all messages to the user
+	var chat      = $( '#chat-wrapper' );
+	chat.socket   = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/' );
+	chat.messages = []; //the list of all messages to the user
+	chat.margin   = chat.css( 'margin-left' )[0];
 
-	var inputField =        $( '#chat-input-field' );         //the textarea that the user can type into and send messages from
-	var inputFieldWrapper = $( '#chat-input-field-wrapper' ); //the wrapper for the aforementioned textarea
-	var inputSend =         $( '#chat-input-send' );          //the button used to send messages
-	var inputConnect =      $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
-	var output =            $( '#chat-output' );              //the place where conversations go
+	chat.dock                = $( '#chat-dock' );                //the place where the user dock goes
+	chat.output              = $( '#chat-output' );              //the place where conversations go
+	chat.output.wrap         = $( '#chat-output-wrapper' );      //the wrapper for above
+	chat.input               = $( '#chat-input' );               //the lower panel, where the user can type and send messages
+	chat.input.field         = $( '#chat-input-field' );         //the textarea that the user can type into and send messages from
+	chat.input.field.wrap    = $( '#chat-input-field-wrapper' ); //the wrapper for the aforementioned textarea
+	chat.input.button        = $( '.chat-input-button' );        //a class consisting of the buttons on the input panel
+	chat.input.sendButton    = $( '#chat-input-send' );          //the button used to send messages
+	chat.input.connectButton = $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
 
-	var margin = $( '#chat-wrapper' ).css( 'margin-left' )[0];
-	var dockHeight = $( '#chat-dock-wrapper' ).outerHeight();
-	var inputHeight = $( '#chat-input-wrapper' ).outerHeight();
+	chat.input.connectButton.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
+	chat.input.sendButton.data( 'state', 'DISABLED' ); //adds states to the send button to show when you can't send messages
 
-	inputConnect.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
-
-	//===============================================
-	// User Interface
-	//===============================================
-	function resize() {
-		$( '#chat-output-wrapper' ).css( { 'height': 
+	chat.resize = function()  {
+		chat.output.wrap.css( { 'height': 
 			$( window ).height() - ( 
-				inputHeight + 
-				dockHeight +
-				margin * 3
+				chat.input.field.wrap.outerHeight() + 
+				chat.dock.outerHeight() +
+				chat.margin * 3
 			)
 		});
-		inputFieldWrapper.css( { 'width': 
+		chat.input.field.wrap.css( { 'width': 
 			$( window ).width() - ( 
-				inputConnect.outerWidth() + 
-				inputSend.outerWidth() + 
-				margin * 4 
+				chat.input.connectButton.outerWidth() + 
+				chat.input.sendButton.outerWidth() + 
+				chat.margin * 4
 			) 
 		});
 	}
-
-	resize();
-
-	window.onresize = function(event) {
-		resize();
+	chat.resize();
+	window.onresize = function( event ) {
+		chat.resize();
 	}
 
-	$( '.chat-input-button' ).fadeTo( 0, 0.7 );
+	chat.input.button.fadeTo( 0, 0.7 );
 
-	$( '.chat-input-button' ).hover( 
+	chat.input.connectButton.hover(
 		function() {
 			$( this ).fadeTo( 'fast' , 1.0 );
 		}, function() {
 			$( this ).fadeTo( 'fast' , 0.7 );
 		}
-	)
-
+	);
+	chat.input.sendButton.hover( 
+		function() {
+			if( chat.input.sendButton.data( 'state' ) == 'ENABLED' ) {
+				$( this ).fadeTo( 'fast' , 1.0 );
+			}
+		}, function() {
+			$( this ).fadeTo( 'fast' , 0.7 );
+		}
+	);
 
 	$( document ).keydown( function( e ){
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ) {
 			e.preventDefault();
-			addMessage( { message: inputField.prop( 'value' ), type:'self' } );
-			sendMessage( inputField.prop( 'value' ) );
+			chat.output.add( { message: chat.input.field.prop( 'value' ), type:'self' } );
+			chat.input.send( chat.input.field.prop( 'value' ) );
 		}
 	});
-
 	$( document ).keyup( function( e ){
 		//ESC KEY: end discussion/start new discussion
 		if( e.keyCode == 27 ) {
 			e.preventDefault();
-			connectToggle( );
+			chat.input.connectButton.toggle();
 		}
 	});
 
-	inputSend.on( 'click', function() {
-		addMessage( { message: inputField.prop( 'value' ), type:'self' } );
-		sendMessage( inputField.prop( 'value' ) );
+	chat.input.sendButton.on( 'click', function() {
+		chat.output.add( { message: chat.input.field.prop( 'value' ), type:'self' } );
+		chat.input.send( chat.input.field.prop( 'value' ) );
 	});
-
-	inputConnect.on( 'click', function() {
-		connectToggle();
+	chat.input.connectButton.on( 'click', function() {
+		chat.input.connectButton.toggle();
 	});
 
 
@@ -85,31 +89,33 @@ window.onload = function() {
 	// Chat Protocol
 	//===============================================
 	//what to do when the user recieves a message
-	socket.on( 'message', function( data ) {
-		addMessage( data );
+	chat.socket.on( 'message', function( data ) {
+		chat.output.add( data );
 	});
 
 	//what to do when the user finds a chat partner
-	socket.on( 'partner connected', function() {
-		socket.connected = true;
+	chat.socket.on( 'partner connected', function() {
+		chat.socket.connected = true;
 		console.log( 'partner connected' );
-		output.prop( 'value', '' );
-		inputFieldWrapper.css( 'background-color', 'white' );
-		inputField.prop( 'readOnly', false );
-		inputField.css( 'visibility', 'visible' );
-		inputField.focus();
+		chat.output.prop( 'value', '' );
+		chat.input.field.wrap.css( 'background-color', 'white' );
+		chat.input.field.prop( 'readOnly', false );
+		chat.input.field.css( 'visibility', 'visible' );
+		chat.input.field.focus();
+		chat.input.sendButton.toggle();
 	});
 
 	//what to do when a chat partner disconnects
-	socket.on( 'partner disconnected', function() {
-		inputFieldWrapper.load( '/modules/ratings', function() { ratings.init(); } );
-		socket.emit( 'virtual disconnect' );
-		inputFieldWrapper.css( 'background-color', '#eeeeee' );
-		inputField.prop( 'readOnly', true );
-		inputField.prop( 'value', '' );
-		inputField.css( 'visibility', 'hidden' );
-		inputConnect.prop( 'value', 'new discussion' );
-		inputConnect.data( 'state', 'NEW' );
+	chat.socket.on( 'partner disconnected', function() {
+		chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init(); } );
+		chat.socket.emit( 'virtual disconnect' );
+		chat.input.field.wrap.css( 'background-color', '#eeeeee' );
+		chat.input.field.prop( 'readOnly', true );
+		chat.input.field.prop( 'value', '' );
+		chat.input.field.css( 'visibility', 'hidden' );
+		chat.input.connectButton.prop( 'value', 'new discussion' );
+		chat.input.connectButton.data( 'state', 'NEW' );
+		chat.input.sendButton.toggle();
 	}); 
 
 
@@ -117,63 +123,74 @@ window.onload = function() {
 	// Internal Functions
 	//===============================================
 	//adds a new line to the output field
-	addMessage = function( data ) {
+	chat.output.add = function( data ) {
 		console.log( data );
 		if( data && data.message && data.message != '' && data.type ) {
 			if( data.type == 'server'  ) { var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
-			if( data.type == 'partner' ) { var text = '<span class="chat-message-partner">' + data.message + '</span>'; }
+			if( data.type == 'partner' ) { var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
 			if( data.type == 'self'    ) { var text = '<span class="chat-message-self">'    + data.message + '</span>'; }
-			messages.push( text );
+			chat.messages.push( text );
 			var html = '';
-			for( var i=0; i < messages.length; i++ ) {
-				html += messages[i] + '<br />';
+			for( var i=0; i < chat.messages.length; i++ ) {
+				html += chat.messages[i] + '<br />';
 			}
-			output.html( html );
-			output.scrollTop( output.height() );
-		} else if( !data || !data.message || !data.type ) {
-			console.log( 'error transporting message' );
+			chat.output.html( html );
+			chat.output.scrollTop( chat.output.height() );
 		}
 	};
 
-	//sends a message to partner
-	sendMessage = function( text ) {
+	//sends a message to the partner
+	chat.input.send = function( text ) {
 		if( text != '' ) {
-			inputField.prop( 'value', '' );
-			socket.emit( 'send', { message: text } );
+			chat.input.field.prop( 'value', '' );
+			chat.socket.emit( 'send', { message: text } );
 			console.log( 'you: ', text );
 		}
 	};
 
 	//clears the output field
-	clearOutput = function() {
+	chat.output.clear = function() {
 		console.log( 'clearing outputinputField...' );
-		messages = [];
-		output.html( '' );
-		output.scrollTop( output.height() );
+		chat.messages = [];
+		this.html( '' );
+		this.scrollTop( chat.output.height() );
 	};
 
 	//this function will either create a new virtual connection, or end the current virtual connection
-	//depending upon the state of inputConnect
-	connectToggle = function() {
-		if( inputConnect.data( 'state' ) == 'DISCONNECT' ) {
-			if( socket.connected ) {
-				inputFieldWrapper.load( '/modules/ratings', function() { ratings.init(); } );
+	//depending upon the state of chat.input.connectButton
+	chat.input.connectButton.toggle = function() {
+		if( this.data( 'state' ) == 'DISCONNECT' ) {
+			if( chat.socket.connected ) {
+				chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init(); } );
+				chat.input.sendButton.toggle();
 			}
-			socket.connected = false;
-			socket.emit( 'virtual disconnect' );
-			addMessage( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
-			inputFieldWrapper.css( 'background-color', '#eeeeee' );
-			inputField.prop( 'readOnly', true );
-			inputField.prop( 'value', '' );
-			inputField.css( 'visibility', 'hidden' );
-			inputConnect.prop( 'value', 'new discussion' );
-			inputConnect.data( 'state', 'NEW' );
-		} else if( inputConnect.data( 'state' ) == 'NEW' ) {
-			clearOutput( );
-			inputFieldWrapper.html( inputField );
-			inputConnect.prop( 'value', 'disconnect' );
-			inputConnect.data( 'state', 'DISCONNECT' );
-			socket.emit( 'virtual connection' );
+			chat.socket.connected = false;
+			chat.socket.emit( 'virtual disconnect' );
+			chat.output.add( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
+			chat.input.field.wrap.css( 'background-color', '#eeeeee' );
+			chat.input.field.prop( 'readOnly', true );
+			chat.input.field.prop( 'value', '' );
+			chat.input.field.css( 'visibility', 'hidden' );
+			chat.input.connectButton.prop( 'value', 'new discussion' );
+			chat.input.connectButton.data( 'state', 'NEW' );
+		} else if( chat.input.connectButton.data( 'state' ) == 'NEW' ) {
+			chat.output.clear( );
+			//chat.input.field.wrap.html( inputField );
+			chat.input.connectButton.prop( 'value', 'disconnect' );
+			chat.input.connectButton.data( 'state', 'DISCONNECT' );
+			chat.input.field.wrap.html( chat.input.field ); //puts the input field back in its wrapper
+			chat.socket.emit( 'virtual connection' );
+		}
+	};
+	//this function will either create a new virtual connection, or end the current virtual connection
+	//depending upon the state of chat.input.connectButton
+	chat.input.sendButton.toggle = function() {
+		if( chat.input.sendButton.data( 'state' ) == 'DISABLED' ) {
+			chat.input.sendButton.data( 'state', 'ENABLED' );
+			chat.input.sendButton.css( 'background-color', '#0B5FA5' );
+		} else {
+			chat.input.sendButton.data( 'state', 'DISABLED' );
+			chat.input.sendButton.css( 'background-color', '#999' );
 		}
 	};
 }
