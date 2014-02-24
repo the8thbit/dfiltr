@@ -50,14 +50,28 @@ virtualConnect = function( socket ) {
 	socket.retry = setInterval( function() {
 		socket.emit( 'message', { message: '...', type: 'debug' } );
 		if( !socket.partner && socket.inPool ) {
-			var partner;
+			var partner, isNew = true;
 			for( var i=0; i < pool.length; i++ ) {
-				if( ( !partner || pool[i].score > partner.score ) && pool[i] != socket ) {
+				for( var j=0; j < socket.scores.length; j++ ) {
+					if( pool[i] == socket.scores[j] ) {
+						isNew = false;
+					}
+				}
+
+				if( isNew ) {
+					socket.scores[pool[i].id] = ( Math.random() * 100 ) + 1;
+				}
+
+				if( partner && !partner.scores[socket.id] ) {
+					partner.scores[socket.id] = ( Math.random() * 100 ) + 1;					
+				}
+
+				if( ( !partner || socket.scores[pool[i].id] > socket.scores[partner.id] ) && pool[i] != socket ) {
 					partner = pool[i];
 				}
 			}
 
-			if( partner && partner.score > Math.random() * 90 ) {
+			if( partner && ( socket.scores[partner.id] + partner.scores[socket.id] ) > Math.random() * 160 ) {
 				socket.partner = partner;
 				clearInterval( socket.partner.retry );
 				clearInterval( socket.retry );
@@ -75,12 +89,12 @@ virtualConnect = function( socket ) {
 				socket.partner.partner = socket;
 
 				socket.partner.emit( 'message', { message: 'You\'ve been paired with a partner.', type: 'server' } );
-				socket.partner.emit( 'message', { message: 'partner\'s score: ' + socket.score,   type: 'debug' } );
+				socket.partner.emit( 'message', { message: 'partner\'s score: ' + socket.partner.scores[socket.id],   type: 'debug' } );
 				socket.partner.emit( 'message', { message: 'partner\'s ID: ' + socket.id,         type: 'debug' } );
 				socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug' } );
 
 				socket.emit( 'message', { message: 'You\'ve been paired with a partner.',       type: 'server' } );
-				socket.emit( 'message', { message: 'partner\'s score: ' + socket.partner.score, type: 'debug' } );
+				socket.emit( 'message', { message: 'partner\'s score: ' + socket.scores[socket.partner.id], type: 'debug' } );
 				socket.emit( 'message', { message: 'partner\'s ID: ' + socket.partner.id,       type: 'debug' } );
 				socket.emit( 'message', { message: 'You were the picker.',                      type: 'debug' } );
 				
@@ -120,7 +134,7 @@ virtualDisconnect = function( socket ) {
 }
 
 connect = function( socket ) {
-	socket.score = Math.floor( ( Math.random() * 100 ) + 1 );
+	socket.scores = [];
 
 	//if there are users in the pool, take one of them and make them your
 	//partner. If not, jump in the pool.
