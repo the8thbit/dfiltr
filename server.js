@@ -148,7 +148,7 @@ io.of( '/main' ).on( 'connection', function( socket ) {
 	connect( socket );
 });
 
-for( var i=0; i < 100; i++ ) {
+for( var i=0; i < 500; i++ ) {
 	io.of( '/sim/' + i ).on( 'connection', function( socket ) {
 		connect( socket );
 	});
