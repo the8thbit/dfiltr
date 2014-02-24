@@ -52,6 +52,10 @@ body {
 .chat-message-self {
   color: #0b5fa5;
 }
+.chat-message-debug {
+  color: #808080;
+  font-weight: bold;
+}
 #chat-input-wrapper {
   position: relative;
   height: 130px;
@@ -112,5 +116,8 @@ body {
   outline: none;
 }
 #mod-ratings {
+  visibility: hidden;
+}
+#dock {
   visibility: hidden;
 }
