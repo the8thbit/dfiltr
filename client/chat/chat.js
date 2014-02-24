@@ -98,7 +98,7 @@ window.onload = function() {
 	};
 
 	chat.createSim = function() {
-		for( var i=0; i < 1000; i++ ) {
+		for( var i=0; i < 100; i++ ) {
 			chat.sim[i] = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/sim/' + i );
 			if( chat.sim[i] ) {
 				chat.sim[i].num = i;
@@ -125,10 +125,10 @@ window.onload = function() {
 	
 				chat.sim[i].on( 'partner disconnected', function() {
 					var thisSim = this;
-					var timeout = Math.floor((Math.random()*5000)+1);
+					var timeout = Math.floor((Math.random()*5000)+10);
 					setTimeout( 
 						function() { thisSim.emit( 'virtual connect' ); },
-						3000
+						timeout
 					)
 				});
 			}
@@ -216,6 +216,7 @@ window.onload = function() {
 		chat.socket.connected = true;
 		console.log( 'partner connected' );
 		chat.output.prop( 'value', '' );
+		chat.input.field.wrap.html( chat.input.field ); //puts the input field back in its wrapper
 		chat.input.field.wrap.css( 'background-color', 'white' );
 		chat.input.field.prop( 'readOnly', false );
 		chat.input.field.css( 'visibility', 'visible' );
@@ -225,6 +226,7 @@ window.onload = function() {
 
 	//what to do when a chat partner disconnects
 	chat.socket.on( 'partner disconnected', function() {
+		chat.socket.connected = false;
 		chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init(); } );
 		chat.socket.emit( 'virtual disconnect' );
 		chat.input.field.wrap.css( 'background-color', '#eeeeee' );

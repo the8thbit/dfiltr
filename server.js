@@ -49,37 +49,46 @@ virtualConnect = function( socket ) {
 
 	socket.retry = setInterval( function() {
 		socket.emit( 'message', { message: '...', type: 'debug' } );
-		if( !socket.partner && socket.inPool && pool[0] && pool[0] != socket ) {
-			socket.partner = pool.shift();
-			clearInterval( socket.partner.retry );
-			clearInterval( socket.retry );
-
-			for( var j=0; j < pool.length; j++ ) {
-				if( pool[j].id == socket.id ) {
-					pool.splice( j-1, 1 );
-					socket.inPool = null;
-				} else if( pool[j].id == socket.partner.id ) {
-					pool.splice( j-1, 1 );
-					socket.partner.inPool = null;
+		if( !socket.partner && socket.inPool ) {
+			var partner;
+			for( var i=0; i < pool.length; i++ ) {
+				if( ( !partner || pool[i].score > partner.score ) && pool[i] != socket ) {
+					partner = pool[i];
 				}
 			}
+
+			if( partner && partner.score > Math.random() * 90 ) {
+				socket.partner = partner;
+				clearInterval( socket.partner.retry );
+				clearInterval( socket.retry );
+
+				for( var j=0; j < pool.length; j++ ) {
+					if( pool[j].id == socket.id ) {
+						pool.splice( j-1, 1 );
+						socket.inPool = null;
+					} else if( pool[j].id == socket.partner.id ) {
+						pool.splice( j-1, 1 );
+						socket.partner.inPool = null;
+					}
+				}
 			
-			socket.partner.partner = socket;
+				socket.partner.partner = socket;
 
-			socket.partner.emit( 'message', { message: 'You\'ve been paired with a partner.', type: 'server' } );
-			socket.partner.emit( 'message', { message: 'partner\'s score: ' + socket.score,   type: 'debug' } );
-			socket.partner.emit( 'message', { message: 'partner\'s ID: ' + socket.id,         type: 'debug' } );
-			socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug' } );
+				socket.partner.emit( 'message', { message: 'You\'ve been paired with a partner.', type: 'server' } );
+				socket.partner.emit( 'message', { message: 'partner\'s score: ' + socket.score,   type: 'debug' } );
+				socket.partner.emit( 'message', { message: 'partner\'s ID: ' + socket.id,         type: 'debug' } );
+				socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug' } );
 
-			socket.emit( 'message', { message: 'You\'ve been paired with a partner.',       type: 'server' } );
-			socket.emit( 'message', { message: 'partner\'s score: ' + socket.partner.score, type: 'debug' } );
-			socket.emit( 'message', { message: 'partner\'s ID: ' + socket.partner.id,       type: 'debug' } );
-			socket.emit( 'message', { message: 'You were the picker.',                      type: 'debug' } );
+				socket.emit( 'message', { message: 'You\'ve been paired with a partner.',       type: 'server' } );
+				socket.emit( 'message', { message: 'partner\'s score: ' + socket.partner.score, type: 'debug' } );
+				socket.emit( 'message', { message: 'partner\'s ID: ' + socket.partner.id,       type: 'debug' } );
+				socket.emit( 'message', { message: 'You were the picker.',                      type: 'debug' } );
 				
-			socket.emit( 'partner connected' );
-			socket.partner.emit( 'partner connected' );
-		} else if( !socket.inPool ) { 
-			clearInterval( socket.retry );
+				socket.emit( 'partner connected' );
+				socket.partner.emit( 'partner connected' );
+			} else if( !socket.inPool ) { 
+				clearInterval( socket.retry );
+			}
 		}	
 	}, 1000 );
 }
@@ -148,7 +157,7 @@ io.of( '/main' ).on( 'connection', function( socket ) {
 	connect( socket );
 });
 
-for( var i=0; i < 1000; i++ ) {
+for( var i=0; i < 100; i++ ) {
 	io.of( '/sim/' + i ).on( 'connection', function( socket ) {
 		connect( socket );
 	});
