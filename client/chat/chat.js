@@ -98,7 +98,7 @@ window.onload = function() {
 	};
 
 	chat.createSim = function() {
-		for( var i=0; i < 10; i++ ) {
+		for( var i=0; i < 100; i++ ) {
 			chat.sim[i] = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/sim/' + i );
 			if( chat.sim[i] ) {
 				chat.sim[i].num = i;
