@@ -1,10 +1,9 @@
 //====================================
 //SERVER START UP
 //====================================
-var config = require( './config.js' );
-
+var config  = require( './config.js' );
 var express = require( 'express' );
-stylus = require( 'stylus' );
+var stylus  = require( 'stylus' );
 
 var app = express();
 
