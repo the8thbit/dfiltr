@@ -27,6 +27,7 @@
 *.sqlite
 ./data/* #
 /data/* #
+data/*
 
 
 
