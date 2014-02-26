@@ -4,30 +4,28 @@
 var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
-var mongo = require('mongodb');
-var monk = require('monk');
-var MongoClient = require('mongodb').MongoClient , format = require('util').format;
-
+var mongo   = require( 'mongodb' );
+var monk    = require( 'monk' );
 
 //======================TEST MONGO CODE=======================//
-MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
-    if(err) throw err;
+if( false /*we dont have a database schema, so this will throw an error*/ ) {
+	var MongoClient = require('mongodb').MongoClient , format = require('util').format;
+	MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
+		if(err) throw err;
+		var collection = db.collection('user.collection');
+		collection.insert({a:2}, function(err, docs) {
+			collection.count(function(err, count) {
+				console.log(format("count = %s", count));
+			});
 
-    var collection = db.collection('user.collection');
-    collection.insert({a:2}, function(err, docs) {
-
-      collection.count(function(err, count) {
-        console.log(format("count = %s", count));
-      });
-
-      // Locate all the entries using find
-      collection.find().toArray(function(err, results) {
-        console.dir(results);
-        
-        db.close();
-      });
-    });
-  })
+			// Locate all the entries using find
+			collection.find().toArray(function(err, results) {
+				console.dir(results);
+				db.close();
+			});
+		});
+	})
+}
 //======================END OF TEST MONGO CODE=======================//
 
 var app = express();
@@ -47,8 +45,6 @@ app.engine( 'jade', require( 'jade' ).__express );
 app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
 app.get( '/modules/ratings', function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
 app.get( '/modules/dock', function( req, res ){ res.render( 'modules/dock/dock' ); } );
-
-
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
