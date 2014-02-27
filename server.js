@@ -4,31 +4,7 @@
 var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
-var mongo = require('mongodb');
-var monk = require('monk');
-var MongoClient = require('mongodb').MongoClient , format = require('util').format;
-
-
-//======================TEST MONGO CODE=======================//
-MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
-    if(err) throw err;
-
-    var collection = db.collection('user.collection');
-    collection.insert({a:2}, function(err, docs) {
-
-      collection.count(function(err, count) {
-        console.log(format("count = %s", count));
-      });
-
-      // Locate all the entries using find
-      collection.find().toArray(function(err, results) {
-        console.dir(results);
-        
-        db.close();
-      });
-    });
-  })
-//======================END OF TEST MONGO CODE=======================//
+var schema = require('./schema.js');
 
 var app = express();
 
