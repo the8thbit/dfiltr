@@ -6,21 +6,27 @@ var express = require( 'express' );
 var stylus  = require( 'stylus' );
 var mongo   = require( 'mongodb' );
 var monk    = require( 'monk' );
+var http    = require( 'http' );
+
+var brain   = require( 'predictionio' ) ( {
+	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
+	baseUrl: 'http://localhost:8001'
+})
 
 //======================TEST MONGO CODE=======================//
 if( false /*we dont have a database schema, so this will throw an error*/ ) {
-	var MongoClient = require('mongodb').MongoClient , format = require('util').format;
-	MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, db) {
-		if(err) throw err;
-		var collection = db.collection('user.collection');
-		collection.insert({a:2}, function(err, docs) {
-			collection.count(function(err, count) {
-				console.log(format("count = %s", count));
-			});
+	var MongoClient = require( 'mongodb' ).MongoClient , format = require( 'util' ).format;
+	MongoClient.connect( 'mongodb://127.0.0.1:27017/test', function( err, db ) {
+		if( err ) throw err;
+		var collection = db.collection( 'user.collection' );
+		collection.insert( { a:2 }, function( err, docs ) {
+			collection.count( function( err, count ) {
+				console.log( format( 'count = %s', count ) );
+			} );
 
 			// Locate all the entries using find
-			collection.find().toArray(function(err, results) {
-				console.dir(results);
+			collection.find().toArray( function( err, results ) {
+				console.dir( results );
 				db.close();
 			});
 		});
@@ -59,14 +65,35 @@ console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PO
 //====================================
 //CHAT PROTOCOL
 //====================================
-var pool = [];    //pool of unpaired users
+var pool        = [];    //pool of unpaired users
+brain.userList = [];
+brain.itemList = [];
 
 virtualConnect = function( socket ) {
+	socket.brainUser;
+	socket.brainItems = [];
+	var ERROR_CHECK = function( err, res ) {
+		if( err ) console.log( err );
+		if( res ) console.log( res );
+	}
+
+	brain.users.create( { pio_uid: brain.userList.length + 1, pio_inactive: false }, ERROR_CHECK );
+	brain.userList.push( brain.users.get( brain.userList.length, ERROR_CHECK ) );
+	console.log( brain.userList[brain.userList.length - 1] );
+
+	socket.brainUser = brain.userList[brain.userList.length - 1];
+	//console.log( socket.brainUser );
+
+	for( var i=0; i < 5; i++ ) {
+		brain.items.create( { pio_iid: brain.itemList.length + 1, pio_itypes: 'user', pio_inactive: false }, ERROR_CHECK );
+		brain.itemList.push(
+			brain.items.get( brain.itemList.length, ERROR_CHECK )
+		);
+		socket.brainItems.push( brain.itemList[this.length] );
+	}
+
 	socket.emit( 'message', { message: 'your ID:' + socket.id, type: 'debug' } );
 	socket.inPool = pool.push( socket );
-	console.log( 'POOL SIZE: ' + pool.length );
-	console.log( 'POOL SIZE: ' + pool.length );
-	console.log( 'POOL SIZE: ' + pool.length );
 	socket.emit( 'message', { message: 'Looking for a partner...', type: 'server' } );
 
 	socket.retry = setInterval( function() {
