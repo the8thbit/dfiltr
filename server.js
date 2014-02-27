@@ -8,31 +8,9 @@ var schema  = require('./schema.js');
 var http    = require( 'http' );
 
 var brain   = require( 'predictionio' ) ( {
-	key: API_KEY,
+	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
 	baseUrl: 'http://localhost:8001'
 })
-
-//======================TEST MONGO CODE=======================//
-if( false /*we dont have a database schema, so this will throw an error*/ ) {
-	var MongoClient = require( 'mongodb' ).MongoClient , format = require( 'util' ).format;
-	MongoClient.connect( 'mongodb://127.0.0.1:27017/test', function( err, db ) {
-		if( err ) throw err;
-		var collection = db.collection( 'user.collection' );
-		collection.insert( { a:2 }, function( err, docs ) {
-			collection.count( function( err, count ) {
-				console.log( format( 'count = %s', count ) );
-			} );
-
-			// Locate all the entries using find
-			collection.find().toArray( function( err, results ) {
-				console.dir( results );
-				db.close();
-			});
-		});
-	})
-}
-//======================END OF TEST MONGO CODE=======================//
-=======
 
 var app = express();
 
