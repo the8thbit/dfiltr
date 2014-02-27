@@ -4,12 +4,11 @@
 var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
-var mongo   = require( 'mongodb' );
-var monk    = require( 'monk' );
+var schema  = require('./schema.js');
 var http    = require( 'http' );
 
 var brain   = require( 'predictionio' ) ( {
-	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
+	key: API_KEY,
 	baseUrl: 'http://localhost:8001'
 })
 
@@ -33,6 +32,7 @@ if( false /*we dont have a database schema, so this will throw an error*/ ) {
 	})
 }
 //======================END OF TEST MONGO CODE=======================//
+=======
 
 var app = express();
 
