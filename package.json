@@ -8,7 +8,8 @@
 		"socket.io": "latest",
 		"jade": "latest",
 		"stylus": "latest",
-		"mongodb": "*",
-  	        "mongoose": "*"
+		"mongodb": "latest",
+  	        "mongoose": "latest"
+
 	}
 }

@@ -5,6 +5,12 @@ var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
 var schema = require('./schemas/mainDB.js');
+var http    = require( 'http' );
+
+var brain   = require( 'predictionio' ) ( {
+	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
+	baseUrl: 'http://localhost:8001'
+})
 
 var app = express();
 
@@ -24,8 +30,6 @@ app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
 app.get( '/modules/ratings', function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
 app.get( '/modules/dock', function( req, res ){ res.render( 'modules/dock/dock' ); } );
 
-
-
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
 
@@ -39,14 +43,35 @@ console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PO
 //====================================
 //CHAT PROTOCOL
 //====================================
-var pool = [];    //pool of unpaired users
+var pool        = [];    //pool of unpaired users
+brain.userList = [];
+brain.itemList = [];
 
 virtualConnect = function( socket ) {
+	socket.brainUser;
+	socket.brainItems = [];
+	var ERROR_CHECK = function( err, res ) {
+		if( err ) console.log( err );
+		if( res ) console.log( res );
+	}
+
+	brain.users.create( { pio_uid: brain.userList.length + 1, pio_inactive: false }, ERROR_CHECK );
+	brain.userList.push( brain.users.get( brain.userList.length, ERROR_CHECK ) );
+	console.log( brain.userList[brain.userList.length - 1] );
+
+	socket.brainUser = brain.userList[brain.userList.length - 1];
+	//console.log( socket.brainUser );
+
+	for( var i=0; i < 5; i++ ) {
+		brain.items.create( { pio_iid: brain.itemList.length + 1, pio_itypes: 'user', pio_inactive: false }, ERROR_CHECK );
+		brain.itemList.push(
+			brain.items.get( brain.itemList.length, ERROR_CHECK )
+		);
+		socket.brainItems.push( brain.itemList[this.length] );
+	}
+
 	socket.emit( 'message', { message: 'your ID:' + socket.id, type: 'debug' } );
 	socket.inPool = pool.push( socket );
-	console.log( 'POOL SIZE: ' + pool.length );
-	console.log( 'POOL SIZE: ' + pool.length );
-	console.log( 'POOL SIZE: ' + pool.length );
 	socket.emit( 'message', { message: 'Looking for a partner...', type: 'server' } );
 
 	socket.retry = setInterval( function() {

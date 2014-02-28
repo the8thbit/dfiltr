@@ -5,11 +5,11 @@
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/chatappdb');
-User = require('./schemas/user-schema.js');
+User = require('./user-schema.js');
 
 var NewUser = new User({
-	username: 'testUser',
-	password: 'testPassword'
+	username: 'testUser1',
+	password: 'testPassword1'
 });
 
-testUser.save();
+NewUser.save();
