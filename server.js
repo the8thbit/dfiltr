@@ -4,7 +4,7 @@
 var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
-var schema  = require( './schemas/mainDB.js' );
+//var schema  = require( './schemas/mainDB.js' );
 /*var brain   = require( 'predictionio' ) ( {
 	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
 	baseUrl: 'http://localhost:8001'
