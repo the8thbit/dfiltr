@@ -9,6 +9,6 @@
 		"jade": "latest",
 		"stylus": "latest",
 		"mongodb": "*",
-  	        "monk": "*"
+  	        "mongoose": "*"
 	}
 }

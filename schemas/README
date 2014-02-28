@@ -1,0 +1,63 @@
+START UP SERVER AND STORE A NEW USER IN MONGO LOCALLY
+
+***Replace ariel with your directory throughout
+
+NAVIGATE TOO ---> $cd '/home/ariel/435-master'
+
+ALRIGHT NOW START MONGO SERVER ---> $mongod --dbpath '/home/ariel/435-master/data'
+
+Once the server is up and running pointed to data we can now add things and grab things from our mongo database.
+
+Open a new terminal
+
+NAVIGATE TOO ---> $cd '/home/ariel/435-master'
+
+START SERVER ---> $node ./server.js
+
+This should create a new user under what we have entered in the NewUser variable located in the mainDB.js file
+
+var testUser = new User({
+	username: 'testUser',
+	password: 'testPassword'
+});
+
+The next step is setting up 'testUser' and 'testPassword' to where it grabs these values from the textboxes in our web application.
+
+To see if the user was saved in the mongodb simply follow these steps:
+
+1)Open a new terminal 
+2)NAVIGATE TOO ---> $cd '/home/ariel/435-master'
+3)TYPE IN TERMINAL ---> $mongo
+4)now a new mongo connection should be up and you should be in the mongo shell
+5) type the following commands in the mongo shell
+	>show dbs (you should see chatappdb)
+	>use chatappdb
+	>show collections ( you should see users)
+.	>db.users.find().pretty()   (this should display the new use entered)
+	>exit (to exit mongo shell)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+

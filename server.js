@@ -4,7 +4,7 @@
 var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
-var schema = require('./schema.js');
+var schema = require('./schemas/mainDB.js');
 
 var app = express();
 
