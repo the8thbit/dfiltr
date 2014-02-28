@@ -63,6 +63,7 @@ for( var i=0; i < 100; i++ ) {
 // create our socket and connect to the server
 //-----------------------------------------------------------------------------
 ptcl.connect = function( socket ) {
+	socket.set( 'destroy upgrade', false );
 	socket.scores = [];
 
 	//if there are users in the ptcl.pool, take one of them and make them your
