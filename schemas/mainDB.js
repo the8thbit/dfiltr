@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://' + SERVER_IP + '/chatappdb');
 User = require('./user-schema.js');
 
+
 var NewUser = new User({
 	username: 'testUser1',
 	password: 'testPassword1'
