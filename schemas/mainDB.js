@@ -3,7 +3,7 @@
 //NOTE: HERE IS WHERE WE CAN CREATE NEW USERS AND SAVE TO DATABASE
 //====================================
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://' + config.SERVER_IP + ':' 27017 + '/chatappdb');
+mongoose.connect('mongodb://' + config.SERVER_IP + ':27017' + '/chatappdb');
 User = require('./user-schema.js');
 
 var NewUser = new User({
