@@ -4,7 +4,7 @@
 //====================================
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/chatappdb');
+mongoose.connect('mongodb://' + SERVER_IP + '/chatappdb');
 User = require('./user-schema.js');
 
 var NewUser = new User({
