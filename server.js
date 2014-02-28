@@ -4,7 +4,7 @@
 var config  = require( './config.js' );
 var express = require( 'express' );
 var stylus  = require( 'stylus' );
-//var schema  = require( './schemas/mainDB.js' );
+var schema  = require( './schemas/mainDB.js' );
 /*var brain   = require( 'predictionio' ) ( {
 	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
 	baseUrl: 'http://localhost:8001'
@@ -63,7 +63,6 @@ for( var i=0; i < 100; i++ ) {
 // create our socket and connect to the server
 //-----------------------------------------------------------------------------
 ptcl.connect = function( socket ) {
-	socket.set( 'destroy upgrade', false );
 	socket.scores = [];
 
 	//if there are users in the ptcl.pool, take one of them and make them your
