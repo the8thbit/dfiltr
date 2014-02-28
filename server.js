@@ -38,9 +38,8 @@ console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PO
 //=============================================================================
 // CHAT PROTOCOL
 //=============================================================================
-var ptcl = newObject();
+var ptcl = new Object();
 ptcl.pool = []; //pool of unpaired users
-
 
 //-----------------------------------------------------------------------------
 // what to do when the socket connects
