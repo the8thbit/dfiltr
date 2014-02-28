@@ -2,11 +2,11 @@
 //CONNECTS TO MONGODB AND LOADS UP ALL SCHEMAS
 //NOTE: HERE IS WHERE WE CAN CREATE NEW USERS AND SAVE TO DATABASE
 //====================================
+var config  = require( './config.js' );
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://' + SERVER_IP + '/chatappdb');
 User = require('./user-schema.js');
-
 
 var NewUser = new User({
 	username: 'testUser1',
