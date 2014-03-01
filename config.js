@@ -1,39 +1,43 @@
-//=====================================//
-//        SERVER CONFIGURATION         //
-//=====================================//
-  if( process.env ) {                  // TOGGLE ON FOR OPENSHIFT DEPLOY
-//=====================================//
-//IP ADDRESS                           //
-  var SERVER_IP =                      //
-//'localhost';                         // toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_IP;     // toggle on for openshift deploy
-//=====================================//
-//PORT NUMBER                          //
-  var SERVER_PORT =                    //
-//8080;                                // toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_PORT;   // toggle on for openshift deploy
-//=====================================//
-//MONGODB CONNECTION INFO              //
-  var MONGO_ADD =                      //
-//mongodb://localhost/chatappdb        // toggle on for local testing
-  process.env.OPENSHIFT_MONGODB_DB_URL // toggle on for openshift deploy
-//=======================================
-  }                                    // TOGGLE ON FOR OPENSHIFT DEPLOY
-//=====================================//
+//========================================//
+//          SERVER CONFIGURATION          //
+//========================================//
+  if( process.env ) {                     // TOGGLE ON FOR OPENSHIFT DEPLOY
+//========================================//
+//IP ADDRESS                              //
+  var SERVER_IP =                         //
+//'localhost';                            // toggle on for local testing
+  process.env.OPENSHIFT_NODEJS_IP;        // toggle on for openshift deploy
+//========================================//
+//PORT NUMBER                             //
+  var SERVER_PORT =                       //
+//8080;                                   // toggle on for local testing
+  process.env.OPENSHIFT_NODEJS_PORT;      // toggle on for openshift deploy
+//========================================//
+//MONGODB CONNECTION INFO                 //
+  var MONGO_IP =                          //
+//mongodb://localhost/chatappdb           // toggle on for local testing
+  process.env.OPENSHIFT_MONGODB_DB_URL;   // toggle on for openshift deploy
+//========================================//
+  var MONGO_PORT =                        //
+//????                                    // toggle on for local testing
+  process.env.OPENSHIFT_MONGODB_DB_PORT;  //
+//========================================//
+  }                                       // TOGGLE ON FOR OPENSHIFT DEPLOY
+//========================================//
 
-//=====================================//
-//         CLIENT CONFIGURATION        //
-//=====================================//
-//IP ADDRESS                           //
-  var CLIENT_IP =                      //
-//'localhost';                         // toggle on for local testing
-  '435-teamnoname.rhcloud.com';        // toggle on for openshift deploy
-//=====================================//
-//PORT NUMBER                          //
-  var CLIENT_PORT =                    //
-//8080;                                // toggle on for local testing
-  8000;                                // neccessary for openshift, as websockets is restricted to this port
-//=====================================//
+//========================================//
+//          CLIENT CONFIGURATION          //
+//========================================//
+//IP ADDRESS                              //
+  var CLIENT_IP =                         //
+//'localhost';                            // toggle on for local testing
+  '435-teamnoname.rhcloud.com';           // toggle on for openshift deploy
+//========================================//
+//PORT NUMBER                             //
+  var CLIENT_PORT =                       //
+//8080;                                   // toggle on for local testing
+  8000;                                   // neccessary for openshift, as websockets is restricted to this port
+//========================================//
 
 
 
