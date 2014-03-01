@@ -3,11 +3,11 @@
 //====================================
 
 var mongoose = require('mongoose'),
-Schema = mongoose.Schema;
+schema = mongoose.schema;
 
-var UserSchema = new Schema({
+var userSchema = new schema( {
 	username: { type: String, required: true, index: { unique: true } },
 	password: { type: String, required: true }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model( 'user', userSchema );
