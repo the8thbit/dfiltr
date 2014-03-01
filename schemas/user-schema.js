@@ -3,7 +3,7 @@
 //====================================
 
 var mongoose = require('mongoose'),
-schema = mongoose.schema;
+schema = mongoose.Schema;
 
 var userSchema = new schema( {
 	username: { type: String, required: true, index: { unique: true } },
