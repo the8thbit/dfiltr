@@ -6,15 +6,15 @@ var config  = require( './../config.js' );
 var mongoose = require( 'mongoose' );
 mongoose.connect( config.MONGO_IP + ':' + config.MONGO_PORT + '/chatappdb' );
 
-var db = mongoose.connection;
-db.on( 'error', console.error.bind( console, 'mongo error:' ) );
+var mongo = mongoose.connection;
+mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 
 //=============================================================================
 //LOAD SCHEMA
 //=============================================================================
-user = require( './user-schema.js' );
+User = require( './user-schema.js' );
 
-var newUser = new user( {
+var newUser = new User( {
 	username: 'testUser1',
 	password: 'testPassword1'
 });

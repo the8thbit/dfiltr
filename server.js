@@ -1,12 +1,12 @@
 //=============================================================================
 // SERVER START UP
 //=============================================================================
-var SERVER   = true; //necessary hacky code for the unified config file to work
-var config   = require( './config.js' );
-var express  = require( 'express' );
-var stylus   = require( 'stylus' );
-var passport = require( 'passport' )
-var schema   = require( './schemas/mainDB.js' );
+var config     = require( './config.js' );
+var express    = require( 'express' );
+var stylus     = require( 'stylus' );
+var passport   = require( 'passport' );
+var localStrat = require( 'passport-local' ).Strategy;
+var db         = require( './schemas/mainDB.js' );
 
 /*var brain   = require( 'predictionio' ) ( {
 	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
@@ -16,6 +16,9 @@ var schema   = require( './schemas/mainDB.js' );
 //use the express app engine
 var app = express();
 app.use( express.static( __dirname + '/' ) );
+
+//use pasport for managing user authentication and sessions
+app.use( passport.initialize() );
 
 //use stylus templates for CSS
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
@@ -34,8 +37,29 @@ app.get( '/modules/dock', function( req, res ){ res.render( 'modules/dock/dock' 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
 io.configure( function() { io.set( 'transports', [ 'websocket' ] ); } ); //turn websockets on
-console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT ); 
+console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT );
+
+
+
 //=============================================================================
+// AUTHENTICATION PROTOCOL
+//=============================================================================
+passport.use( new localStrat( function( username, password, done ) {
+	User.findOne( { username: username }, function( err, user ) {
+		if( err )                              return done( err );
+		if( !user )                            return done( null, false, { message: 'bad username' } );
+		if( user.password != password )        return done( null, false, { message: 'bad password' } );
+		return done( null, user );
+	});
+}));
+
+app.post( '/login',
+	passport.authenticate( 'local', { 
+		successRedirect: '/',
+		failureRedirect: '/login',
+   	failureFlash:    true 
+	})
+);
 
 
 
@@ -69,8 +93,8 @@ for( var i=0; i < 100; i++ ) {
 ptcl.connect = function( socket ) {
 	socket.scores = [];
 
-	//if there are users in the ptcl.pool, take one of them and make them your
-	//partner. If not, jump in the ptcl.pool.
+	//if there are users in the pool, take one of them and make them your
+	//partner. If not, jump in the pool.
 	ptcl.virtualConnect( socket );
 
 	socket.on( 'virtual connection', function() {

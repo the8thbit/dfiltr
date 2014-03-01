@@ -1,6 +1,7 @@
-if( SERVER ) {
 //========================================//
 //          SERVER CONFIGURATION          //
+//========================================//
+//if( process.env ) {                     // TOGGLE ON FOR OPENSHIFT DEPLOY
 //========================================//
 //IP ADDRESS                              //
   var SERVER_IP =                         //
@@ -21,7 +22,9 @@ if( SERVER ) {
   27017                                   // toggle on for local testing
 //process.env.OPENSHIFT_MONGODB_DB_PORT;  //
 //========================================//
-} else if( CLIENT ) {
+//}                                       // TOGGLE ON FOR OPENSHIFT DEPLOY
+//========================================//
+
 //========================================//
 //          CLIENT CONFIGURATION          //
 //========================================//
@@ -35,12 +38,14 @@ if( SERVER ) {
   8080;                                   // toggle on for local testing
 //8000;                                   // neccessary for openshift, as websockets is restricted to this port
 //========================================//
-}
 
 
 
 
-if( SERVER ) {
+
+if( process == 'SERVER' || process.env ) {
+	module.exports.CLIENT_IP   = CLIENT_IP;
+	module.exports.CLIENT_PORT = CLIENT_PORT;
 	module.exports.SERVER_IP   = SERVER_IP;
 	module.exports.SERVER_PORT = SERVER_PORT;
 	module.exports.MONGO_IP    = MONGO_IP;
