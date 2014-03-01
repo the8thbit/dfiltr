@@ -18,8 +18,8 @@ window.onload = function() {
 	chat.input.sendButton    = $( '#chat-input-send' );          //the button used to send messages
 	chat.input.connectButton = $( '#chat-input-connect' );       //the button used to connect/disconnect from a discussion
 
-	chat.input.connectButton.data( 'state', 'DISCONNECT' ); //adds states to the connect/disconnect button to swap between the two
-	chat.input.sendButton.data( 'state', 'DISABLED' ); //adds states to the send button to show when you can't send messages
+	chat.input.connectButton.data( 'state', 'DISCONNECT' );      //adds states to the connect/disconnect button to swap between the two
+	chat.input.sendButton.data( 'state', 'DISABLED' );           //adds states to the send button to show when you can't send messages
 	
 	//===============================================
 	// Internal Functions
