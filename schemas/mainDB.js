@@ -1,3 +1,5 @@
+var config  = require( './config.js' );
+
 //====================================
 //CONNECTS TO MONGODB AND LOADS UP ALL SCHEMAS
 //NOTE: HERE IS WHERE WE CAN CREATE NEW USERS AND SAVE TO DATABASE
