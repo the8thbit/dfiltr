@@ -1,8 +1,6 @@
 //========================================//
 //          SERVER CONFIGURATION          //
 //========================================//
-//if( process.env ) {                     // TOGGLE ON FOR OPENSHIFT DEPLOY
-//========================================//
 //IP ADDRESS                              //
   var SERVER_IP =                         //
   'localhost';                            // toggle on for local testing
@@ -21,8 +19,6 @@
   var MONGO_PORT =                        //
   27017                                   // toggle on for local testing
 //process.env.OPENSHIFT_MONGODB_DB_PORT;  //
-//========================================//
-//}                                       // TOGGLE ON FOR OPENSHIFT DEPLOY
 //========================================//
 
 //========================================//

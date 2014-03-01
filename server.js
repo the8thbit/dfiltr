@@ -1,10 +1,12 @@
 //=============================================================================
 // SERVER START UP
 //=============================================================================
-var config  = require( './config.js' );
-var express = require( 'express' );
-var stylus  = require( 'stylus' );
-var schema  = require( './schemas/mainDB.js' );
+var config   = require( './config.js' );
+var express  = require( 'express' );
+var stylus   = require( 'stylus' );
+var passport = require( 'passport' )
+var schema   = require( './schemas/mainDB.js' );
+
 /*var brain   = require( 'predictionio' ) ( {
 	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
 	baseUrl: 'http://localhost:8001'
@@ -33,6 +35,7 @@ var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.S
 io.configure( function() { io.set( 'transports', [ 'websocket' ] ); } ); //turn websockets on
 console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT ); 
 //=============================================================================
+
 
 
 //=============================================================================
