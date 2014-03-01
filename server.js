@@ -1,6 +1,7 @@
 //=============================================================================
 // SERVER START UP
 //=============================================================================
+var SERVER   = true; //necessary hacky code for the unified config file to work
 var config   = require( './config.js' );
 var express  = require( 'express' );
 var stylus   = require( 'stylus' );
