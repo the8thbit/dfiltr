@@ -13,6 +13,11 @@
 //8080;                                // toggle on for local testing
   process.env.OPENSHIFT_NODEJS_PORT;   // toggle on for openshift deploy
 //=====================================//
+//MONGODB CONNECTION INFO              //
+  var MONGO_ADD =                      //
+//mongodb://localhost/chatappdb        // toggle on for local testing
+  process.env.OPENSHIFT_MONGODB_DB_URL // toggle on for openshift deploy
+//=======================================
   }                                    // TOGGLE ON FOR OPENSHIFT DEPLOY
 //=====================================//
 
@@ -39,4 +44,5 @@ if( process == 'SERVER' || process.env ) {
 	module.exports.CLIENT_PORT = CLIENT_PORT;
 	module.exports.SERVER_IP   = SERVER_IP;
 	module.exports.SERVER_PORT = SERVER_PORT;
+	module.exports.MONGO_ADD   = MONGO_ADD;
 }
