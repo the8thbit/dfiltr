@@ -15,7 +15,7 @@
 //========================================//
 //MONGODB CONNECTION INFO                 //
   var MONGO_IP =                          //
-  'mongodb://localhost'                     // toggle on for local testing
+  'mongodb://localhost'                   // toggle on for local testing
 //process.env.OPENSHIFT_MONGODB_DB_URL;   // toggle on for openshift deploy
 //========================================//
   var MONGO_PORT =                        //
