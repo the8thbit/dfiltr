@@ -1,11 +1,17 @@
 var config  = require( './../config.js' );
 
 //=============================================================================
-//CONNECTS TO MONGODB AND LOADS UP ALL SCHEMAS
-//NOTE: HERE IS WHERE WE CAN CREATE NEW USERS AND SAVE TO DATABASE
+//ESTABLISH CONNECTION
 //=============================================================================
 var mongoose = require( 'mongoose' );
 mongoose.connect( config.MONGO_IP + ':' + config.MONGO_PORT + '/chatappdb' );
+
+var db = mongoose.connection;
+db.on( 'error', console.error.bind( console, 'mongo error:' ) );
+
+//=============================================================================
+//LOAD SCHEMA
+//=============================================================================
 user = require( './user-schema.js' );
 
 var newUser = new user( {
