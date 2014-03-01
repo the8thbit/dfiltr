@@ -19,7 +19,7 @@
   process.env.OPENSHIFT_MONGODB_DB_URL;   // toggle on for openshift deploy
 //========================================//
   var MONGO_PORT =                        //
-//????                                    // toggle on for local testing
+//27017                                   // toggle on for local testing
   process.env.OPENSHIFT_MONGODB_DB_PORT;  //
 //========================================//
   }                                       // TOGGLE ON FOR OPENSHIFT DEPLOY
