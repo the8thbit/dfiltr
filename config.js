@@ -48,5 +48,6 @@ if( process == 'SERVER' || process.env ) {
 	module.exports.CLIENT_PORT = CLIENT_PORT;
 	module.exports.SERVER_IP   = SERVER_IP;
 	module.exports.SERVER_PORT = SERVER_PORT;
-	module.exports.MONGO_ADD   = MONGO_ADD;
+	module.exports.MONGO_IP    = MONGO_IP;
+	module.exports.MONGO_PORT  = MONGO_PORT;
 }
