@@ -1,7 +1,7 @@
 //=============================================================================
 //VERY SIMPLE USERNAME AND PASSWORD SCHEMA
 //=============================================================================
-var mongoose = require('mongoose');
+var mongoose = require( 'mongoose' );
 var schema = mongoose.Schema;
 
 var userSchema = new schema( {
