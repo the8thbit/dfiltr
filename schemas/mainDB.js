@@ -5,7 +5,7 @@ var config  = require( './../config.js' );
 //NOTE: HERE IS WHERE WE CAN CREATE NEW USERS AND SAVE TO DATABASE
 //====================================
 var mongoose = require('mongoose');
-mongoose.connect( process.env.OPENSHIFT_MONGODB_DB_HOST + ':' + process.env.OPENSHIFT_MONGODB_DB_PORT );
+mongoose.connect( config.MONGO_IP + ':' + config.MONGO_PORT );
 User = require('./user-schema.js');
 
 var NewUser = new User({

@@ -6,23 +6,23 @@
 //IP ADDRESS                              //
   var SERVER_IP =                         //
 //'localhost';                            // toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_IP;        // toggle on for openshift deploy
+//process.env.OPENSHIFT_NODEJS_IP;        // toggle on for openshift deploy
 //========================================//
 //PORT NUMBER                             //
   var SERVER_PORT =                       //
-//8080;                                   // toggle on for local testing
-  process.env.OPENSHIFT_NODEJS_PORT;      // toggle on for openshift deploy
+  8080;                                   // toggle on for local testing
+//process.env.OPENSHIFT_NODEJS_PORT;      // toggle on for openshift deploy
 //========================================//
 //MONGODB CONNECTION INFO                 //
   var MONGO_IP =                          //
-//mongodb://localhost/chatappdb           // toggle on for local testing
-  process.env.OPENSHIFT_MONGODB_DB_URL;   // toggle on for openshift deploy
+  'mongodb:localhost/chatappdb'           // toggle on for local testing
+//process.env.OPENSHIFT_MONGODB_DB_URL;   // toggle on for openshift deploy
 //========================================//
   var MONGO_PORT =                        //
-//27017                                   // toggle on for local testing
-  process.env.OPENSHIFT_MONGODB_DB_PORT;  //
+  27017                                   // toggle on for local testing
+//process.env.OPENSHIFT_MONGODB_DB_PORT;  //
 //========================================//
-  }                                       // TOGGLE ON FOR OPENSHIFT DEPLOY
+//}                                       // TOGGLE ON FOR OPENSHIFT DEPLOY
 //========================================//
 
 //========================================//
@@ -30,13 +30,13 @@
 //========================================//
 //IP ADDRESS                              //
   var CLIENT_IP =                         //
-//'localhost';                            // toggle on for local testing
-  '435-teamnoname.rhcloud.com';           // toggle on for openshift deploy
+  'localhost';                            // toggle on for local testing
+//'435-teamnoname.rhcloud.com';           // toggle on for openshift deploy
 //========================================//
 //PORT NUMBER                             //
   var CLIENT_PORT =                       //
-//8080;                                   // toggle on for local testing
-  8000;                                   // neccessary for openshift, as websockets is restricted to this port
+  8080;                                   // toggle on for local testing
+//8000;                                   // neccessary for openshift, as websockets is restricted to this port
 //========================================//
 
 
