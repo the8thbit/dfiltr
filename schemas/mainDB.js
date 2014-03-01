@@ -1,4 +1,4 @@
-var config  = require( './config.js' );
+var config  = require( './../config.js' );
 
 //====================================
 //CONNECTS TO MONGODB AND LOADS UP ALL SCHEMAS
