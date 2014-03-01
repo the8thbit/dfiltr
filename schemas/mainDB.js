@@ -5,12 +5,12 @@ var config  = require( './../config.js' );
 //NOTE: HERE IS WHERE WE CAN CREATE NEW USERS AND SAVE TO DATABASE
 //====================================
 var mongoose = require('mongoose');
-mongoose.connect( config.MONGO_IP + ':' + config.MONGO_PORT );
-User = require('./user-schema.js');
+mongoose.connect( config.MONGO_IP + ':' + config.MONGO_PORT + '/chatappdb' );
+user = require( './user-schema.js' );
 
-var NewUser = new User({
+var newUser = new user( {
 	username: 'testUser1',
 	password: 'testPassword1'
 });
 
-NewUser.save();
+newUser.save();
