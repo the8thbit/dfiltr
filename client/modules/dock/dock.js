@@ -1,4 +1,9 @@
 var dock = $( '#dock' );
+dock.css( 'visibility', 'visible' );
+
+$('a.popup').popup( {
+	preloaderContent: ''
+});
 
 $( '.dock-faded' ).fadeTo( 0, 0.6 );
 
@@ -17,9 +22,3 @@ $( '#dock-login-r' ).hover(
 		$( '#dock-login-r' ).css( 'color', '#0B5FA5' );
 	}
 )
-
-dock.init = function() {
-	dock.fadeTo( 0 , 0.0 );
-	dock.css( 'visibility', 'visible' );
-	dock.fadeTo( 5 , 1.0 );
-}

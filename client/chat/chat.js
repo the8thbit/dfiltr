@@ -42,7 +42,6 @@ window.onload = function() {
 			chat.output.scrollTop( 99999999 );
 		}
 	};
-
 	//sends a message to the partner
 	chat.input.send = function( text ) {
 		if( text != '' ) {
@@ -51,7 +50,6 @@ window.onload = function() {
 			console.log( 'you: ', text );
 		}
 	};
-
 	//clears the output field
 	chat.output.clear = function() {
 		console.log( 'clearing outputinputField...' );
@@ -59,7 +57,6 @@ window.onload = function() {
 		this.html( '' );
 		this.scrollTop( 99999999 );
 	};
-
 	//this function will either create a new virtual connection, or end the current virtual connection
 	//depending upon the state of chat.input.connectButton
 	chat.input.connectButton.toggle = function() {
@@ -86,8 +83,6 @@ window.onload = function() {
 			chat.socket.emit( 'virtual connection' );
 		}
 	};
-	//this function will either create a new virtual connection, or end the current virtual connection
-	//depending upon the state of chat.input.connectButton
 	chat.input.sendButton.toggle = function() {
 		if( chat.input.sendButton.data( 'state' ) == 'DISABLED' ) {
 			chat.input.sendButton.data( 'state', 'ENABLED' );
@@ -96,6 +91,22 @@ window.onload = function() {
 			chat.input.sendButton.data( 'state', 'DISABLED' );
 			chat.input.sendButton.css( 'background-color', '#999' );
 		}
+	};
+	chat.resize = function()  {
+		chat.output.wrap.css( { 'height': 
+			$( window ).height() - ( 
+				chat.input.field.wrap.outerHeight() + 
+				chat.dock.outerHeight() +
+				chat.margin * 3
+			)
+		});
+		chat.input.field.wrap.css( { 'width': 
+			$( window ).width() - ( 
+				chat.input.connectButton.outerWidth() + 
+				chat.input.sendButton.outerWidth() + 
+				chat.margin * 4
+			) 
+		});
 	};
 
 	chat.createSim = function() {
@@ -135,23 +146,6 @@ window.onload = function() {
 			}
 		}
 	};
-
-	chat.resize = function()  {
-		chat.output.wrap.css( { 'height': 
-			$( window ).height() - ( 
-				chat.input.field.wrap.outerHeight() + 
-				chat.dock.outerHeight() +
-				chat.margin * 3
-			)
-		});
-		chat.input.field.wrap.css( { 'width': 
-			$( window ).width() - ( 
-				chat.input.connectButton.outerWidth() + 
-				chat.input.sendButton.outerWidth() + 
-				chat.margin * 4
-			) 
-		});
-	}
 
 	//==========================================================================
 	// UI interactions
@@ -248,7 +242,7 @@ window.onload = function() {
 		chat.resize();
 	}
 
-	chat.dock.load( '/modules/dock/', function() { dock.init(); } );
+	chat.dock.load( '/modules/dock/' );
 	//chat.dock.load( '/modules/dock/auth',   function() { dock.init(); } );
 
 	chat.input.button.fadeTo( 0, 0.7 );

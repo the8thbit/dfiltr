@@ -102,6 +102,7 @@ body {
   color: #fff;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 #chat-input-send {
   position: relative;
@@ -114,6 +115,7 @@ body {
   color: #fff;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 #mod-ratings {
   visibility: hidden;

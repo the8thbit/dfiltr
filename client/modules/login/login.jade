@@ -1,10 +1,36 @@
-form#login( method='post', action='/login' )
-	input.text-input( type='text', name='username' )
-	br
-	input.text-input( type='password', name='password' )
-	br
-	button.btn-submit( type='submit' ) Login!
-	a.btn-cancel( href='/' ) Cancel
+div#login
+	div#login-left
+		div.login-header get a new account
+		form#login-reg( method='post' action='/register' )
+			div.login-subhead username
+			div
+				input#login-reg-input-username.login-input( type='text' name='username' )
+			div.login-subhead account recovery email (optional)
+			div
+				input#login-reg-input-username.login-input( type='text' name='username' )
+			div.login-subhead password
+			div
+				input#login-reg-input-password.login-input( type='password' name='password' )
+			div.login-subhead verify password
+			div
+				input#login-reg-input-verify.login-input( type='password' name='verify' )
+			div.login-submit-wrap
+				button.login-submit( type='submit' ) register
+	div#login-right
+		div.login-header use an existing account
+		form#login-log( method='post' action='/login' )
+			div.login-subhead username
+			div
+				input#login-log-input-username.login-input( type='text' name='username' )
+			div.login-subhead password
+			div
+				input#login-log-input-password.login-input( type='password' name='password' )
+			div#login-aux-remember
+				label.login-aux remember me
+				input.login-aux( type='checkbox' name='remember' )
+			div#login-aux-recover
+				a.login-aux recover password
+			div.login-submit-wrap
+				button.login-submit( type='submit' ) login
 
-script( src='/client/modules/login/login.js' )
 link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
