@@ -5,30 +5,12 @@ var config     = require( './config.js' );
 var express    = require( 'express' );
 var stylus     = require( 'stylus' );
 var passport   = require( 'passport' );
-var localStrat = require( 'passport-local' ).Strategy;
-var db         = require( './schemas/mainDB.js' );
-
+var passConfig = require( './server/passConfig.js' )( passport );
+var db         = require( './server/schemas/mainDB.js' );
 /*var brain   = require( 'predictionio' ) ( {
 	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
 	baseUrl: 'http://localhost:8001'
 })*/
-
-passport.use( 'local', new localStrat( function( username, password, done ) {
-	User.findOne( { username: username }, function( err, user ) {
-		if( err )   { return done( err ); }
-		if( !user ) { return done( null, false ); }
-		if( user.password != password ) { return done( null, false ); }
-		return done( null, user );
-	});
-}));
-
-passport.serializeUser( function( user, done ) {
-  done( null, user );
-});
-
-passport.deserializeUser( function( obj, done ) {
-  done( null, obj );
-});
 
 //use the express app engine
 var app = express();
@@ -61,6 +43,9 @@ var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.S
 io.configure( function() { io.set( 'transports', [ 'websocket' ] ); } ); //turn websockets on
 console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT );
 
+//=============================================================================
+// AUTHENTICATION PROTOCOL
+//=============================================================================
 app.post( '/login', passport.authenticate( 'local', { 
 	successRedirect: '/SUCCESS/',
 	failureRedirect: '/failure/',
