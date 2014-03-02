@@ -13,16 +13,36 @@ var db         = require( './schemas/mainDB.js' );
 	baseUrl: 'http://localhost:8001'
 })*/
 
+passport.use( 'local', new localStrat( function( username, password, done ) {
+	User.findOne( { username: username }, function( err, user ) {
+		if( err )   { return done( err ); }
+		if( !user ) { return done( null, false ); }
+		if( user.password != password ) { return done( null, false ); }
+		return done( null, user );
+	});
+}));
+
+passport.serializeUser( function( user, done ) {
+  done( null, user );
+});
+
+passport.deserializeUser( function( obj, done ) {
+  done( null, obj );
+});
+
 //use the express app engine
 var app = express();
-app.use( express.static( __dirname + '/' ) );
-
-//use pasport for managing user authentication and sessions
-app.use( passport.initialize() );
 
 //use stylus templates for CSS
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
 app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) )
+app.use( express.static( __dirname + '/' ) );
+
+//use pasport for managing user authentication and sessions
+app.use( express.bodyParser() );
+app.use( express.cookieParser( 'your secret here' ) );
+app.use( passport.initialize() );
+app.use( passport.session() );
 
 //use jade templates for HTML
 app.set( 'views', __dirname + '/client' );
@@ -31,36 +51,20 @@ app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
 app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
-app.get( '/modules/ratings', function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
-app.get( '/modules/dock', function( req, res ){ res.render( 'modules/dock/dock' ); } );
+app.get( '/modules/ratings',   function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
+app.get( '/modules/auth/dock', function( req, res ){ res.render( 'modules/dock/dock_in'    ); } );
+app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ); } );
+app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'   ); } );
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
 io.configure( function() { io.set( 'transports', [ 'websocket' ] ); } ); //turn websockets on
 console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT );
 
-
-
-//=============================================================================
-// AUTHENTICATION PROTOCOL
-//=============================================================================
-passport.use( new localStrat( function( username, password, done ) {
-	User.findOne( { username: username }, function( err, user ) {
-		if( err )                              return done( err );
-		if( !user )                            return done( null, false, { message: 'bad username' } );
-		if( user.password != password )        return done( null, false, { message: 'bad password' } );
-		return done( null, user );
-	});
+app.post( '/login', passport.authenticate( 'local', { 
+	successRedirect: '/SUCCESS/',
+	failureRedirect: '/failure/',
 }));
-
-app.post( '/login',
-	passport.authenticate( 'local', { 
-		successRedirect: '/',
-		failureRedirect: '/login',
-   	failureFlash:    true 
-	})
-);
-
 
 
 //=============================================================================

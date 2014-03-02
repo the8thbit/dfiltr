@@ -1,0 +1,10 @@
+form#login( method='post', action='/login' )
+	input.text-input( type='text', name='username' )
+	br
+	input.text-input( type='password', name='password' )
+	br
+	button.btn-submit( type='submit' ) Login!
+	a.btn-cancel( href='/' ) Cancel
+
+script( src='/client/modules/login/login.js' )
+link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )

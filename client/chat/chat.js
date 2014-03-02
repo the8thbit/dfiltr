@@ -4,7 +4,6 @@ document.write( '<script type="text/javascript" src="../../config.js"><\/script>
 window.onload = function() {
 	var chat      = $( '#chat-wrapper' );
 	chat.socket   = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/main' );
-	chat.socket.emit( 'login' );
 
 	chat.sim = [];
 	chat.messages = []; //the list of all messages to the user
@@ -249,7 +248,8 @@ window.onload = function() {
 		chat.resize();
 	}
 
-	chat.dock.load( '/modules/dock', function() { dock.init(); } );
+	chat.dock.load( '/modules/dock/', function() { dock.init(); } );
+	//chat.dock.load( '/modules/dock/auth',   function() { dock.init(); } );
 
 	chat.input.button.fadeTo( 0, 0.7 );
 }
