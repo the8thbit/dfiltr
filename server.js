@@ -7,10 +7,6 @@ var stylus     = require( 'stylus' );
 var passport   = require( 'passport' );
 var passConfig = require( './server/passConfig.js' )( passport );
 var db         = require( './server/schemas/mainDB.js' );
-/*var brain   = require( 'predictionio' ) ( {
-	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
-	baseUrl: 'http://localhost:8001'
-})*/
 
 //use the express app engine
 var app = express();
@@ -19,12 +15,6 @@ var app = express();
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
 app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) )
 app.use( express.static( __dirname + '/' ) );
-
-//use pasport for managing user authentication and sessions
-app.use( express.bodyParser() );
-app.use( express.cookieParser( 'your secret here' ) );
-app.use( passport.initialize() );
-app.use( passport.session() );
 
 //use jade templates for HTML
 app.set( 'views', __dirname + '/client' );
@@ -38,7 +28,13 @@ app.get( '/modules/auth/dock', function( req, res ){ res.render( 'modules/dock/d
 app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ); } );
 app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'   ); } );
 
-//use socket.io and give it a location to listen on 
+//use pasport for managing user authentication and sessions
+app.use( express.bodyParser() );
+app.use( express.cookieParser( 'your secret here' ) );
+app.use( passport.initialize() );
+app.use( passport.session() );
+
+//use socket.io for chat and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
 io.configure( function() { io.set( 'transports', [ 'websocket' ] ); } ); //turn websockets on
 console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT );
