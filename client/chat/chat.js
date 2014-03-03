@@ -236,14 +236,14 @@ window.onload = function() {
 	//==========================================================================
 	// Initialization
 	//==========================================================================
+	chat.dock.load( '/modules/dock/' );
+	//chat.dock.load( '/modules/dock/auth',   function() { dock.init(); } );
+
 	chat.resize();
 
 	window.onresize = function( event ) {
 		chat.resize();
 	}
-
-	chat.dock.load( '/modules/dock/' );
-	//chat.dock.load( '/modules/dock/auth',   function() { dock.init(); } );
 
 	chat.input.button.fadeTo( 0, 0.7 );
 }

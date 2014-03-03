@@ -22,7 +22,7 @@ app.use( express.static( __dirname + '/' ) );
 
 //use pasport for managing user authentication and sessions
 app.use( express.bodyParser() );
-app.use( express.cookieParser( 'your secret here' ) );
+app.use( express.cookieParser( Math.random() ) );
 app.use( passport.initialize() );
 app.use( passport.session() );
 
@@ -36,7 +36,8 @@ app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
 app.get( '/modules/ratings',   function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
 app.get( '/modules/auth/dock', function( req, res ){ res.render( 'modules/dock/dock_in'    ); } );
 app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ); } );
-app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'   ); } );
+app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'     ); } );
+app.get( '/badlog/',           function( req, res ){ res.render( 'modules/login/badlog'    ); } );
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
@@ -49,6 +50,7 @@ console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PO
 //=============================================================================
 app.post( '/login', passport.authenticate( 'local', { 
 	successRedirect: '/',
+	failureRedirect: '/badlog/'
 }));
 
 

@@ -1,25 +1,26 @@
-.login-subhead {
+.badlog-subhead {
   margin-top: 10px;
   font-size: 11pt;
   font-weight: bold;
   color: #808080;
 }
-#login {
+#badlog {
   display: table;
   margin: 0 auto;
+  margin-top: 10%;
 }
-#login-left {
+#badlog-left {
   display: table-cell;
   margin: 50px;
 }
-#login-right {
+#badlog-right {
   display: table-cell;
   padding-left: 50px;
 }
-.login-submit-wrap {
+.badlog-submit-wrap {
   text-align: right;
 }
-.login-submit {
+.badlog-submit {
   margin-top: 15px;
   font-weight: bold;
   padding: 2px;
@@ -33,33 +34,33 @@
   opacity: 0.6;
   cursor: pointer;
 }
-.login-submit:hover {
+.badlog-submit:hover {
   opacity: 1;
 }
-.login-input {
+.badlog-input {
   border-style: solid;
   border-color: #808080;
   border-width: 1px;
   padding-left: 2px;
   margin-top: 2px;
 }
-.login-header {
+.badlog-header {
   text-align: center;
   font-weight: bold;
   margin-bottom: 15px;
 }
-.login-aux {
+.badlog-aux {
   text-align: right;
   color: #0b5fa5;
   font-size: 10pt;
   margin: 4px;
   margin-top: 8px;
 }
-#login-aux-remember {
+#badlog-aux-remember {
   text-align: right;
   margin: 0;
 }
-#login-aux-recover {
+#badlog-aux-recover {
   text-align: right;
   margin: 0;
 }

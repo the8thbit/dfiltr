@@ -1,3 +1,7 @@
+script( src='/client/modules/dock/dock.js' )
+script( src='/client/modules/thickbox/thickbox.js' )
+
+
 table#dock
 	tr#dock-row1
 		td#dock-row1-col1
@@ -18,7 +22,8 @@ table#dock
 					| contact 
 		td#dock-row1-col3
 			div#dock-login
-				a( href='/modules/login/' class='dock-faded' class='popup' ) login / registe
+				a( href='#TB_inline?height=300&width=300&inlineId=#login' class='dock-faded' class='thickbox' id='popup' ) login / registe
 					span#dock-login-r r
-script( src='/client/modules/dock/dock.js' )
-link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )
+div( style='display:none' )
+	div( id='login' )
+		p This content comes from a hidden element on this page.
