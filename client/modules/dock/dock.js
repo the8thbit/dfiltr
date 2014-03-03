@@ -1,8 +1,13 @@
 $( document ).ready( function() {
 	var dock = $( '#dock' );
-	dock.css( 'visibility', 'visible' );
-
 	$( '.dock-faded' ).fadeTo( 0, 0.6 );
+	dock.css( 'visibility', 'visible' );
+	$( '#login' ).load( '/modules/login' );
+
+	$( '#popup' ).colorbox( { 
+		inline:true,
+		transition: 'none'
+	});
 
 	$( '.dock-faded' ).hover( 
 		function() { //hover enter

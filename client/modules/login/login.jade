@@ -1,5 +1,5 @@
 div#login
-	div#login-left
+	div.login-left
 		div.login-header get a new account
 		form#login-reg( method='post' action='/register' )
 			div.login-subhead username
@@ -16,22 +16,17 @@ div#login
 				input#login-reg-input-verify.login-input( type='password' name='verify' )
 			div.login-submit-wrap
 				button.login-submit( type='submit' ) register
-	div#login-right
+	div.login-right
 		div.login-header use an existing account
-		form#login-log( method='post' action='/login' )
+		form#login-log
 			div.login-subhead username
 			div
 				input#login-log-input-username.login-input( type='text' name='username' )
 			div.login-subhead password
 			div
 				input#login-log-input-password.login-input( type='password' name='password' )
-			div#login-aux-remember
-				label.login-aux remember me
-				input.login-aux( type='checkbox' name='remember' )
-			div#login-aux-recover
-				a.login-aux recover password
 			div.login-submit-wrap
 				button.login-submit( type='submit' ) login
 
 link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
-
+script( src='/client/modules/login/login.js' )

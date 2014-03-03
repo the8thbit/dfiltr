@@ -49,8 +49,8 @@ console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PO
 // AUTHENTICATION PROTOCOL
 //=============================================================================
 app.post( '/login', passport.authenticate( 'local', { 
-	successRedirect: '/',
-	failureRedirect: '/badlog/'
+	successRedirect: '/'
+	//failureRedirect: '/badlog/'
 }));
 
 
