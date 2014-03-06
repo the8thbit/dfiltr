@@ -1,30 +1,40 @@
 div#login
 	div.login-left
 		div.login-header get a new account
-		form#login-reg( method='post' action='/register' )
+		div#login-reg-err( class='login-error' )
+		form#login-reg( class='login-form' )
 			div.login-subhead username
 			div
-				input#login-reg-input-username.login-input( type='text' name='username' )
+				input#login-reg-input-name.login-input( type='text' name='username' )
+			div#login-reg-name-err( class='login-error' )
 			div.login-subhead account recovery email (optional)
 			div
-				input#login-reg-input-username.login-input( type='text' name='username' )
+				input#login-reg-input-email.login-input( type='text' name='email' )
+			div#login-reg-email-err( class='login-error' )
 			div.login-subhead password
 			div
-				input#login-reg-input-password.login-input( type='password' name='password' )
+				input#login-reg-input-pass.login-input( type='password' name='password' )
+			div#login-reg-pass-err( class='login-error' )
 			div.login-subhead verify password
 			div
 				input#login-reg-input-verify.login-input( type='password' name='verify' )
+			div#login-reg-verify-err( class='login-error' )
 			div.login-submit-wrap
 				button.login-submit( type='submit' ) register
 	div.login-right
 		div.login-header use an existing account
-		form#login-log
-			div.login-subhead username
+		div#login-log-err( class='login-error' )
+		form#login-log( class='login-form' )
+			div#login-log-name-head( class='login-subhead' ) username
 			div
-				input#login-log-input-username.login-input( type='text' name='username' )
-			div.login-subhead password
+				input#login-log-input-name( type='text' name='username' class='login-input' )
+			div#login-log-name-err( class='login-error' )
+
+			div#login-log-pass-head( class='login-subhead' ) password
 			div
-				input#login-log-input-password.login-input( type='password' name='password' )
+				input#login-log-input-pass( type='password' name='password' class='login-input' )
+			div#login-log-pass-err( class='login-error' )
+
 			div.login-submit-wrap
 				button.login-submit( type='submit' ) login
 

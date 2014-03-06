@@ -1,5 +1,5 @@
 .login-subhead {
-  margin-top: 25px;
+  margin-top: 20px;
   font-size: 11pt;
   font-weight: bold;
   color: #808080;
@@ -10,10 +10,12 @@
   padding: 5px;
 }
 .login-left {
+  width: 300px;
   display: table-cell;
   padding-right: 50px;
 }
 .login-right {
+  width: 300px;
   display: table-cell;
   padding-left: 50px;
 }
@@ -21,10 +23,10 @@
   text-align: right;
 }
 .login-submit {
-  margin-top: 15px;
+  margin-top: 25px;
   font-weight: bold;
-  padding: 2px;
-  width: 100px;
+  padding: 10px;
+  width: 100%;
   padding-left: 8px;
   padding-right: 8px;
   font-size: 12pt;
@@ -45,7 +47,6 @@
 .login-header {
   text-align: center;
   font-weight: bold;
-  margin-bottom: 15px;
 }
 .login-aux {
   text-align: right;
@@ -59,4 +60,12 @@
 #login-aux-recover {
   text-align: right;
   margin: 0;
+}
+.login-error {
+  position: fixed;
+  color: #ff4c00;
+  font-size: 10pt;
+}
+.login-form {
+  margin-top: 30px;
 }

@@ -13,10 +13,3 @@ mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 //LOAD SCHEMA
 //=============================================================================
 User = require( './user-schema.js' );
-
-var newUser = new User( {
-	username: 'testUser1',
-	password: 'testPassword1'
-});
-
-newUser.save();

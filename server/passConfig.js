@@ -4,8 +4,12 @@ module.exports = function( passport ) {
 	passport.use( 'local', new localStrat( function( username, password, done ) {
 		User.findOne( { username: username }, function( err, user ) {
 			if( err )   { return done( err ); }
-			if( !user ) { return done( null, false ); }
-			if( user.password != password ) { return done( null, false ); }
+			if( !user ) { 
+				return done( null, false, { message: 'bad name' } );
+			}
+			if( user.password != password ) { 
+				return done( null, false, { message: 'bad pass' } ); 
+			}
 			return done( null, user );
 		});
 	}));

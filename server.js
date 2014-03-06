@@ -21,7 +21,7 @@ app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) )
 app.use( express.static( __dirname + '/' ) );
 
 //use pasport for managing user authentication and sessions
-app.use( express.bodyParser() );
+app.use( express.urlencoded() );
 app.use( express.cookieParser( Math.random() ) );
 app.use( passport.initialize() );
 app.use( passport.session() );
@@ -34,25 +34,78 @@ app.engine( 'jade', require( 'jade' ).__express );
 //get the JADE template pages used in the project
 app.get( '/', function( req, res ){ res.render( 'chat/chat' ); } );
 app.get( '/modules/ratings',   function( req, res ){ res.render( 'modules/ratings/ratings' ); } );
-app.get( '/modules/auth/dock', function( req, res ){ res.render( 'modules/dock/dock_in'    ); } );
+app.get( '/modules/dock/auth', function( req, res ){ res.render( 'modules/dock/dock_in'    ); } );
 app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ); } );
 app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'     ); } );
-app.get( '/badlog/',           function( req, res ){ res.render( 'modules/login/badlog'    ); } );
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
-io.configure( function() { io.set( 'transports', [ 'websocket' ] ); } ); //turn websockets on
 console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PORT );
-
 
 //=============================================================================
 // AUTHENTICATION PROTOCOL
 //=============================================================================
-app.post( '/login', passport.authenticate( 'local', { 
-	successRedirect: '/'
-	//failureRedirect: '/badlog/'
-}));
+app.get( '/login', function( req, res, next ) {
+	passport.authenticate( 'local', function( err, user, info ) {
+		if( info && info.message == 'bad name' ) {
+			res.send( 'bad name' );
+			return next( 'bad name' );
+		} else if( info && info.message == 'bad pass' ) {
+			res.send( 'bad pass' );
+			return next( 'bad pass' );
+		} else if( user ) {
+			res.send( user );
+			return next( user );
+		} else if( err ) {
+			res.send( 'login error' );
+			console.log( 'login error: ' + err );
+			return next( err );
+		} else { 
+			console.log( info );
+			return next( 'error' ); 
+		}
+	})( req, res, next );
+});
 
+app.post( '/register', function( req, res, next ) {
+	var result = 'success';
+	User.findOne( { username: req.body.username }, function( err, user ) {
+		if( err ) {
+			result = 'error';
+			console.log( 'registration error: ' + err );
+			result = 'error';
+		} else {
+			result = 'bad name';
+			console.log( 'returnVar: ' + returnVar );
+		}
+	});
+
+	if( result == 'success' ) {
+		var newUser = new User( {
+			username: req.body.username,
+			//email: res.email,
+			password: req.body.password
+		});
+
+		newUser.save( function( err ) {
+			if( err ) console.log( 'mongo error: ' + err );
+			result = 'error';
+		});
+	}
+	
+	res.send( result );
+});
+
+app.get( '/isLogged', function( req, res, next ) {
+	var result;
+	if( req.user ) {
+		result = req.user;
+	} else {
+		result = false;
+	}
+
+	res.send( result );
+});
 
 //=============================================================================
 // CHAT PROTOCOL

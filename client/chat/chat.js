@@ -197,7 +197,6 @@ window.onload = function() {
 		chat.input.connectButton.toggle();
 	});
 
-
 	//===============================================
 	// Chat Protocol
 	//===============================================
@@ -236,8 +235,15 @@ window.onload = function() {
 	//==========================================================================
 	// Initialization
 	//==========================================================================
-	chat.dock.load( '/modules/dock/' );
-	//chat.dock.load( '/modules/dock/auth',   function() { dock.init(); } );
+	console.log( 'LALALALALALALALALALALA' );
+	$.get( '/isLogged', null, function( res ) {
+		console.log( res );
+		if( res ) {
+			chat.dock.load( '/modules/dock/auth' );
+		} else {
+			chat.dock.load( '/modules/dock/' );
+		}
+	});
 
 	chat.resize();
 
