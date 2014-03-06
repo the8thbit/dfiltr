@@ -27,7 +27,6 @@ window.onload = function() {
 	//===============================================
 	//adds a new line to the output field
 	chat.output.add = function( data ) {
-		console.log( data );
 		if( data && data.message && data.message != '' && data.type ) {
 			if( data.type == 'server'  ) { var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
 			if( data.type == 'partner' ) { var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
@@ -47,12 +46,10 @@ window.onload = function() {
 		if( text != '' ) {
 			chat.input.field.prop( 'value', '' );
 			chat.socket.emit( 'send', { message: text } );
-			console.log( 'you: ', text );
 		}
 	};
 	//clears the output field
 	chat.output.clear = function() {
-		console.log( 'clearing outputinputField...' );
 		chat.messages = [];
 		this.html( '' );
 		this.scrollTop( 99999999 );
@@ -79,7 +76,6 @@ window.onload = function() {
 			chat.input.connectButton.prop( 'value', 'disconnect' );
 			chat.input.connectButton.data( 'state', 'DISCONNECT' );
 			chat.input.field.wrap.html( chat.input.field ); //puts the input field back in its wrapper
-			console.log( 'virtual connection....' );
 			chat.socket.emit( 'virtual connection' );
 		}
 	};
@@ -208,7 +204,6 @@ window.onload = function() {
 	//what to do when the user finds a chat partner
 	chat.socket.on( 'partner connected', function() {
 		chat.socket.connected = true;
-		console.log( 'partner connected' );
 		chat.output.prop( 'value', '' );
 		chat.input.field.wrap.html( chat.input.field ); //puts the input field back in its wrapper
 		chat.input.field.wrap.css( 'background-color', 'white' );
@@ -235,9 +230,7 @@ window.onload = function() {
 	//==========================================================================
 	// Initialization
 	//==========================================================================
-	console.log( 'LALALALALALALALALALALA' );
 	$.get( '/isLogged', null, function( res ) {
-		console.log( res );
 		if( res ) {
 			chat.dock.load( '/modules/dock/auth' );
 		} else {
