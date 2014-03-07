@@ -76,7 +76,7 @@ app.post( '/register', function( req, res, next ) {
 			result = 'error';
 		} else {
 			result = 'bad name';
-			console.log( 'returnVar: ' + returnVar );
+			console.log( 'returnVar: ' + result );
 		}
 	});
 
