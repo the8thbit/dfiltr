@@ -16,7 +16,7 @@
 //MONGODB CONNECTION INFO                     //
   var MONGO_USER =                            //
 //''                                          // toggle on for local testing
-  process.env.OPENSHIFT_MONGODB_DB_PASSWORD;  // toggle on for openshift deploy
+  process.env.OPENSHIFT_MONGODB_DB_USERNAME;  // toggle on for openshift deploy
 //============================================//
   var MONGO_PASS =                            //
 //''                                          // toggle on for local testing
