@@ -14,7 +14,7 @@
   process.env.OPENSHIFT_NODEJS_PORT;          // toggle on for openshift deploy
 //============================================//
 //MONGODB CONNECTION INFO                     //
-  var MONGO_PASS =                            //
+  var MONGO_USER =                            //
 //''                                          // toggle on for local testing
   process.env.OPENSHIFT_MONGODB_DB_PASSWORD;  // toggle on for openshift deploy
 //============================================//
