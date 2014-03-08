@@ -16,6 +16,6 @@ var mongo = mongoose.connection;
 mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 
 //=============================================================================
-//LOAD SCHEMA
+//LOAD SCHEMAS
 //=============================================================================
-User = require( './user-schema.js' ); 
+User = require( './user-schema.js' );
