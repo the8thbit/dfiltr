@@ -3,23 +3,32 @@ module.exports = function( passport ) {
 	
 	passport.use( 'local', new localStrat( function( username, password, done ) {
 		User.findOne( { username: username }, function( err, user ) {
-			if( err )   { return done( err ); }
+			if( err ) { status = 'error'; }
 			if( !user ) { 
 				return done( null, false, { message: 'bad name' } );
+			} else {
+				user.comparePassword( password, function( err, isMatch ) {
+					if( err ) {
+						console.log( 'error: ' + err ); 
+						return done( err );
+					} else if( !isMatch ) {
+						return done( null, false, { message: 'bad pass' } );
+					} else {
+						return done( null, user );
+					}						 	
+				});
 			}
-			if( user.password != password ) { 
-				return done( null, false, { message: 'bad pass' } ); 
-			}
-			return done( null, user );
 		});
 	}));
 
 	passport.serializeUser( function( user, done ) {
-		done( null, user );
+		done( null, user.username );
 	});
 
-	passport.deserializeUser( function( obj, done ) {
-		done( null, obj );
+	passport.deserializeUser( function( username, done ) {
+		User.findOne( { username: username }, function( err, user ) {
+			done( err, user );
+		});
 	});
 };
 

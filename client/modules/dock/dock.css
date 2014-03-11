@@ -11,14 +11,17 @@
 }
 #dock-row1-col1 {
   vertical-align: middle;
+  width: 33.33333%;
 }
 #dock-row1-col2 {
   vertical-align: middle;
   color: #808080;
+  width: 33.33333%;
 }
 #dock-row1-col3 {
   vertical-align: middle;
   color: #0b5fa5;
+  width: 33.33333%;
 }
 #dock-logo {
   margin-left: 10px;
@@ -31,8 +34,8 @@
   font-weight: bold;
 }
 .dock-link {
-  margin-left: 5%;
-  margin-right: 5%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 #dock-stats {
   text-align: right;

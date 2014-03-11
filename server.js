@@ -22,7 +22,8 @@ app.use( express.static( __dirname + '/' ) );
 
 //use pasport for managing user authentication and sessions
 app.use( express.urlencoded() );
-app.use( express.cookieParser( Math.random() ) );
+app.use( express.cookieParser() );
+app.use( express.session( { secret: '1234567890QWERTY' } ) );
 app.use( passport.initialize() );
 app.use( passport.session() );
 
@@ -52,59 +53,68 @@ app.get( '/login', function( req, res, next ) {
 			return next( 'bad name' );
 		} else if( info && info.message == 'bad pass' ) {
 			res.send( 'bad pass' );
-			return next( 'bad pass' );
 		} else if( user ) {
-			res.send( user );
-			return next( user );
+			req.logIn( user, function( err ) { 
+				if( err ) { 
+					console.log( 'login error: ' + err );
+					res.send( err ); 
+				} else {
+					res.send( user );
+				}
+			});
 		} else if( err ) {
 			res.send( 'login error' );
 			console.log( 'login error: ' + err );
-			return next( err );
 		} else { 
+			res.send( 'login error' );
 			console.log( info );
-			return next( 'error' ); 
 		}
 	})( req, res, next );
 });
 
 app.post( '/register', function( req, res, next ) {
-	var result = 'success';
+	//does the username exist already?
 	User.findOne( { username: req.body.username }, function( err, user ) {
 		if( err ) {
-			result = 'error';
 			console.log( 'registration error: ' + err );
-			result = 'error';
+			return res.send( err );
+		} else if( user ) {
+			return res.send( 'bad name' ); 
 		} else {
-			result = 'bad name';
-			console.log( 'returnVar: ' + result );
+			//does the email exist already?
+			User.findOne( { email: req.body.email }, function( err, user ) {
+				if( err ) {
+					console.log( 'registration error: ' + err );
+					return res.send( err );
+				} else if( req.body.email && user ) {
+					return res.send( 'bad email' );
+				} else {
+					//create a new user
+					var newUser = new User( {
+						username: req.body.username,
+						password: req.body.password,
+						email:    req.body.email
+					});
+					newUser.save( function( err ) {
+						if( err ) {
+							console.log( 'mongo error: ' + err );
+							return res.send( err );
+						} else {
+							return res.send( 'success' );
+						}
+					});
+				}					
+			});
 		}
 	});
-
-	if( result == 'success' ) {
-		var newUser = new User( {
-			username: req.body.username,
-			//email: res.email,
-			password: req.body.password
-		});
-
-		newUser.save( function( err ) {
-			if( err ) console.log( 'mongo error: ' + err );
-			result = 'error';
-		});
-	}
-	
-	res.send( result );
 });
 
 app.get( '/isLogged', function( req, res, next ) {
-	var result;
 	if( req.user ) {
-		result = req.user;
+		return res.send( req.user );
 	} else {
-		result = false;
+		return res.send( false );
 	}
-
-	res.send( result );
 });
 
 //=============================================================================

@@ -3,13 +3,14 @@
 //=============================================================================
 var mongoose = require( 'mongoose' );
 var schema = mongoose.Schema
-bcrypt = require('bcrypt'),
+bcrypt = require( 'bcrypt' ),
 SALT_WORK_FACTOR = 10;
 
 //create schema model
 var userSchema = new schema( {
 	username: { type: String, required: true, index: { unique: true } },
-	password: { type: String, required: true }
+	password: { type: String, required: true },
+	email:    { type: String, required: false }
 });
 
 //mongoose middleware automatically hashes passsword before saving to mongodb
@@ -36,9 +37,9 @@ userSchema.pre( 'save', function( next ) {
 //password verification
 userSchema.methods.comparePassword = function( candidatePassword, cb ) {
 	bcrypt.compare( candidatePassword, this.password, function( err, isMatch ) {
-		if ( err ) return cb( err );
+		if( err ) { return cb( err ); }
 		cb( null, isMatch );
-    	});
+	});
 };
 
 //export this model

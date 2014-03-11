@@ -98,8 +98,11 @@ $( '#login-reg' ).on( 'submit', function( event ) {
 			if( res == 'bad name' ) {
 				$( '#login-reg-input-name' ).css( 'border-color', '#FF4C00' );
 				$( '#login-reg-name-err' ).html( 'that username is already taken' );
+			} else if( res == 'bad email' ) {
+				$( '#login-reg-input-email' ).css( 'border-color', '#FF4C00' );
+				$( '#login-reg-email-err' ).html( 'email already in use by another account' );
 			} else if( res == 'success' ) {
-				window.location = '/';
+				window.location.reload( true );
 			} else { $( '#login-reg-err' ).html( '<div>there was an error logging you in</div><div>please try again later</div>' ); }
 		});
 	}

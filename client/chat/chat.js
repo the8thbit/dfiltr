@@ -230,7 +230,8 @@ window.onload = function() {
 	//==========================================================================
 	// Initialization
 	//==========================================================================
-	$.get( '/isLogged', null, function( res ) {
+	$.get( '/isLogged', function( res ) {
+		console.log( 'the result: ' + res );
 		if( res ) {
 			chat.dock.load( '/modules/dock/auth' );
 		} else {
