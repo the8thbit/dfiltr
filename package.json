@@ -9,6 +9,8 @@
 		"jade": "latest",
 		"stylus": "latest",
 		"mongodb": "latest",
-		"mongoose": "latest"
+		"mongoose": "latest",
+		"passport": "latest",
+		"predictionio": "latest"
 	}
 }

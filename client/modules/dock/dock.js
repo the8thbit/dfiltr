@@ -1,4 +1,17 @@
 $( document ).ready( function() {
+	$.get( '/isLogged', function( user ) { 
+		$( '#dock-username' ).html( '<a href="#" class="dock-faded">' + user.username + '</a>' );
+		$( '.dock-faded' ).fadeTo( 0, 0.6 );
+
+		$( '.dock-faded' ).hover(
+			function() { //hover enter
+				$( this ).fadeTo( 0 , 1.0 );
+			}, function() { //hover exit
+				$( this ).fadeTo( 0 , 0.6 );
+			}
+		);	
+	});
+
 	var dock = $( '#dock' );
 	$( '.dock-faded' ).fadeTo( 0, 0.6 );
 	dock.css( 'visibility', 'visible' );
@@ -9,7 +22,7 @@ $( document ).ready( function() {
 		transition: 'none'
 	});
 
-	$( '.dock-faded' ).hover( 
+	$( '.dock-faded' ).hover(
 		function() { //hover enter
 			$( this ).fadeTo( 0 , 1.0 );
 		}, function() { //hover exit

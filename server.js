@@ -7,13 +7,25 @@ var stylus     = require( 'stylus' );
 var passport   = require( 'passport' );
 var passConfig = require( './server/passConfig.js' )( passport );
 var db         = require( './server/schemas/mainDB.js' );
-/*var brain   = require( 'predictionio' ) ( {
-	key: '3YVm7gr7UrYGA0TaarlBqFjF6IpX9Y90gQvUD7TgwSRADiFUyMhXsxQ1w7EPkcOz',
-	baseUrl: 'http://localhost:8001'
-})*/
+var pio        = require( 'predictionio' ) ( {
+	key: config.PIO_API_KEY,
+	baseUrl: config.PIO_API_HOST
+})
+
+pio.items.recommendation( {
+	pio_engine: 'engine',
+	pio_uid: 13,
+	pio_n: 50
+}, function( err, res ) {
+	console.log( err )
+	console.log( res )
+})
 
 //use the express app engine
 var app = express();
+app.use( express.urlencoded() );
+app.use( express.cookieParser() );
+app.use( express.session( { secret: config.COOKIE_SECRET } ) );
 
 //use stylus templates for CSS
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
@@ -21,9 +33,6 @@ app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) )
 app.use( express.static( __dirname + '/' ) );
 
 //use pasport for managing user authentication and sessions
-app.use( express.urlencoded() );
-app.use( express.cookieParser() );
-app.use( express.session( { secret: '1234567890QWERTY' } ) );
 app.use( passport.initialize() );
 app.use( passport.session() );
 
