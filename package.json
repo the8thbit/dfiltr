@@ -5,12 +5,14 @@
 	"private": true,
 	"dependencies": {
 		"express": "latest",
-		"socket.io": "latest",
 		"jade": "latest",
 		"stylus": "latest",
+		"socket.io": "latest",
 		"mongodb": "latest",
 		"mongoose": "latest",
 		"passport": "latest",
-		"predictionio": "latest"
+		"passport.socket.io": "latest",
+		"sessionstore": "latest"
+		"predictionio": "latest",
 	}
 }
