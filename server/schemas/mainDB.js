@@ -18,4 +18,5 @@ mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 //=============================================================================
 //LOAD SCHEMAS
 //=============================================================================
-User = require( './user-schema.js' );
+User   = require( './user-schema.js' );
+Client = require( './client-schema.js' );

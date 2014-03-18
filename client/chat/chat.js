@@ -5,7 +5,6 @@ window.onload = function() {
 	var chat      = $( '#chat-wrapper' );
 	chat.socket   = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/main' );
 
-	chat.sim = [];
 	chat.messages = []; //the list of all messages to the user
 	chat.margin   = chat.css( 'margin-left' )[0];
 
@@ -59,7 +58,7 @@ window.onload = function() {
 	chat.input.connectButton.toggle = function() {
 		if( chat.input.connectButton.data( 'state' ) == 'DISCONNECT' ) {
 			if( chat.socket.connected ) {
-				chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init(); } );
+				chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init( chat.socket ); } );
 				chat.input.sendButton.toggle();
 			}
 			chat.socket.connected = false;
@@ -133,9 +132,9 @@ window.onload = function() {
 	
 				chat.sim[i].on( 'partner disconnected', function() {
 					var thisSim = this;
-					var timeout = Math.floor((Math.random()*5000)+10);
+					var timeout = Math.floor( ( Math.random() * 5000 ) + 10 )
 					setTimeout( 
-						function() { thisSim.emit( 'virtual connect' ); },
+						function() { thisSim.emit( 'virtual connect' ) },
 						timeout
 					)
 				});

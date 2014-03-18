@@ -29,7 +29,8 @@ ratings.stabalizeHTML = function( html ) {
 	this.flag.onClick  = html;
 }
 
-ratings.init = function() {
+ratings.init = function( socket ) {
+	this.socket = socket
 	this.hide();
 	this.css( 'visibility', 'visible' );				
 	this.fadeIn( 'slow' );
@@ -56,11 +57,23 @@ ratings.buttons.hover( function() {}, function() { //hover exit
 })
 
 //remove buttons when one is clicked
-ratings.button.on( 'click', function() { 
+ratings.button.on( 'click', function() {
 	ratings.buttons.prop( 'disabled', true );
 	ratings.buttons.fadeTo( 'slow' , 0, function() {
 		ratings.buttons.hide();
 	});
+})
+
+ratings.delta.on( 'click', function() {
+	ratings.socket.emit( 'rate', { rating: 'delta' } )
+})
+
+ratings.same.on( 'click', function() {
+	ratings.socket.emit( 'rate', { rating: 'same' } )
+})
+
+ratings.same.on( 'click', function() {
+	ratings.socket.emit( 'rate', { rating: 'flag' } )
 })
 
 ratings.delta.on( 'click', function() { ratings.stabalizeHTML( ratings.delta.onClick ); })

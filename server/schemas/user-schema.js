@@ -8,9 +8,14 @@ SALT_WORK_FACTOR = 10;
 
 //create schema model
 var userSchema = new schema( {
-	username: { type: String, required: true, index: { unique: true } },
-	password: { type: String, required: true },
-	email:    { type: String, required: false }
+	username:  { type: String, required: true, index: { unique: true } },
+	password:  { type: String, required: true },
+	email:     { type: String, required: false },
+
+	pio_user:  { type: Number,  required: true },
+	pio_items: { type: Array,  required: true },
+	
+	flags:     { type: Number, required: true }
 });
 
 //mongoose middleware automatically hashes passsword before saving to mongodb
