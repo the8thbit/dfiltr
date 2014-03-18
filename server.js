@@ -82,9 +82,7 @@ ptcl.pool = [] //pool of unpaired users
 // what to do when the socket connects
 // this also bootstraps the rest of the protocol
 //-----------------------------------------------------------------------------
-io.of( '/main' ).on( 'connection', function( socket ) {
-	ptcl.connect( socket )
-})
+io.of( '/main' ).on( 'connection', function( socket ) { ptcl.connect( socket ) } )
 
 //-----------------------------------------------------------------------------
 // what to do when bot sockets connect
@@ -101,7 +99,6 @@ for( var i=0; i < 100; i++ ) {
 //-----------------------------------------------------------------------------
 ptcl.connect = function( socket ) {
 	socket.user = socket.handshake.user
-	if( socket.handshake.user.username ) { console.log( socket.user ) }
 	Client.findOne( { ip: socket.handshake.address.address }, function( err, res ) { socket.client = res } )
 
 	if( !socket.client ) {
