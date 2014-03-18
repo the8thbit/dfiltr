@@ -12,7 +12,7 @@
 		"mongoose": "latest",
 		"passport": "latest",
 		"passport.socket.io": "latest",
-		"sessionstore": "latest"
-		"predictionio": "latest",
+		"sessionstore": "latest",
+		"predictionio": "latest"
 	}
 }
