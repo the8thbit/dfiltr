@@ -38,14 +38,14 @@ window.onload = function() {
 			}
 			chat.output.html( html );
 			chat.output.scrollTop( 99999999 );
-		}
+		};
 	};
 	//sends a message to the partner
 	chat.input.send = function( text ) {
 		if( text != '' ) {
 			chat.input.field.prop( 'value', '' );
 			chat.socket.emit( 'send', { message: text } );
-		}
+		};
 	};
 	//clears the output field
 	chat.output.clear = function() {
@@ -60,9 +60,9 @@ window.onload = function() {
 			if( chat.socket.connected ) {
 				chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init( chat.socket ); } );
 				chat.input.sendButton.toggle();
-			}
-			chat.socket.connected = false;
-			chat.socket.emit( 'virtual disconnect' );
+			};
+			chat.socket.connected = false
+			chat.socket.emit( 'virtual disconnect' )
 			chat.output.add( { message: 'You have disconnected.', type:'server' } ); //spoof the server because its easier and more efficient this way
 			chat.input.field.wrap.css( 'background-color', '#eeeeee' );
 			chat.input.field.prop( 'readOnly', true );
@@ -85,10 +85,10 @@ window.onload = function() {
 		} else {
 			chat.input.sendButton.data( 'state', 'DISABLED' );
 			chat.input.sendButton.css( 'background-color', '#999' );
-		}
+		};
 	};
 	chat.resize = function()  {
-		chat.output.wrap.css( { 'height': 
+		chat.output.wrap.css( { 'height' : 
 			$( window ).height() - ( 
 				chat.input.field.wrap.outerHeight() + 
 				chat.dock.outerHeight() +
@@ -102,44 +102,6 @@ window.onload = function() {
 				chat.margin * 4
 			) 
 		});
-	};
-
-	chat.createSim = function() {
-		for( var i=0; i < 100; i++ ) {
-			chat.sim[i] = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/sim/' + i );
-			if( chat.sim[i] ) {
-				chat.sim[i].num = i;
-
-				chat.sim[i].on( 'partner connected', function() {
-					var thisSim = this;
-					var timeout = Math.floor((Math.random()*100000)+10);
-					
-					thisSim.emit( 'send', { message: 
-						'I am Sim number ' + thisSim.num + '. ' + 
-						'I will disconnect in ' + timeout + ' ms.'
-					});
-					setTimeout( 
-						function() { 
-							thisSim.emit( 'virtual disconnect' )
-							setTimeout(
-								function() { 
-									thisSim.emit( 'virtual connection' )
-								}, ( Math.random() * 10000 ) + 10
-							)
-					 	}, timeout
-					);
-				});
-	
-				chat.sim[i].on( 'partner disconnected', function() {
-					var thisSim = this;
-					var timeout = Math.floor( ( Math.random() * 5000 ) + 10 )
-					setTimeout( 
-						function() { thisSim.emit( 'virtual connect' ) },
-						timeout
-					)
-				});
-			}
-		}
 	};
 
 	//==========================================================================
@@ -162,25 +124,25 @@ window.onload = function() {
 		}
 	);
 
-	$( document ).keydown( function( e ){
+	$( document ).keydown( function( e ) {
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ) {
 			e.preventDefault();
 			chat.output.add( { message: chat.input.field.prop( 'value' ), type:'self' } );
 			chat.input.send( chat.input.field.prop( 'value' ) );
-		}
+		};
 	});
-	$( document ).keyup( function( e ){
+	$( document ).keyup( function( e ) {
 		//ESC KEY: end discussion/start new discussion
 		if( e.keyCode == 27 ) {
 			e.preventDefault();
 			chat.input.connectButton.toggle();
-		}
+		};
 
 		if( e.keyCode == 17 ) {
 			e.preventDefault();
 			chat.createSim();
-		}
+		};
 
 	});
 
@@ -224,7 +186,7 @@ window.onload = function() {
 		chat.input.connectButton.prop( 'value', 'new discussion' );
 		chat.input.connectButton.data( 'state', 'NEW' );
 		chat.input.sendButton.toggle();
-	}); 
+	});
 
 	//==========================================================================
 	// Initialization
@@ -234,14 +196,14 @@ window.onload = function() {
 			chat.dock.load( '/modules/dock/auth' );
 		} else {
 			chat.dock.load( '/modules/dock/' );
-		}
+		};
 	});
 
 	chat.resize();
 
 	window.onresize = function( event ) {
 		chat.resize();
-	}
+	};
 
 	chat.input.button.fadeTo( 0, 0.7 );
-}
+};

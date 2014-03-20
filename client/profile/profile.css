@@ -1,0 +1,27 @@
+#profile-dock {
+  position: relative;
+  height: 41px;
+  border-bottom: solid 1px #999;
+  background-color: #fff;
+}
+#profile {
+  background: -webkit-linear-gradient(#e6eaee, #fff);
+/* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#e6eaee, #fff);
+/* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#e6eaee, #fff);
+/* For Firefox 3.6 to 15 */
+  background: linear-gradient(#e6eaee, #fff);
+/* Standard syntax */
+  padding: 5px;
+}
+#profile-content {
+  height: 50%;
+  text-align: center;
+  width: auto;
+  background-color: #fff;
+  border: solid 1px #999;
+}
+#dock {
+  visibility: hidden;
+}

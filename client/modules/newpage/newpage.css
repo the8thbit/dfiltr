@@ -1,7 +1,12 @@
 * {
   outline: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
-html {
-  font-family: helvetica;
-  overflow: hidden;
+body {
+  font-family: Helvetica;
+  font-size: 14pt;
+  margin: 0;
+  padding: 0;
 }

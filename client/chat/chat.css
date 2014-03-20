@@ -1,16 +1,6 @@
-* {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
 body {
   height: 100%;
   width: 100%;
-  font-family: Helvetica;
-  font-size: 14pt;
-  margin: 0;
-  padding: 0;
-  background-color: #e6eaee;
   background: -webkit-linear-gradient(#e6eaee, #fff);
 /* For Safari 5.1 to 6.0 */
   background: -o-linear-gradient(#e6eaee, #fff);

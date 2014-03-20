@@ -51,6 +51,7 @@ app.engine( 'jade', require( 'jade' ).__express )
 
 //get the JADE template pages used in the project
 app.get( '/', function( req, res ){ res.render( 'chat/chat' ) } )
+app.get( '/user/', function( req, res ){ res.render( 'profile/profile' ) } )
 app.get( '/modules/ratings',   function( req, res ){ res.render( 'modules/ratings/ratings' ) } )
 app.get( '/modules/dock/auth', function( req, res ){ res.render( 'modules/dock/dock_in'    ) } )
 app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ) } )
@@ -99,6 +100,7 @@ for( var i=0; i < 100; i++ ) {
 //-----------------------------------------------------------------------------
 ptcl.connect = function( socket ) {
 	socket.user = socket.handshake.user
+	console.log( socket.user )
 	Client.findOne( { ip: socket.handshake.address.address }, function( err, res ) { socket.client = res } )
 
 	if( !socket.client ) {
@@ -147,7 +149,9 @@ ptcl.connect = function( socket ) {
 					socket.prev_partner = null
 				})
 			} else if( data.rating == 'flag' ) {
-				//flagging code will go here eventually
+				socket.prev_partner.client.flags++
+				if( socket.prev_partner.user ) { socket.prev_partner.user.flags++ }
+				socket.prev_partner = null				
 			}
 		}
 	})
