@@ -28,7 +28,6 @@ sessionStore.mongo = sessionStore.createSessionStore( {
 	port:     config.MONGO_PORT,
 	username: config.MONGO_USER,
 	password: config.MONGO_PASS,
-	dbName: '435db',
 	collectionName: '_sessions'
 }) 
 app.use( express.session( { 
