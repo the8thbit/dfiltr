@@ -5,11 +5,11 @@ var config  = require( './../../config.js' );
 //=============================================================================
 var mongoose = require( 'mongoose' );
 if( config.MONGO_USER && config.MONGO_PASS ) {
-	mongoose.connect( 'mongodb://' + config.MONGO_USER + ':' + config.MONGO_PASS + '@' + config.MONGO_IP + ':' + config.MONGO_PORT );
+	mongoose.connect( 'mongodb://' + config.MONGO_USER + ':' + config.MONGO_PASS + '@' + config.MONGO_IP + ':' + config.MONGO_PORT  + '/435' );
 } else if( config.MONGO_USER ) {
-	mongoose.connect( 'mongodb://' + config.MONGO_USER + '@' + config.MONGO_IP + ':' + config.MONGO_PORT );
+	mongoose.connect( 'mongodb://' + config.MONGO_USER + '@' + config.MONGO_IP + ':' + config.MONGO_PORT + '/435' );
 } else {
-	mongoose.connect( 'mongodb://' + config.MONGO_IP + ':' + config.MONGO_PORT );
+	mongoose.connect( 'mongodb://' + config.MONGO_IP + ':' + config.MONGO_PORT + '/435' );
 }
 
 var mongo = mongoose.connection;
