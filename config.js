@@ -83,7 +83,7 @@ if( process.env ) {
 	module.exports.MONGO_PASS    = MONGO_PASS;
 	module.exports.MONGO_IP      = MONGO_IP;
 	module.exports.MONGO_PORT    = MONGO_PORT;
-	module.exports.MONGO_DB      = MONGO_DB_NAME;
+	module.exports.MONGO_DB_NAME = MONGO_DB;
 	module.exports.PIO_API_KEY   = PIO_API_KEY;
 	module.exports.PIO_API_IP    = PIO_API_IP;
 	module.exports.PIO_API_PORT  = PIO_API_PORT;
