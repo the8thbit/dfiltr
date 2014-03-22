@@ -22,13 +22,6 @@ pio.ITEMS_PER_USER = 5
 var app = express()
 app.use( express.urlencoded() )
 app.use( express.cookieParser() )
-sessionStore.mongo = sessionStore.createSessionStore( {
-	type: 'mongoDb',
-	host: config.MONGO_IP,
-	port: config.MONGO_PORT,
-	dbName: '435',
-	collectionName: 'sessions'
-}) 
 app.use( express.session( { 
 	key: '435.sid',
 	secret: config.COOKIE_SECRET,
