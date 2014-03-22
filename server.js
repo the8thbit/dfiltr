@@ -24,8 +24,11 @@ app.use( express.urlencoded() )
 app.use( express.cookieParser() )
 sessionStore.mongo = sessionStore.createSessionStore( {
 	type: 'mongoDb',
-	host: config.MONGO_IP,
-	port: config.MONGO_PORT,
+	host:     config.MONGO_IP,
+	port:     config.MONGO_PORT,
+	username: config.MONGO_USER,
+	password: config.MONGO_PASS,
+	dbName: '435db',
 	collectionName: '_sessions'
 }) 
 app.use( express.session( { 
