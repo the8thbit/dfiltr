@@ -50,12 +50,14 @@ app.set( 'view engine', 'jade' )
 app.engine( 'jade', require( 'jade' ).__express )
 
 //get the JADE template pages used in the project
-app.get( '/', function( req, res ){ res.render( 'chat/chat' ) } )
-app.get( '/user/', function( req, res ){ res.render( 'profile/profile' ) } )
+app.get( '/', function( req, res ){ res.render( 'chat/chat' ) } );
+app.get( '/user/', function( req, res ){ res.render( 'profile/profile' ) } );
+app.get( '/profile/delta', function( req, res ){ res.render( 'profile/delta/delta' ) } );
 app.get( '/modules/ratings',   function( req, res ){ res.render( 'modules/ratings/ratings' ) } )
 app.get( '/modules/dock/auth', function( req, res ){ res.render( 'modules/dock/dock_in'    ) } )
 app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ) } )
 app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'     ) } )
+app.get( '/modules/convo',     function( req, res ){ res.render( 'modules/convo/convo'     ) } )
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) )
@@ -100,7 +102,6 @@ for( var i=0; i < 100; i++ ) {
 //-----------------------------------------------------------------------------
 ptcl.connect = function( socket ) {
 	socket.user = socket.handshake.user
-	console.log( socket.user )
 	Client.findOne( { ip: socket.handshake.address.address }, function( err, res ) { socket.client = res } )
 
 	if( !socket.client ) {
@@ -325,6 +326,7 @@ createUser = function( body ) {
 		}, function( err, res ) {
 			console.log( err, res )
 			newUser.pio_user = pio.users.num
+			var race_condition_stopper = 0
 			for( var i=0; i < pio.ITEMS_PER_USER; i++ ) {
 				pio.items.num++
 				pio.items.create( {
@@ -334,7 +336,8 @@ createUser = function( body ) {
 				}, function( err, res ) {
 					if( err ) { console.log( err ) }
 					newUser.pio_items.push( pio.items.num )
-					if( i == pio.ITEMS_PER_USER ) { newUser.save() }
+					race_condition_stopper++
+					if( race_condition_stopper == pio.ITEMS_PER_USER ) { newUser.save() }
 				})
 			}
 		})

@@ -18,7 +18,7 @@ $( document ).ready( function() {
 	$( '#login' ).load( '/modules/login' );
 
 	$( '#popup' ).colorbox( { 
-		inline:true,
+		inline: true,
 		transition: 'none'
 	});
 

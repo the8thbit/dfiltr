@@ -7,7 +7,8 @@ module.exports = function( passport ) {
 			if( !user ) { 
 				return done( null, false, { message: 'bad name' } );
 			} else {
-				user.comparePassword( password, function( err, isMatch ) {
+				console.log( 'tryin it out: ' + user.password );
+				user.comparePassword( password, user.password, function( err, isMatch ) {
 					if( err ) {
 						console.log( 'error: ' + err ); 
 						return done( err );

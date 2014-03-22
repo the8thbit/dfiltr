@@ -12,8 +12,8 @@ var userSchema = new schema( {
 	password:  { type: String, required: true },
 	email:     { type: String, required: false },
 
-	pio_user:  { type: Number,  required: true },
-	pio_items: { type: Array,  required: true },
+	pio_user:  { type: Number,  required: false },
+	pio_items: { type: Array,  required: false },
 	
 	flags:     { type: Number, required: true }
 });
@@ -22,29 +22,31 @@ var userSchema = new schema( {
 userSchema.pre( 'save', function( next ) {
 	var user = this
 
+	console.log( user.password )
+	console.log( user.isModified( 'password' ) )
 	// only hash the password if it has been modified (or is new)
-	if( !user.isModified( 'password' ) ) { return next() }
-
-	// generate a salt (used to hash prevents brute force attacks)
-	bcrypt.genSalt( SALT_WORK_FACTOR, function( err, salt ) {
-	if ( err ) return next( err )
-
-		// hash the password along with our new salt
-		bcrypt.hash( user.password, salt, function( err, hash ) {
-			if ( err ) return next( err )
-			// override the cleartext password with the hashed one
-			user.password = hash
-			next()
+	if( user.isModified( 'password' ) ) {
+		// generate a salt (used to hash prevents brute force attacks)
+		bcrypt.genSalt( SALT_WORK_FACTOR, function( err, salt ) {
+		if ( err ) return next( err )
+			// hash the password along with our new salt
+			bcrypt.hash( user.password, salt, function( err, hash ) {
+				if ( err ) return next( err )
+				// override the cleartext password with the hashed one
+				user.password = hash
+				next()
+			});
 		});
-	});
+	}
 });
 
 //password verification
-userSchema.methods.comparePassword = function( candidatePassword, cb ) {
-	bcrypt.compare( candidatePassword, this.password, function( err, isMatch ) {
-		console.log( err, isMatch )
-		if( err ) { return cb( err ) }
-		cb( null, isMatch )
+userSchema.methods.comparePassword = function( candidatePassword, hash, cb ) {
+	bcrypt.compare( candidatePassword, hash, function( err, isMatch ) {
+		console.log( 'cannidate: ' + candidatePassword );
+		console.log( 'this hash: ' + hash );
+		if( err ) { return cb( err ) };
+		cb( null, isMatch );
 	});
 };
 

@@ -1,7 +1,7 @@
 doctype html
 html( lang='en' )
 	head
-		title= 'Chat Test'
+		title= 'User Page'
 		link( rel='stylesheet' type='text/css' href='/client/modules/reset/reset.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/newpage/newpage.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/colorbox/colorbox.css' )
@@ -15,3 +15,28 @@ html( lang='en' )
 		#profile-dock
 		#profile
 			#profile-content
+				table#profile-headerbar
+					td#profile-headerbar-name( class='profile-headerbar-cell' ) 
+						table#profile-headerbar-name-table( class='.profile-headerbar-subtable' )
+							td name
+					td#profile-headerbar-stats( class='profile-headerbar-cell' )
+						table#profile-headerbar-stats-table( class='profile-headerbar-subtable' )
+							td#profile-headerbar-stats-delta 0 ∆
+							td#profile-headerbar-stats-badge 0 ☆
+					td#profile-headerbar-tabs( class='profile-headerbar-cell' )
+						table#profile-headerbar-tabs-table( class='profile-headerbar-subtable' )
+							td#profile-headerbar-tabs-delta( class='profile-headerbar-tab' class='profile-faded' )
+								#profile-headerbar-tabs-delta-text( class='profile-headerbar-tab-text' ) ∆
+							td( class='profile-headerbar-tab-space' )
+							td#profile-headerbar-tabs-badge( class='profile-headerbar-tab' class='profile-faded' )
+								#profile-headerbar-tabs-badge-text( class='profile-headerbar-tab-text' ) ☆
+							td( class='profile-headerbar-tab-space' )
+							td#profile-headerbar-tabs-info( class='profile-headerbar-tab' class='profile-faded' ) 
+								#profile-headerbar-tabs-info-text( class='profile-headerbar-tab-text' ) ?
+							td( class='profile-headerbar-tab-space' )
+							td#profile-headerbar-tabs-mail( class='profile-headerbar-tab' class='profile-faded' )
+								#profile-headerbar-tabs-mail-text( class='profile-headerbar-tab-text' ) ✉
+							td( class='profile-headerbar-tab-space' )
+							td#profile-headerbar-tabs-options( class='profile-headerbar-tab' class='profile-faded' )
+								#profile-headerbar-tabs-options-text( class='profile-headerbar-tab-text' ) ⚙
+				#profile-viewer
