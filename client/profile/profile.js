@@ -28,10 +28,14 @@ window.onload = function() {
 		$( '.profile-faded' ).css( 'background-color', '#0B5FA5' );
 		$( this ).css( 'background-color', '#FF4C00' );
 	});
+
 	$( '#profile-headerbar-tabs-delta' ).click( function() { 
-		profile.viewer.load( '/profile/delta/' );
+		profile.viewer.load( '/profile/delta/', function() { delta.init(); } );
 	});
 
+	$( '#profile-headerbar-tabs-badges' ).click( function() { 
+		profile.viewer.load( '/profile/badges/', function() { badges.init(); } );
+	});
 
 	//==========================================================================
 	// Initialization

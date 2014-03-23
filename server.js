@@ -52,17 +52,21 @@ app.set( 'view engine', 'jade' )
 app.engine( 'jade', require( 'jade' ).__express )
 
 //get the JADE template pages used in the project
-app.get( '/', function( req, res ){ res.render( 'chat/chat' ) } );
-app.get( '/user/', function( req, res ){ res.render( 'profile/profile' ) } );
-app.get( '/profile/delta', function( req, res ){ res.render( 'profile/delta/delta' ) } );
-app.get( '/modules/ratings',   function( req, res ){ res.render( 'modules/ratings/ratings' ) } )
-app.get( '/modules/dock/auth', function( req, res ){ res.render( 'modules/dock/dock_in'    ) } )
-app.get( '/modules/dock',      function( req, res ){ res.render( 'modules/dock/dock_out'   ) } )
-app.get( '/modules/login',     function( req, res ){ res.render( 'modules/login/login'     ) } )
-app.get( '/modules/convo',     function( req, res ){ res.render( 'modules/convo/convo'     ) } )
+app.get( '/',                    function( req, res ){ res.render( 'chat/chat'                ) } );
+app.get( '/user',                function( req, res ){ res.render( 'profile/profile'          ) } );
+app.get( '/profile/delta',       function( req, res ){ res.render( 'profile/delta/delta'      ) } );
+app.get( '/profile/badges',      function( req, res ){ res.render( 'profile/badges/badges'    ) } );
+app.get( '/profile/badges/view', function( req, res ){ res.render( 'profile/badges/view/view' ) } );
+
+app.get( '/modules/ratings',     function( req, res ){ res.render( 'modules/ratings/ratings'  ) } );
+app.get( '/modules/dock/auth',   function( req, res ){ res.render( 'modules/dock/dock_in'     ) } );
+app.get( '/modules/dock',        function( req, res ){ res.render( 'modules/dock/dock_out'    ) } );
+app.get( '/modules/login',       function( req, res ){ res.render( 'modules/login/login'      ) } );
+app.get( '/modules/convo',       function( req, res ){ res.render( 'modules/convo/convo'      ) } );
+app.get( '/modules/convols',     function( req, res ){ res.render( 'modules/convols/convols'  ) } );
 
 //use socket.io and give it a location to listen on 
-var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) )
+var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
 io.set( 'log level', 1 )
 //use passport.socket.io to link passport sessions with a socket
 io.set( 'authorization', passportSIO.authorize( {
@@ -129,7 +133,7 @@ ptcl.connect = function( socket ) {
 	//what to do when the user provides a rating
 	socket.on( 'rate', function( data ) {
 		if( socket.prev_partner ) {
-			if( data.rating == 'delta' ) {
+			if( data.rating == 'delta' && socket.prev_partner.pio_items ) {
 				pio.users.createAction( {
 					pio_engine: 'engine',
 					pio_uid: socket.pio_user,
@@ -140,7 +144,7 @@ ptcl.connect = function( socket ) {
 					console.log( err, res )
 					socket.prev_partner = null
 				})
-			} else if( data.rating == 'same' ) {
+			} else if( data.rating == 'same' && socket.prev_partner.pio_items ) {
 				pio.users.createAction( {
 					pio_engine: 'engine',
 					pio_uid: socket.pio_user,

@@ -8,9 +8,17 @@ html( lang='en' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )
 		link( rel='stylesheet' type='text/css' href='/client/profile/profile.css' )
+		link( rel='stylesheet' type='text/css' href='/client/profile/delta/delta.css' )
+		link( rel='stylesheet' type='text/css' href='/client/profile/badges/badges.css' )
+		link( rel='stylesheet' type='text/css' href='/client/profile/badges/view/view.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/convols/convols.css' )
 		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
 		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
+		script( src='/client/modules/isotope/isotope.js' )
 		script( src='/client/profile/profile.js' )
+		script( src='/client/profile/delta/delta.js' )
+		script( src='/client/profile/badges/badges.js' )
+		script( src='/client/profile/badges/view/view.js' )
 	body
 		#profile-dock
 		#profile
@@ -22,17 +30,17 @@ html( lang='en' )
 					td#profile-headerbar-stats( class='profile-headerbar-cell' )
 						table#profile-headerbar-stats-table( class='profile-headerbar-subtable' )
 							td#profile-headerbar-stats-delta 0 ∆
-							td#profile-headerbar-stats-badge 0 ☆
+							td#profile-headerbar-stats-badges 0 ☆
 					td#profile-headerbar-tabs( class='profile-headerbar-cell' )
 						table#profile-headerbar-tabs-table( class='profile-headerbar-subtable' )
 							td#profile-headerbar-tabs-delta( class='profile-headerbar-tab' class='profile-faded' )
 								#profile-headerbar-tabs-delta-text( class='profile-headerbar-tab-text' ) ∆
 							td( class='profile-headerbar-tab-space' )
-							td#profile-headerbar-tabs-badge( class='profile-headerbar-tab' class='profile-faded' )
-								#profile-headerbar-tabs-badge-text( class='profile-headerbar-tab-text' ) ☆
+							td#profile-headerbar-tabs-badges( class='profile-headerbar-tab' class='profile-faded' )
+								#profile-headerbar-tabs-badges-text( class='profile-headerbar-tab-text' ) ☆
 							td( class='profile-headerbar-tab-space' )
 							td#profile-headerbar-tabs-info( class='profile-headerbar-tab' class='profile-faded' ) 
-								#profile-headerbar-tabs-info-text( class='profile-headerbar-tab-text' ) ?
+								#profile-headerbar-tabs-info-text( class='profile-headerbar-tab-text' ) ☺
 							td( class='profile-headerbar-tab-space' )
 							td#profile-headerbar-tabs-mail( class='profile-headerbar-tab' class='profile-faded' )
 								#profile-headerbar-tabs-mail-text( class='profile-headerbar-tab-text' ) ✉
