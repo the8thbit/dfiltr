@@ -1,6 +1,6 @@
 $( document ).ready( function() {
 	$.get( '/isLogged', function( user ) { 
-		$( '#dock-username' ).html( '<a href="#" class="dock-faded">' + user.username + '</a>' );
+		$( '#dock-username' ).html( '<a href="/user/' + user.username + '" class="dock-faded">' + user.username + '</a>' );
 		$( '.dock-faded' ).fadeTo( 0, 0.6 );
 
 		$( '.dock-faded' ).hover(

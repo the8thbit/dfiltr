@@ -30,40 +30,56 @@ sessionStore.mongo = sessionStore.createSessionStore( {
 	port:     config.MONGO_PORT,
 	dbName:   'admin',
 	collectionName: '_sessions'
-}) 
+});
 app.use( express.session( { 
 	key: '435.sid',
 	secret: config.COOKIE_SECRET,
 	store: sessionStore.mongo
-}))
+}));
 
 //use stylus templates for CSS
-function compile( str, path ) { return stylus( str ).set( 'filename', path ) } 
-app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) )
-app.use( express.static( __dirname + '/' ) )
+function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
+app.use( stylus.middleware( { src: __dirname + '/' , compile: compile } ) );
+app.use( express.static( __dirname + '/' ) );
 
 //use pasport for managing user authentication and sessions
-app.use( passport.initialize() )
-app.use( passport.session() )
+app.use( passport.initialize() );
+app.use( passport.session() );
 
 //use jade templates for HTML
-app.set( 'views', __dirname + '/client' )
-app.set( 'view engine', 'jade' )
-app.engine( 'jade', require( 'jade' ).__express )
+app.set( 'views', __dirname + '/client' );
+app.set( 'view engine', 'jade' );
+app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
-app.get( '/',                    function( req, res ){ res.render( 'chat/chat'                ) } );
-app.get( '/user',                function( req, res ){ res.render( 'profile/profile'          ) } );
-app.get( '/profile/delta',       function( req, res ){ res.render( 'profile/delta/delta'      ) } );
-app.get( '/profile/badges',      function( req, res ){ res.render( 'profile/badges/badges'    ) } );
-app.get( '/profile/badges/view', function( req, res ){ res.render( 'profile/badges/view/view' ) } );
+app.get( '/',                    function( req, res ){ res.render( 'chat/chat'                ); } );
+app.get( '/user',                function( req, res ){ res.render( 'profile/profile'          ); } );
+app.get( '/profile/delta',       function( req, res ){ res.render( 'profile/delta/delta'      ); } );
+app.get( '/profile/badges',      function( req, res ){ res.render( 'profile/badges/badges'    ); } );
+app.get( '/profile/badges/view', function( req, res ){ res.render( 'profile/badges/view/view' ); } );
 
-app.get( '/modules/ratings',     function( req, res ){ res.render( 'modules/ratings/ratings'  ) } );
-app.get( '/modules/dock/auth',   function( req, res ){ res.render( 'modules/dock/dock_in'     ) } );
-app.get( '/modules/dock',        function( req, res ){ res.render( 'modules/dock/dock_out'    ) } );
-app.get( '/modules/login',       function( req, res ){ res.render( 'modules/login/login'      ) } );
-app.get( '/modules/convo',       function( req, res ){ res.render( 'modules/convo/convo'      ) } );
-app.get( '/modules/convols',     function( req, res ){ res.render( 'modules/convols/convols'  ) } );
+app.get( '/modules/ratings',     function( req, res ){ res.render( 'modules/ratings/ratings'  ); } );
+app.get( '/modules/dock/auth',   function( req, res ){ res.render( 'modules/dock/dock_in'     ); } );
+app.get( '/modules/dock',        function( req, res ){ res.render( 'modules/dock/dock_out'    ); } );
+app.get( '/modules/login',       function( req, res ){ res.render( 'modules/login/login'      ); } );
+app.get( '/modules/convo',       function( req, res ){ res.render( 'modules/convo/convo'      ); } );
+app.get( '/modules/convols',     function( req, res ){ res.render( 'modules/convols/convols'  ); } );
+
+app.get('/user/:username',       function( req, res ){
+	User.findOne( { username: req.params.username }, function( err, user ) {
+		if( user && user.username ) {
+			res.render('profile/profile', {
+				profileData: {
+					name: user.username,
+					deltas: user.deltas,
+					badges: user.badges
+				}
+			})
+		} else {
+			res.render( 'chat/chat' );
+		}
+	})
+})
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
@@ -127,6 +143,17 @@ ptcl.connect = function( socket ) {
 		data.type = 'partner'                       	//'send' is a chat message coming from a client, and
 		if( socket.partner ) {                       //'message' is a chat message being sent from the server to a client.
 			socket.partner.emit( 'message', data  )
+			if( socket.convo ) {
+				socket.convo.messages.push( {
+					userId: 1,
+					message: data.message
+				});
+			} else if( socket.partner.convo ) {
+				socket.partner.convo.messages.push( {
+					userId: 2,
+					message: data.message
+				});
+			}
 		}
 	})
 
@@ -175,7 +202,7 @@ ptcl.virtualConnect = function( socket ) {
 	var pickiness = 0.96
 	//periodically scan pool for matches
 	socket.retry = setInterval( function() {
-		pickiness -= 1.00 - pickiness 
+		pickiness -= 1.00 - pickiness
 		ptcl.scanPool( socket, recommends, pickiness )
 	}, 1000 )
 }
@@ -201,9 +228,16 @@ ptcl.virtualDisconnect = function( socket ) {
 				socket.inPool = null
 			}
 		}
-
 		socket.partner.emit( 'partner disconnected' )
 		socket.partner.emit( 'message', { message: 'Your partner has disconnected.', type: 'server' } )
+		
+		console.log( 'test' );
+
+		if( socket.convo ) {
+			socket.convo.save();
+			socket.convo = null;
+		}
+
 		socket.partner.prev_partner = socket
 		socket.prev_partner = socket.partner
 		socket.partner.partner = null
@@ -291,14 +325,20 @@ ptcl.handshake = function( socket, partner ) {
 			
 		socket.partner.partner = socket
 
-		socket.partner.emit( 'message', { message: 'You\'ve been paired with a partner.',                     type: 'server' } )
-		socket.partner.emit( 'message', { message: 'partner\'s ID: '    + socket.id,                          type: 'debug'  } )
-		socket.partner.emit( 'message', { message: 'You were picked from the pool.',                          type: 'debug'  } )
+		socket.convo = new Convo( {
+			topic: 'this is a test topic',
+			userOne: socket.user.username,
+			userTwo: socket.partner.user.username
+		});
 
-		socket.emit( 'message', { message: 'You\'ve been paired with a partner.',                   type: 'server' } )
-		socket.emit( 'message', { message: 'partner\'s ID: ' + socket.partner.id,                   type: 'debug'  } )
-		socket.emit( 'message', { message: 'You were the picker.',                                  type: 'debug'  } )
-				
+		socket.partner.emit( 'message', { message: 'You\'ve been paired with a partner.', type: 'server' } )
+		socket.partner.emit( 'message', { message: 'partner\'s ID: '    + socket.id,      type: 'debug'  } )
+		socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug'  } )
+
+		socket.emit(         'message', { message: 'You\'ve been paired with a partner.', type: 'server' } )
+		socket.emit(         'message', { message: 'partner\'s ID: ' + socket.partner.id, type: 'debug'  } )
+		socket.emit(         'message', { message: 'You were the picker.',                type: 'debug'  } )
+
 		socket.emit( 'partner connected' )
 		socket.partner.emit( 'partner connected' )
 	} else if( !socket.inPool && socket.retry ) { 
@@ -319,31 +359,35 @@ createUser = function( body ) {
 		pio_user:  null,
 		pio_items: [],
 		flags:     0,
+		deltas:    0,
+		badges:    0,
 	})
-	
+
 	User.count( {}, function( err, res ) { 
-		pio.users.num = res
-		pio.items.num = res * pio.ITEMS_PER_USER
+		pio.users.num = res;
+		pio.items.num = res * pio.ITEMS_PER_USER;
 		//create the predictionio user and items associated with the scoket
-		pio.users.num++
+		pio.users.num++;
 		pio.users.create( {
 			pio_uid: pio.users.num,
 			pio_inactive: false
 		}, function( err, res ) {
-			console.log( err, res )
-			newUser.pio_user = pio.users.num
-			var race_condition_stopper = 0
+			console.log( err, res );
+			newUser.pio_user = pio.users.num;
+			var race_condition_stopper = 0;
 			for( var i=0; i < pio.ITEMS_PER_USER; i++ ) {
-				pio.items.num++
+				pio.items.num++;
 				pio.items.create( {
 					pio_iid: pio.items.num,
 					pio_itypes: 'uitem',
 					pio_inactive: false
 				}, function( err, res ) {
-					if( err ) { console.log( err ) }
-					newUser.pio_items.push( pio.items.num )
-					race_condition_stopper++
-					if( race_condition_stopper == pio.ITEMS_PER_USER ) { newUser.save() }
+					if( err ) { console.log( err ); }
+					newUser.pio_items.push( pio.items.num );
+					race_condition_stopper++;
+					if( race_condition_stopper == pio.ITEMS_PER_USER ) {
+						newUser.save();
+					}
 				})
 			}
 		})
@@ -403,4 +447,13 @@ app.get( '/isLogged', function( req, res, next ) {
 	} else {
 		return res.send( false )
 	}
+})
+
+/////////////////////////////
+//Mongo queries
+/////////////////////////////
+app.get( '/mongo/profile/delta', function( req, res, next ) {
+	Convo.find( { $or: [{userOne: req.query.name}, {userTwo: req.query.name}] }, function( err, convos ) {
+		res.send( convos );
+	})
 })

@@ -6,16 +6,20 @@ var schema = mongoose.Schema
 bcrypt = require( 'bcrypt' ),
 SALT_WORK_FACTOR = 10;
 
+Convo = require( './convo-schema.js' );
+
 //create schema model
 var userSchema = new schema( {
 	username:  { type: String, required: true, index: { unique: true } },
-	password:  { type: String, required: true },
+	password:  { type: String, required: true  },
 	email:     { type: String, required: false },
 
-	pio_user:  { type: Number,  required: false },
+	pio_user:  { type: Number, required: false },
 	pio_items: { type: Array,  required: false },
 	
-	flags:     { type: Number, required: true }
+	deltas:    { type: Number, default: 0, required: true },
+	badges:    { type: Number, default: 0, required: true },
+	flags:     { type: Number, default: 0, required: true },
 });
 
 //mongoose middleware automatically hashes passsword before saving to mongodb

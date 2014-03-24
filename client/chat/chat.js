@@ -29,8 +29,8 @@ window.onload = function() {
 		if( data && data.message && data.message != '' && data.type ) {
 			if( data.type == 'server'  ) { var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
 			if( data.type == 'partner' ) { var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
-			if( data.type == 'self'    ) { var text = '<span class="chat-message-self">'    + data.message + '</span>'; } else
-			if( data.type == 'debug'   ) { var text = '<span class="chat-message-debug">'   + data.message + '</span>'; }
+			if( data.type == 'self'    ) { var text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
+			//if( data.type == 'debug'   ) { var text = '<span class="chat-message-debug">'   + data.message + '</span>'; }
 			if( text ) { chat.messages.push( text ); }
 			var html = '';
 			for( var i=0; i < chat.messages.length; i++ ) {

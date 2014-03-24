@@ -7,7 +7,7 @@ window.onload = function() {
 	profile.content   = $( '#profile-content' )
 	profile.headerbar = $( '#profile-headerbar' )
 	profile.viewer    = $( '#profile-viewer' )
-
+	
 	window.onresize = function( event ) {
 		profile.resize();
 	};
@@ -30,7 +30,7 @@ window.onload = function() {
 	});
 
 	$( '#profile-headerbar-tabs-delta' ).click( function() { 
-		profile.viewer.load( '/profile/delta/', function() { delta.init(); } );
+		profile.viewer.load( '/profile/delta/', function() { delta.init( $( '#profile-headerbar-name-table-cell' ).html() ); } );
 	});
 
 	$( '#profile-headerbar-tabs-badges' ).click( function() { 
@@ -41,6 +41,10 @@ window.onload = function() {
 	// Initialization
 	//==========================================================================
 	profile.resize();
+
+	//default to delta view
+	profile.viewer.load( '/profile/delta/', function() { delta.init( $( '#profile-headerbar-name-table-cell' ).html() ); } );
+	$( '#profile-headerbar-tabs-delta' ).css( 'background-color', '#FF4C00' );
 
 	$( '.profile-faded' ).fadeTo( 0, 0.6 );
 

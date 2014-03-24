@@ -1,5 +1,6 @@
-$( '.convols-faded' ).fadeTo( 0, 0.7 );
+var convols = $( '.convols' );
 
+$( '.convols-faded' ).fadeTo( 0, 0.7 );
 $( '.convols-faded' ).hover(
 	function() {
 		$( this ).fadeTo( 0 , 1.0 );
@@ -7,4 +8,3 @@ $( '.convols-faded' ).hover(
 		$( this ).fadeTo( 0 , 0.7 );
 	}
 );
-

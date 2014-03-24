@@ -26,11 +26,11 @@ html( lang='en' )
 				table#profile-headerbar
 					td#profile-headerbar-name( class='profile-headerbar-cell' ) 
 						table#profile-headerbar-name-table( class='.profile-headerbar-subtable' )
-							td name
+							td#profile-headerbar-name-table-cell #{ profileData.name }
 					td#profile-headerbar-stats( class='profile-headerbar-cell' )
 						table#profile-headerbar-stats-table( class='profile-headerbar-subtable' )
-							td#profile-headerbar-stats-delta 0 ∆
-							td#profile-headerbar-stats-badges 0 ☆
+							td#profile-headerbar-stats-delta #{ profileData.deltas } ∆
+							td#profile-headerbar-stats-badges #{ profileData.badges } ☆
 					td#profile-headerbar-tabs( class='profile-headerbar-cell' )
 						table#profile-headerbar-tabs-table( class='profile-headerbar-subtable' )
 							td#profile-headerbar-tabs-delta( class='profile-headerbar-tab' class='profile-faded' )

@@ -1,4 +1,5 @@
-var config  = require( './../../config.js' );
+var config        = require( './../../config.js' );
+var autoIncrement = require( 'mongoose-auto-increment' );
 
 //=============================================================================
 //ESTABLISH CONNECTION
@@ -18,5 +19,6 @@ mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 //=============================================================================
 //LOAD SCHEMAS
 //=============================================================================
-User   = require( './user-schema.js' );
+Convo  = require( './convo-schema.js'  );
+User   = require( './user-schema.js'   );
 Client = require( './client-schema.js' );
