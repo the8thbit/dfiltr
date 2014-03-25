@@ -36,8 +36,8 @@ if( process.env ) {                           //
   process.env.OPENSHIFT_MONGODB_DB_PORT       // toggle on for openshift deploy
 //============================================//
   var MONGO_DB_NAME =                         //
-//'435'                                     // toggle on for local testing
-  '435'                                     // toggle on for openshift deploy
+//'435'                                       // toggle on for local testing
+  '435'                                       // toggle on for openshift deploy
 //============================================//
 //PREDICTIONIO CONNECTION INFO                //
   var PIO_API_KEY =                           //
