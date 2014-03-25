@@ -30,19 +30,20 @@ if( pio.users && pio.items ) {
 var app = express()
 app.use( express.urlencoded() )
 app.use( express.cookieParser() )
-/*sessionStore.mongo = sessionStore.createSessionStore( {
+sessionStore.mongo = sessionStore.createSessionStore( {
 	type:     'mongoDb',
 	username: config.MONGO_USER,
 	password: config.MONGO_PASS,
 	host:     config.MONGO_IP,
 	port:     config.MONGO_PORT,
+	dbName:   '435',
 	collectionName: 'sessions'
 });
 app.use( express.session( { 
 	key: '435.sid',
 	secret: config.COOKIE_SECRET,
 	store: sessionStore.mongo
-}));*/
+}));
 
 //use stylus templates for CSS
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
