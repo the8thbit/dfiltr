@@ -83,7 +83,9 @@ app.get('/user/:username',       function( req, res ){
 
 //use socket.io and give it a location to listen on 
 var io = require( 'socket.io' ).listen( app.listen( config.SERVER_PORT, config.SERVER_IP ) );
-io.set( 'log level', 1 )
+io.set( 'log level', 1 );
+io.set( 'browser client minification', true );
+io.set( 'browser client etag', true );
 //use passport.socket.io to link passport sessions with a socket
 io.set( 'authorization', passportSIO.authorize( {
 	cookieParser: express.cookieParser,
@@ -144,13 +146,15 @@ ptcl.connect = function( socket ) {
 		if( socket.partner ) {                       //'message' is a chat message being sent from the server to a client.
 			socket.partner.emit( 'message', data  )
 			if( socket.convo ) {
+				socket.convo.users[0] = socket.user.username;
 				socket.convo.messages.push( {
-					userId: 1,
+					userId: 0,
 					message: data.message
 				});
 			} else if( socket.partner.convo ) {
+				socket.partner.convo.users[1] = socket.partner.user.username;
 				socket.partner.convo.messages.push( {
-					userId: 2,
+					userId: 1,
 					message: data.message
 				});
 			}
@@ -160,17 +164,33 @@ ptcl.connect = function( socket ) {
 	//what to do when the user provides a rating
 	socket.on( 'rate', function( data ) {
 		if( socket.prev_partner ) {
-			if( data.rating == 'delta' && socket.prev_partner.pio_items ) {
-				pio.users.createAction( {
-					pio_engine: 'engine',
-					pio_uid: socket.pio_user,
-					pio_iid: socket.prev_partner.pio_items[Math.floor( Math.random() * socket.prev_partner.pio_items.length )],
-					pio_action: 'like',
-					pio_rate: '5'
-				}, function( err, res ) {
-					console.log( err, res )
-					socket.prev_partner = null
-				})
+			if( data.rating == 'delta' ) {
+				if( socket.prev_partner.pio_items ) {
+					pio.users.createAction( {
+						pio_engine: 'engine',
+						pio_uid: socket.pio_user,
+						pio_iid: socket.prev_partner.pio_items[Math.floor( Math.random() * socket.prev_partner.pio_items.length )],
+						pio_action: 'like',
+						pio_rate: '5'
+					}, function( err, res ) {
+						console.log( err, res )
+					})
+				}
+				if( socket.prev_convo ) {
+					socket.prev_convo.deltas[1]++;
+					socket.prev_convo.deltas[2]++;
+					socket.prev_convo.save();
+					socket.prev_convo = null;
+				} else if( socket.prev_partner.prev_convo ) {
+					socket.prev_partner.prev_convo.deltas[0]++;
+					socket.prev_partner.prev_convo.deltas[2]++;
+					socket.prev_partner.prev_convo.save();
+					socket.prev_partner.prev_convo = null;
+				}
+				
+				socket.prev_partner.user.deltas++;
+				socket.prev_partner.user.save();
+				socket.prev_partner = null;
 			} else if( data.rating == 'same' && socket.prev_partner.pio_items ) {
 				pio.users.createAction( {
 					pio_engine: 'engine',
@@ -230,19 +250,35 @@ ptcl.virtualDisconnect = function( socket ) {
 		}
 		socket.partner.emit( 'partner disconnected' )
 		socket.partner.emit( 'message', { message: 'Your partner has disconnected.', type: 'server' } )
-		
-		console.log( 'test' );
 
 		if( socket.convo ) {
 			socket.convo.save();
 			socket.convo = null;
-		}
+		};
 
-		socket.partner.prev_partner = socket
-		socket.prev_partner = socket.partner
-		socket.partner.partner = null
-		socket.partner = null
-	}
+		if( socket.partner.convo ) {
+			socket.partner.convo.save();
+			socket.partner.convo = null;
+		};
+
+		socket.prev_convo = socket.convo;
+		socket.partner.prev_convo = socket.convo;
+
+		socket.prev_convoId = socket.convoId;
+		socket.partner.prev_convoId = socket.partner.convoId;
+
+		socket.partner.prev_partner = socket;
+		socket.prev_partner = socket.partner;
+
+		socket.convo = null;
+		socket.partner.convo = null;
+
+		socket.prev_convoId = null;
+		socket.partner.prev_convoId = null;
+
+		socket.partner.partner = null;
+		socket.partner = null;
+	};
 }
 
 //-----------------------------------------------------------------------------
@@ -250,8 +286,8 @@ ptcl.virtualDisconnect = function( socket ) {
 //-----------------------------------------------------------------------------
 ptcl.scanPool = function( socket, recommends, pickiness ) {
 	socket.emit( 'message', { message: '...', type: 'debug' } )
-	if( partner = ptcl.findPartner( socket, recommends, pickiness ) ) {
-		ptcl.handshake( socket, partner )
+	if( partner = ptcl.findPartner( socket, recommends, pickiness ) ) { //set partner equal to ptcl.findPartner() and then check if partner exists
+		ptcl.handshake( socket, partner );
 	}	
 }
 
@@ -262,7 +298,7 @@ ptcl.findPartner = function( socket, recommends, pickiness ) {
 	if( !socket.partner && socket.inPool && ptcl.pool.length > 1 ) {
 		var partner
 
-		if( recommends && !recommends.message && !recommends.error && recommends.length > 0 && pickiness >= 0 ) {
+		if( recommends && !recommends.message && recommends.length > 0 && pickiness >= 0 && Math.random < 0.9 ) {
 			var matchNum = Math.floor( ( 1 - pickiness ) * 50 ) //the total number of matches to compare against, as determined by our current pickiness
 			if( matchNum < recommends.length ) {
 				var matches = recommends.slice( 0, matchNum )
@@ -298,9 +334,9 @@ ptcl.getRecommends = function( pio_user ) {
 		pio_engine: 'engine',
 		pio_uid: pio_user,
 		pio_n: 50
-	}, function( err, res ) {
-		console.log( err, res )
-		return res
+	}, function( err, recommends ) {
+		console.log( err );
+		return recommends
 	})
 }
 
@@ -312,7 +348,7 @@ ptcl.handshake = function( socket, partner ) {
 		socket.partner = partner
 		clearInterval( socket.partner.retry )
 		clearInterval( socket.retry )
-
+		
 		for( var j=0; j < ptcl.pool.length; j++ ) {
 			if( ptcl.pool[j].id == socket.id ) {
 				ptcl.pool.splice( j-1, 1 )
@@ -322,25 +358,30 @@ ptcl.handshake = function( socket, partner ) {
 				socket.partner.inPool = null
 			}
 		}
-			
+		
 		socket.partner.partner = socket
+		
+		Topic.find().exec( function( err, topics ) {
+			Topic.count().exec( function( err, count ) {
+				socket.convo = new Convo( { topic: topics[Math.floor( Math.random() * count )].text } );
 
-		socket.convo = new Convo( {
-			topic: 'this is a test topic',
-			userOne: socket.user.username,
-			userTwo: socket.partner.user.username
+				socket.convoId = 0
+				socket.partner.convoId = 1
+		
+				socket.emit( 'partner connected' )
+				socket.partner.emit( 'partner connected' )
+				
+				socket.partner.emit( 'message', { message: 'You\'ve found a partner.',            type: 'server' } )
+				socket.partner.emit( 'message', { message: 'partner\'s ID: '    + socket.id,      type: 'debug'  } )
+				socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug'  } )
+				socket.partner.emit( 'message', { message: socket.convo.topic,                    type: 'server' } )
+				
+				socket.emit(         'message', { message: 'You\'ve found a partner.',            type: 'server' } )
+				socket.emit(         'message', { message: 'partner\'s ID: ' + socket.partner.id, type: 'debug'  } )
+				socket.emit(         'message', { message: 'You were the picker.',                type: 'debug'  } )
+				socket.emit(         'message', { message: socket.convo.topic,                    type: 'server' } )
+			});
 		});
-
-		socket.partner.emit( 'message', { message: 'You\'ve been paired with a partner.', type: 'server' } )
-		socket.partner.emit( 'message', { message: 'partner\'s ID: '    + socket.id,      type: 'debug'  } )
-		socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug'  } )
-
-		socket.emit(         'message', { message: 'You\'ve been paired with a partner.', type: 'server' } )
-		socket.emit(         'message', { message: 'partner\'s ID: ' + socket.partner.id, type: 'debug'  } )
-		socket.emit(         'message', { message: 'You were the picker.',                type: 'debug'  } )
-
-		socket.emit( 'partner connected' )
-		socket.partner.emit( 'partner connected' )
 	} else if( !socket.inPool && socket.retry ) { 
 		clearInterval( socket.retry )
 	}
@@ -453,7 +494,7 @@ app.get( '/isLogged', function( req, res, next ) {
 //Mongo queries
 /////////////////////////////
 app.get( '/mongo/profile/delta', function( req, res, next ) {
-	Convo.find( { $or: [{userOne: req.query.name}, {userTwo: req.query.name}] }, function( err, convos ) {
+	Convo.find( { users: {$in: [req.query.name]} }, function( err, convos ) {
 		res.send( convos );
 	})
 })

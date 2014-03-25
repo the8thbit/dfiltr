@@ -19,6 +19,7 @@ mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 //=============================================================================
 //LOAD SCHEMAS
 //=============================================================================
-Convo  = require( './convo-schema.js'  );
 User   = require( './user-schema.js'   );
 Client = require( './client-schema.js' );
+Topic  = require( './topic-schema.js'  );
+Convo  = require( './convo-schema.js'  );

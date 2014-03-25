@@ -11,12 +11,9 @@ var msgSchema = new schema( {
 });
 
 var convoSchema = new schema( {
-	userOne:   { type: String, required: false },
-	userTwo:   { type: String, required: false },
+	users:     { type: Array, required: false },
 
-	deltasOne:   { type: Number, required: true, default: 0 },
-	deltasTwo:   { type: Number, required: true, default: 0 },
-	deltasTotal: { type: Number, required: true, default: 0 },
+	deltas:    { type: Array, required: true, default: [0,0,0] },
 
 	topic:     { type: String, required: true },
    messages:  { type: [msgSchema], required: false },

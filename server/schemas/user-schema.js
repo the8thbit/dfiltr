@@ -19,15 +19,12 @@ var userSchema = new schema( {
 	
 	deltas:    { type: Number, default: 0, required: true },
 	badges:    { type: Number, default: 0, required: true },
-	flags:     { type: Number, default: 0, required: true },
+	flags:     { type: Number, default: 0, required: true }
 });
 
 //mongoose middleware automatically hashes passsword before saving to mongodb
 userSchema.pre( 'save', function( next ) {
 	var user = this
-
-	console.log( user.password )
-	console.log( user.isModified( 'password' ) )
 	// only hash the password if it has been modified (or is new)
 	if( user.isModified( 'password' ) ) {
 		// generate a salt (used to hash prevents brute force attacks)
@@ -38,10 +35,10 @@ userSchema.pre( 'save', function( next ) {
 				if ( err ) return next( err )
 				// override the cleartext password with the hashed one
 				user.password = hash
-				next()
 			});
 		});
 	}
+	next();
 });
 
 //password verification

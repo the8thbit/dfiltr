@@ -164,6 +164,7 @@ window.onload = function() {
 
 	//what to do when the user finds a chat partner
 	chat.socket.on( 'partner connected', function() {
+		chat.output.clear();
 		chat.socket.connected = true;
 		chat.output.prop( 'value', '' );
 		chat.input.field.wrap.html( chat.input.field ); //puts the input field back in its wrapper
