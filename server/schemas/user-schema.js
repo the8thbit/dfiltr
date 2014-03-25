@@ -35,10 +35,12 @@ userSchema.pre( 'save', function( next ) {
 				if ( err ) return next( err )
 				// override the cleartext password with the hashed one
 				user.password = hash
+				next();
 			});
 		});
+	} else {
+		next();
 	}
-	next();
 });
 
 //password verification

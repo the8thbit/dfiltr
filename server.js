@@ -14,9 +14,17 @@ var pio          = require( 'predictionio' ) ( {
 	baseUrl: config.PIO_API_HOST
 })
 
-pio.users.num = 0
-pio.items.num = 0
-pio.ITEMS_PER_USER = 5
+if( pio.users && pio.items ) {
+	pio.users.num = 0
+	pio.items.num = 0
+	pio.ITEMS_PER_USER = 5
+} else {
+	pio.users = 0
+	pio.items = 0
+	pio.users.num = 0
+	pio.items.num = 0
+	pio.ITEMS_PER_USER = 5
+}
 
 //use the express app engine
 var app = express()
