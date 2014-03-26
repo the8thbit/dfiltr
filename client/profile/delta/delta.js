@@ -10,6 +10,7 @@ delta.init = function( username ) {
 					var target = $( '<div>', { id: 'delta-content' + i, class: 'delta-content' } ).html( template );
 					target.find( '.convols-topic' ).html( convo.topic );
 					target.find( '.convols-topic' ).click( function() {
+						$( '#delta-options' ).html( '' );
 						$( '#delta-content' ).load( '/modules/convo/', function() {
 							convoinit();
 							$( '#convo-content' ).append( '<div class="convo-message convo-topic">' + convo.topic + '</div>' );
@@ -20,6 +21,8 @@ delta.init = function( username ) {
 									$( '#convo-content' ).append( '<div class="convo-message convo-red">'  + convo.messages[i].message + '</div>' );
 								}
 							}
+							$( '#convo-stats-blue-name' ).html( convo.users[0] );
+							$( '#convo-stats-red-name'  ).html( convo.users[1] );
 						});
 					});
 					return target[0];
