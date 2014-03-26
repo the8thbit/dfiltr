@@ -60,20 +60,20 @@ app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
-app.get( '/',                    function( req, res ){ res.render( 'chat/chat'                ); } );
-app.get( '/user',                function( req, res ){ res.render( 'profile/profile'          ); } );
-app.get( '/profile/delta',       function( req, res ){ res.render( 'profile/delta/delta'      ); } );
-app.get( '/profile/badges',      function( req, res ){ res.render( 'profile/badges/badges'    ); } );
-app.get( '/profile/badges/view', function( req, res ){ res.render( 'profile/badges/view/view' ); } );
+app.get( '/',                    function( req, res ) { res.render( 'chat/chat'                ); } );
+app.get( '/user',                function( req, res ) { res.render( 'profile/profile'          ); } );
+app.get( '/profile/delta',       function( req, res ) { res.render( 'profile/delta/delta'      ); } );
+app.get( '/profile/badges',      function( req, res ) { res.render( 'profile/badges/badges'    ); } );
+app.get( '/profile/badges/view', function( req, res ) { res.render( 'profile/badges/view/view' ); } );
 
-app.get( '/modules/ratings',     function( req, res ){ res.render( 'modules/ratings/ratings'  ); } );
-app.get( '/modules/dock/auth',   function( req, res ){ res.render( 'modules/dock/dock_in'     ); } );
-app.get( '/modules/dock',        function( req, res ){ res.render( 'modules/dock/dock_out'    ); } );
-app.get( '/modules/login',       function( req, res ){ res.render( 'modules/login/login'      ); } );
-app.get( '/modules/convo',       function( req, res ){ res.render( 'modules/convo/convo'      ); } );
-app.get( '/modules/convols',     function( req, res ){ res.render( 'modules/convols/convols'  ); } );
+app.get( '/modules/ratings',     function( req, res ) { res.render( 'modules/ratings/ratings'  ); } );
+app.get( '/modules/dock/auth',   function( req, res ) { res.render( 'modules/dock/dock_in'     ); } );
+app.get( '/modules/dock',        function( req, res ) { res.render( 'modules/dock/dock_out'    ); } );
+app.get( '/modules/login',       function( req, res ) { res.render( 'modules/login/login'      ); } );
+app.get( '/modules/convo',       function( req, res ) { res.render( 'modules/convo/convo'      ); } );
+app.get( '/modules/convols',     function( req, res ) { res.render( 'modules/convols/convols'  ); } );
 
-app.get('/user/:username',       function( req, res ){
+app.get('/user/:username',       function( req, res ) {
 	User.findOne( { username: req.params.username }, function( err, user ) {
 		if( user && user.username ) {
 			res.render('profile/profile', {

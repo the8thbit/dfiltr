@@ -9,3 +9,14 @@ $( '.convo-faded' ).hover(
 	}
 );
 
+convo.resize = function() {
+	$( '#convo-content' ).css( { 'height' :  $( '#convo' ).height() - $( '#convo-stats' ).outerHeight() } );
+}
+
+convoinit = function() {
+	setInterval( function() {
+		$( '#convo-content' ).css( { 'height' :  $( '#convo' ).height() - $( '#convo-stats' ).outerHeight() } );
+	}, 100 );
+	
+	convo.resize();
+}
