@@ -33,13 +33,30 @@ body {
   border: solid 1px #999;
   overflow: auto;
 }
+#chat-output a {
+  text-decoration: none;
+  font-weight: bold;
+  opacity: 0.7;
+}
+#chat-output a:hover {
+  opacity: 1;
+}
 .chat-message-server {
   font-weight: bold;
+}
+.chat-message-server a {
+  color: #808080;
 }
 .chat-message-partner {
   color: #ff4c00;
 }
+.chat-message-partner a {
+  color: #ff4c00;
+}
 .chat-message-self {
+  color: #0b5fa5;
+}
+.chat-message-self a {
   color: #0b5fa5;
 }
 .chat-message-debug {

@@ -178,7 +178,7 @@ window.onload = function() {
 	//what to do when a chat partner disconnects
 	chat.socket.on( 'partner disconnected', function() {
 		chat.socket.connected = false;
-		chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init(); } );
+		chat.input.field.wrap.load( '/modules/ratings', function() { ratings.init( chat.socket ); } );
 		chat.socket.emit( 'virtual disconnect' );
 		chat.input.field.wrap.css( 'background-color', '#eeeeee' );
 		chat.input.field.prop( 'readOnly', true );

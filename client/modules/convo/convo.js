@@ -10,12 +10,12 @@ $( '.convo-faded' ).hover(
 );
 
 convo.resize = function() {
-	$( '#convo-content' ).css( { 'height' :  $( '#convo' ).height() - $( '#convo-stats' ).outerHeight() } );
+	$( '#convo-content' ).css( { 'height' :  $( '#convo' ).height() - ( $( '#convo-stats' ).outerHeight() + $( '#convo-options' ).outerHeight() ) } );
 }
 
-convoinit = function() {
+convo.init = function() {
 	setInterval( function() {
-		$( '#convo-content' ).css( { 'height' :  $( '#convo' ).height() - $( '#convo-stats' ).outerHeight() } );
+		convo.resize();
 	}, 100 );
 	
 	convo.resize();

@@ -6,25 +6,31 @@ delta.init = function( username ) {
 
 		$.get( '/mongo/profile/delta', { name: username }, function( data ) {
 			$( '#delta-content' ).append(
-				$.map( data, function( convo, i ) {
+				$.map( data, function( conversation, i ) {
 					var target = $( '<div>', { id: 'delta-content' + i, class: 'delta-content' } ).html( template );
-					target.find( '.convols-topic' ).html( convo.topic );
+					target.find( '.convols-topic' ).html( conversation.topic );
+					target.find( '.convols-deltas-blue' ).html( conversation.deltas[0] + ' ∆' );
+					target.find( '.convols-deltas-red' ).html( conversation.deltas[1] + ' ∆' );
+
+					//when the user clicks the topic title, load the conversation view page
 					target.find( '.convols-topic' ).click( function() {
-						$( '#delta-options' ).html( '' );
-						$( '#delta-content' ).load( '/modules/convo/', function() {
-							convoinit();
-							$( '#convo-content' ).append( '<div class="convo-message convo-topic">' + convo.topic + '</div>' );
-							for( var i=0; i < convo.messages.length; i++ ) {
-								if( convo.messages[i].userId == 0 ) {
-									$( '#convo-content' ).append( '<div class="convo-message convo-blue">' + convo.messages[i].message + '</div>' );
+						$( '#delta' ).load( '/modules/convo/', function() {
+							convo.init();
+							$( '#convo-content' ).append( '<div class="convo-message convo-topic">' + conversation.topic + '</div>' );
+							for( var i=0; i < conversation.messages.length; i++ ) {
+								if( conversation.messages[i].userId == 0 ) {
+									$( '#convo-content' ).append( '<div class="convo-message convo-blue">' + conversation.messages[i].message + '</div>' );
 								} else {
-									$( '#convo-content' ).append( '<div class="convo-message convo-red">'  + convo.messages[i].message + '</div>' );
+									$( '#convo-content' ).append( '<div class="convo-message convo-red">'  + conversation.messages[i].message + '</div>' );
 								}
 							}
-							$( '#convo-stats-blue-name' ).html( convo.users[0] );
-							$( '#convo-stats-red-name'  ).html( convo.users[1] );
+							$( '#convo-stats-blue-name span'  ).html( conversation.users[0] );
+							$( '#convo-stats-red-name span'   ).html( conversation.users[1] );
+							$( '#convo-stats-blue-score span' ).html( conversation.deltas[0] + ' ∆' );
+							$( '#convo-stats-red-score span'  ).html( conversation.deltas[1] + ' ∆' );
 						});
 					});
+
 					return target[0];
 				})
 			);

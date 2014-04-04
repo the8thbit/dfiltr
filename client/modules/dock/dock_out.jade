@@ -3,10 +3,11 @@ script( src='/client/modules/dock/dock.js' )
 table#dock
 	tr#dock-row1
 		td#dock-row1-col1
-			img#dock-logo( src='/assets/logo/logo.png' )
+			a( href='/' )
+				img#dock-logo( src='/assets/logo/logo.png' )
 		td#dock-row1-col2
 			div#dock-links
-				a#dock-links-home( class='dock-link' class='dock-faded' href='#' )
+				a#dock-links-home( class='dock-link' class='dock-faded' href='/' )
 					| home
 				a#dock-links-score( class='dock-link' class='dock-faded' href='#' )
 					| stats

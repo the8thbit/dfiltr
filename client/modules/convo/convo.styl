@@ -3,10 +3,13 @@
 #convo
 	width: 100%
 	height: 100%
+#convo-options
+	width: 100%
+	border-bottom: 1px #999 solid
 #convo-content
 	overflow: auto;
 	width: 100%
-	height: 100%
+	height: 50%
 	padding: 5px
 .convo-message
 	font-size: 14pt
@@ -20,46 +23,55 @@
 	font-weight: bold
 
 #convo-stats
+	display: table
 	width: 100%
 	padding: 5px
 	border-top: 1px solid #999
 
 .convo-stat
+	width: 25%
 	display: table-cell
-	width: 50%
 
-#convo-stats-blue
+#convo-stats-blue-name
+	text-align: left
 	color: #0B5FA5
-#convo-stats-red
+#convo-stats-red-name
+	text-align: right
+	color: #FF4C00
+#convo-stats-blue-score
+	text-align: right
+	color: #0B5FA5
+#convo-stats-red-score
+	text-align: left
 	color: #FF4C00
 
 .convo-stat-name
-	text-align: left
 	font-weight: bold
 	font-size: 18pt
 .convo-stat-score
-	text-align: right
-	font-weight: bold
-	font-size: 18pt
-	padding-right: 5px
-.convo-stat-rating
-	text-align: right
-	color: white
-	font-size: 16pt
-	font-weight: bold
-	height: 100%
+	padding-right: 15px
+	padding-left: 15px
+.convo-stat-name span
+	cursor: pointer
 
-#convo-stats-blue-rating-button
+.convo-options-rating
+	display: table-cell
+	text-align: left
+	padding: 4px
+	padding-bottom: 5px
+	padding-right: 12px
+	padding-left: 12px
+	border: 4px white solid
+	border-right: none
+	cursor: pointer
+#convo-options-blue-rating
 	background-color: #0B5FA5
-	display: inline-block
-	text-align: center
-	padding: 3px
-	width: 80px
-	border: 1px #0B5FA5 solid
-#convo-stats-red-rating-button
+#convo-options-red-rating
 	background-color: #FF4C00
-	display: inline-block
+.convo-options-rating span
+	display: block
 	text-align: center
-	padding: 3px
-	width: 80px
-	border: 1px #FF4C00 solid
+	color: white
+	font-size: 15pt
+	font-weight: bold
+

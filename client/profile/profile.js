@@ -21,7 +21,7 @@ window.onload = function() {
 		function() { //hover enter
 			$( this ).fadeTo( 'fast', 1.0 );
 		}, function() { //hover exit
-			$( this ).fadeTo( 'fast', 0.6 );
+			$( this ).fadeTo( 'fast', 0.7 );
 		}
 	);
 	$( '.profile-faded' ).click( function() {

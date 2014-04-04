@@ -1,30 +1,27 @@
 //=============================================================================
 // SERVER START UP
 //=============================================================================
-var config       = require( './config.js' )
-var express      = require( 'express' )
-var stylus       = require( 'stylus' )
-var passport     = require( 'passport' )
+var config       = require( './config.js' );
+var express      = require( 'express' );
+var stylus       = require( 'stylus' );
+var passport     = require( 'passport' );
 var passportSIO  = require( 'passport.socketio' );
-var sessionStore = require( 'sessionstore' )
-var passConfig   = require( './server/passConfig.js' )( passport )
-var db           = require( './server/schemas/mainDB.js' )
+var sessionStore = require( 'sessionstore' );
+var passConfig   = require( './server/passConfig.js' )( passport );
+var db           = require( './server/schemas/mainDB.js' );
+var speakeasy    = require( 'speakeasy-nlp' );
 var pio          = require( 'predictionio' ) ( {
 	key: config.PIO_API_KEY,
 	baseUrl: config.PIO_API_HOST
 })
 
-if( pio.users && pio.items ) {
-	pio.users.num = 0
-	pio.items.num = 0
-	pio.ITEMS_PER_USER = 5
-} else {
-	pio.users = 0
-	pio.items = 0
-	pio.users.num = 0
-	pio.items.num = 0
-	pio.ITEMS_PER_USER = 5
-}
+pio.ITEMS_PER_USER = 5;
+new Index( { name: 'pio_users' } ).save( function() {
+	new Index( { name: 'pio_items' } ).save( function() {
+		Index.findOne( { name: 'pio_users' }, function( err, index ) { console.log( err ); pio.users.index = index; console.log( pio.users.index ); } );
+		Index.findOne( { name: 'pio_items' }, function( err, index ) { console.log( err ); pio.items.index = index; console.log( pio.items.index ); } );
+	});
+});
 
 //use the express app engine
 var app = express()
@@ -152,27 +149,30 @@ ptcl.connect = function( socket ) {
 	socket.on( 'send', function( data ) {        	//when server recieves 'send' relay 'message' to client
 		data.type = 'partner'                       	//'send' is a chat message coming from a client, and
 		if( socket.partner ) {                       //'message' is a chat message being sent from the server to a client.
-			socket.partner.emit( 'message', data  )
+			socket.partner.emit( 'message', data );
+			console.log( 'message sentiment: ', speakeasy.sentiment.analyze( data.message ) );
 			if( socket.convo ) {
-				socket.convo.users[0] = socket.user.username;
+				socket.convo.users[0] = socket.user.username; 
 				socket.convo.messages.push( {
 					userId: 0,
-					message: data.message
+					message: data.message,
+					sentiment: speakeasy.sentiment.analyze( data.message ).comparitive
 				});
 			} else if( socket.partner.convo ) {
-				socket.partner.convo.users[1] = socket.partner.user.username;
+				socket.partner.convo.users[1] = socket.user.username;
 				socket.partner.convo.messages.push( {
 					userId: 1,
-					message: data.message
-				});
-			}
-		}
-	})
+					message: data.message,
+					sentiment: speakeasy.sentiment.analyze( data.message ).comparitive
+			});
+		};
+	};
+});
 
 	//what to do when the user provides a rating
 	socket.on( 'rate', function( data ) {
 		if( socket.prev_partner ) {
-			if( data.rating == 'delta' ) {
+			if( data.rating == 'delta' && ( ( socket.prev_convo && socket.prev_convo.users[0] && socket.prev_convo.users[1] ) || ( socket.prev_partner.prev_convo && socket.prev_partner.prev_convo.users[0] && socket.prev_partner.prev_convo.users[1] ) ) ) {
 				if( socket.prev_partner.pio_items ) {
 					pio.users.createAction( {
 						pio_engine: 'engine',
@@ -184,21 +184,19 @@ ptcl.connect = function( socket ) {
 						console.log( err, res )
 					})
 				}
+
 				if( socket.prev_convo ) {
 					socket.prev_convo.deltas[1]++;
 					socket.prev_convo.deltas[2]++;
-					socket.prev_convo.save();
-					socket.prev_convo = null;
+					Convo.findByIdAndUpdate( socket.prev_convo._id, { deltas: socket.prev_convo.deltas }, function( err ) { console.log( err ) } );
 				} else if( socket.prev_partner.prev_convo ) {
 					socket.prev_partner.prev_convo.deltas[0]++;
 					socket.prev_partner.prev_convo.deltas[2]++;
-					socket.prev_partner.prev_convo.save();
-					socket.prev_partner.prev_convo = null;
+					Convo.findByIdAndUpdate( socket.prev_partner.prev_convo._id, { deltas: socket.prev_partner.prev_convo.deltas }, function( err ) { console.log( err ) } );
 				}
 				
 				socket.prev_partner.user.deltas++;
 				socket.prev_partner.user.save();
-				socket.prev_partner = null;
 			} else if( data.rating == 'same' && socket.prev_partner.pio_items ) {
 				pio.users.createAction( {
 					pio_engine: 'engine',
@@ -256,35 +254,30 @@ ptcl.virtualDisconnect = function( socket ) {
 				socket.inPool = null
 			}
 		}
-		socket.partner.emit( 'partner disconnected' )
-		socket.partner.emit( 'message', { message: 'Your partner has disconnected.', type: 'server' } )
+		if( socket.partner.partner ) {
+			socket.partner.emit( 'partner disconnected' );
+			socket.partner.emit( 'message', { message: 'Your partner has disconnected.', type: 'server' } );
+		}
 
 		if( socket.convo ) {
+			if( socket.convo.users[1] ) socket.emit( 'message', { message:
+				'You were talking to ' + '<a href="/user/' + socket.convo.users[1] + '">' + socket.convo.users[1] + '</a>.',
+			type: 'server' } );
 			socket.convo.save();
-			socket.convo = null;
 		};
 
 		if( socket.partner.convo ) {
+			if( socket.partner.convo.users[0] ) socket.emit( 'message', { message: 
+				'You were talking to ' + '<a href="/user/' + socket.partner.convo.users[0] + '">' + socket.partner.convo.users[0] + '</a>' + '.',
+			type: 'server' } );
 			socket.partner.convo.save();
-			socket.partner.convo = null;
 		};
-
-		socket.prev_convo = socket.convo;
-		socket.partner.prev_convo = socket.convo;
-
+		
+		if( socket.convo ) socket.prev_convo = socket.convo;
 		socket.prev_convoId = socket.convoId;
-		socket.partner.prev_convoId = socket.partner.convoId;
-
-		socket.partner.prev_partner = socket;
 		socket.prev_partner = socket.partner;
-
 		socket.convo = null;
-		socket.partner.convo = null;
-
-		socket.prev_convoId = null;
-		socket.partner.prev_convoId = null;
-
-		socket.partner.partner = null;
+		socket.convoId = null;
 		socket.partner = null;
 	};
 }
@@ -411,36 +404,44 @@ createUser = function( body ) {
 		deltas:    0,
 		badges:    0,
 	})
+	newUser.save();
+
+	var pioItemNum = pio.items.index.value;
+	pio.users.index.value++;
 
 	User.count( {}, function( err, res ) { 
-		pio.users.num = res;
-		pio.items.num = res * pio.ITEMS_PER_USER;
 		//create the predictionio user and items associated with the scoket
-		pio.users.num++;
 		pio.users.create( {
-			pio_uid: pio.users.num,
+			pio_uid: pio.users.index.value,
 			pio_inactive: false
 		}, function( err, res ) {
-			console.log( err, res );
-			newUser.pio_user = pio.users.num;
-			var race_condition_stopper = 0;
+			if( err ) { console.log( err ); } else {
+				newUser.pio_user = pio.users.index.value;
+				User.findByIdAndUpdate(  newUser._id,         { pio_user: newUser.pio_user      }, function( err ) { console.log( err ) } );
+				Index.findByIdAndUpdate( pio.users.index._id, { value:    pio.users.index.value }, function( err ) { console.log( err ) } );
+			}
+
 			for( var i=0; i < pio.ITEMS_PER_USER; i++ ) {
-				pio.items.num++;
+				pio.items.index.value++;
 				pio.items.create( {
-					pio_iid: pio.items.num,
+					pio_iid: pio.items.index.value,
 					pio_itypes: 'uitem',
 					pio_inactive: false
 				}, function( err, res ) {
-					if( err ) { console.log( err ); }
-					newUser.pio_items.push( pio.items.num );
-					race_condition_stopper++;
-					if( race_condition_stopper == pio.ITEMS_PER_USER ) {
-						newUser.save();
+					if( err ) { console.log( err ); } else {
+						pioItemNum++;
+						newUser.pio_items.push( pioItemNum );
+						if( newUser.pio_items.length == pio.ITEMS_PER_USER ) {
+							User.findByIdAndUpdate( newUser._id,          { pio_items: newUser.pio_items     }, function( err ) { console.log( err ) } );
+							Index.findByIdAndUpdate( pio.items.index._id, { value:     pio.items.index.value }, function( err ) { console.log( err ) } );
+						}
 					}
 				})
 			}
 		})
 	})
+
+	return newUser;
 }
 
 app.get( '/login', function( req, res, next ) {
@@ -482,7 +483,8 @@ app.post( '/register', function( req, res, next ) {
 				} else if( req.body.email && user ) {
 					return res.send( 'bad email' )
 				} else {
-					createUser( req.body )
+					console.log( createUser( req.body ) );
+					req.login( createUser( req.body ), function(err) { if( err ) console.log( err ) } );
 					return res.send( 'success' )
 				}					
 			})
@@ -502,7 +504,7 @@ app.get( '/isLogged', function( req, res, next ) {
 //Mongo queries
 /////////////////////////////
 app.get( '/mongo/profile/delta', function( req, res, next ) {
-	Convo.find( { users: {$in: [req.query.name]} }, function( err, convos ) {
+	Convo.find( { users: {$in: [req.query.name]} } ).sort( '-date' ).exec( function( err, convos ) {
 		res.send( convos );
 	})
 })

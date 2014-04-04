@@ -66,16 +66,15 @@ ratings.button.on( 'click', function() {
 
 ratings.delta.on( 'click', function() {
 	ratings.socket.emit( 'rate', { rating: 'delta' } )
+	ratings.stabalizeHTML( ratings.delta.onClick );
 })
 
 ratings.same.on( 'click', function() {
 	ratings.socket.emit( 'rate', { rating: 'same' } )
+	ratings.stabalizeHTML( ratings.same.onClick );
 })
 
 ratings.same.on( 'click', function() {
 	ratings.socket.emit( 'rate', { rating: 'flag' } )
+	ratings.stabalizeHTML( ratings.flag.onClick );
 })
-
-ratings.delta.on( 'click', function() { ratings.stabalizeHTML( ratings.delta.onClick ); })
-ratings.same.on(  'click', function() { ratings.stabalizeHTML( ratings.same.onClick );  })
-ratings.flag.on(  'click', function() { ratings.stabalizeHTML( ratings.flag.onClick );  })

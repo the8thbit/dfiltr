@@ -4,7 +4,8 @@
 .convols-topic {
   float: left;
   width: 85%;
-  font-size: 25px;
+  height: 100%;
+  font-size: 23px;
   text-overflow: ellipsis;
   white-space: nowrap;
   display: block;

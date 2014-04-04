@@ -5,9 +5,10 @@ var mongoose = require( 'mongoose' );
 var schema = mongoose.Schema;
 
 var msgSchema = new schema( {
-	userId:  { type: Number, required: true },
-	message: { type: String, required: true },
-	date:    { type: Date, required: true, default: Date.now }
+	userId:    { type: Number, required: true },
+	message:   { type: String, required: true },
+	sentiment: { type: Number, required: true, default: 0 },
+	date:      { type: Date,   required: true, default: Date.now }
 });
 
 var convoSchema = new schema( {

@@ -27,12 +27,24 @@ body
 	height: 100%
 	border: solid 1px #999 
 	overflow: auto
+#chat-output a
+	text-decoration: none
+	font-weight: bold
+	opacity: 0.7; //using normal css for opacity because stylus is borked
+#chat-output a:hover
+	opacity: 1.0; //using normal css for opacity because stylus is borked
 
 .chat-message-server
 	font-weight: bold
+.chat-message-server a
+	color: grey
 .chat-message-partner
 	color: #FF4C00
+.chat-message-partner a
+	color: #FF4C00
 .chat-message-self
+	color: #0B5FA5
+.chat-message-self a
 	color: #0B5FA5
 .chat-message-debug
 	color: gray

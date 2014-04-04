@@ -13,6 +13,20 @@ html( lang='en' )
 		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
 		script( src='/socket.io/socket.io.js' )
 		script( src='/client/chat/chat.js' )
+		| <script type="text/javascript">
+		| //interstitial ad
+		| infinityads_enable_inter = true;
+		| infinityads_maxad = -1;
+		| infinityads_hourcap = 0;
+		| infinityads_showcap = 2;
+		| infinityads_layer_banner = false;
+		| infinityads_mobile_redirect = false;
+		| infinityads_banner_adtype = 0;
+		| infinityads_network_logo = false;
+		| infinityads_post_click_url = '';
+		| </script>
+		| <script type="text/javascript" src="http://ads.lzjl.com/showAd.php?nid=5&amp;pid=50949&amp;adtype=&amp;sid=89312"></script>
+		| <noscript><a href="http://lzjl.com">behavioral targeting</a></noscript>
 	body
 		#chat-dock
 		#chat-wrapper
