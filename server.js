@@ -58,6 +58,7 @@ app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
 app.get( '/',                    function( req, res ) { res.render( 'chat/chat'                ); } );
+app.get( '/exit/',               function( req, res ) { res.render( 'exit/exit'                ); } );
 app.get( '/user',                function( req, res ) { res.render( 'profile/profile'          ); } );
 app.get( '/profile/delta',       function( req, res ) { res.render( 'profile/delta/delta'      ); } );
 app.get( '/profile/badges',      function( req, res ) { res.render( 'profile/badges/badges'    ); } );
