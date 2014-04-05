@@ -1,0 +1,17 @@
+#options
+	#options-logout( class='options-faded' ) logout
+	form#options-pass
+		#options-pass-header( class='options-header' ) change password
+		#options-pass-new( class='options-item' )
+			#options-pass-new-text( class='options-subhead' ) enter new password
+			input#options-pass-new-input( class='options-input' type='password' name='new' )
+			#options-pass-new-error( class='options-error' )
+		#options-pass-verify( class='options-item' )
+			#options-pass-verify-text( class='options-subhead' ) verify new password
+			input#options-pass-verify-input( class='options-input' type='password' name='verify' )
+			#options-pass-verify-error( class='options-error' )
+		#options-pass-old( class='options-item' )
+			#options-pass-old-text( class='options-subhead' ) enter old password
+			input#options-pass-old-input( class='options-input' type='password' name='old' )
+			#options-pass-old-error( class='options-error' )
+		button#options-pass-submit( class='options-faded options-item' type='submit' ) submit

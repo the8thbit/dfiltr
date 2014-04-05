@@ -58,11 +58,11 @@ app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
 app.get( '/',                    function( req, res ) { res.render( 'chat/chat'                ); } );
-app.get( '/exit/',               function( req, res ) { res.render( 'exit/exit'                ); } );
 app.get( '/user',                function( req, res ) { res.render( 'profile/profile'          ); } );
 app.get( '/profile/delta',       function( req, res ) { res.render( 'profile/delta/delta'      ); } );
 app.get( '/profile/badges',      function( req, res ) { res.render( 'profile/badges/badges'    ); } );
 app.get( '/profile/badges/view', function( req, res ) { res.render( 'profile/badges/view/view' ); } );
+app.get( '/profile/options',     function( req, res ) { res.render( 'profile/options/options'  ); } );
 
 app.get( '/modules/ratings',     function( req, res ) { res.render( 'modules/ratings/ratings'  ); } );
 app.get( '/modules/dock/auth',   function( req, res ) { res.render( 'modules/dock/dock_in'     ); } );
@@ -493,12 +493,33 @@ app.post( '/register', function( req, res, next ) {
 	})
 })
 
+app.post( '/changePass', function( req, res, next ) {
+	req.user.comparePassword( req.body.old, req.user.password, function( err, isMatch ) {
+		if( err ) {
+			console.log( 'error: ' + err );
+			res.send( 'bad pass' );
+		} else if( !isMatch ) {
+			res.send( 'bad pass' );
+		} else {
+			req.user.password = req.body.new;
+			req.user.save();
+			return res.send( 'success' );
+		}						 	
+	});
+});
+
+
 app.get( '/isLogged', function( req, res, next ) {
 	if( req.user ) {
 		return res.send( req.user )
 	} else {
 		return res.send( false )
 	}
+})
+
+app.get( '/logout', function( req, res, next ) {
+	req.logout();
+	res.redirect( '/' );
 })
 
 /////////////////////////////

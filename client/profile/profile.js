@@ -37,6 +37,11 @@ window.onload = function() {
 		profile.viewer.load( '/profile/badges/', function() { badges.init(); } );
 	});
 
+	$( '#profile-headerbar-tabs-options' ).click( function() { 
+		profile.viewer.load( '/profile/options/', function() { options.init(); } );
+	});
+
+
 	//==========================================================================
 	// Initialization
 	//==========================================================================

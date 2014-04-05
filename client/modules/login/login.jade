@@ -1,41 +1,41 @@
-div#login
-	div.login-left
-		div.login-header get a new account
-		div#login-reg-err( class='login-error' )
+#login
+	.login-left
+		.login-header get a new account
+		#login-reg-err( class='login-error' )
 		form#login-reg( class='login-form' )
-			div.login-subhead username
+			.login-subhead username
 			div
 				input#login-reg-input-name.login-input( type='text' name='username' )
-			div#login-reg-name-err( class='login-error' )
-			div.login-subhead account recovery email (optional)
+			#login-reg-name-err( class='login-error' )
+			.login-subhead account recovery email (optional)
 			div
 				input#login-reg-input-email.login-input( type='text' name='email' )
-			div#login-reg-email-err( class='login-error' )
-			div.login-subhead password
+			#login-reg-email-err( class='login-error' )
+			.login-subhead password
 			div
 				input#login-reg-input-pass.login-input( type='password' name='password' )
-			div#login-reg-pass-err( class='login-error' )
-			div.login-subhead verify password
+			#login-reg-pass-err( class='login-error' )
+			.login-subhead verify password
 			div
 				input#login-reg-input-verify.login-input( type='password' name='verify' )
-			div#login-reg-verify-err( class='login-error' )
-			div.login-submit-wrap
+			#login-reg-verify-err( class='login-error' )
+			.login-submit-wrap
 				button.login-submit( type='submit' ) register
-	div.login-right
-		div.login-header use an existing account
-		div#login-log-err( class='login-error' )
+	.login-right
+		.login-header use an existing account
+		#login-log-err( class='login-error' )
 		form#login-log( class='login-form' )
-			div#login-log-name-head( class='login-subhead' ) username
+			#login-log-name-head( class='login-subhead' ) username
 			div
 				input#login-log-input-name( type='text' name='username' class='login-input' )
-			div#login-log-name-err( class='login-error' )
+			#login-log-name-err( class='login-error' )
 
-			div#login-log-pass-head( class='login-subhead' ) password
+			#login-log-pass-head( class='login-subhead' ) password
 			div
 				input#login-log-input-pass( type='password' name='password' class='login-input' )
-			div#login-log-pass-err( class='login-error' )
+			#login-log-pass-err( class='login-error' )
 
-			div.login-submit-wrap
+			.login-submit-wrap
 				button.login-submit( type='submit' ) login
 
 link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )

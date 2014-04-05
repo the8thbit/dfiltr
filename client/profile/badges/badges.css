@@ -9,13 +9,14 @@
 }
 #badges-options {
   width: 100%;
-  height: 30px;
+  height: 33px;
   border-bottom: 1px #999 solid;
 }
 #badges-options-sort {
   text-align: right;
   font-size: 14px;
   margin: 5px;
+  margin-bottom: 0px;
 }
 #badges-list {
   height: 50%;
