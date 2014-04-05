@@ -264,6 +264,7 @@ ptcl.virtualDisconnect = function( socket ) {
 			if( socket.convo.users[1] ) socket.emit( 'message', { message:
 				'You were talking to ' + '<a href="/user/' + socket.convo.users[1] + '">' + socket.convo.users[1] + '</a>.',
 			type: 'server' } );
+			console.log( socket.convo );
 			socket.convo.save();
 		};
 
@@ -271,6 +272,7 @@ ptcl.virtualDisconnect = function( socket ) {
 			if( socket.partner.convo.users[0] ) socket.emit( 'message', { message: 
 				'You were talking to ' + '<a href="/user/' + socket.partner.convo.users[0] + '">' + socket.partner.convo.users[0] + '</a>' + '.',
 			type: 'server' } );
+			console.log( socket.convo );
 			socket.partner.convo.save();
 		};
 		
