@@ -63,6 +63,7 @@ app.get( '/profile/delta',       function( req, res ) { res.render( 'profile/del
 app.get( '/profile/badges',      function( req, res ) { res.render( 'profile/badges/badges'    ); } );
 app.get( '/profile/badges/view', function( req, res ) { res.render( 'profile/badges/view/view' ); } );
 app.get( '/profile/options',     function( req, res ) { res.render( 'profile/options/options'  ); } );
+app.get( '/profile/mail',        function( req, res ) { res.render( 'profile/mail/mail'        ); } );
 
 app.get( '/modules/ratings',     function( req, res ) { res.render( 'modules/ratings/ratings'  ); } );
 app.get( '/modules/dock/auth',   function( req, res ) { res.render( 'modules/dock/dock_in'     ); } );
@@ -509,6 +510,22 @@ app.post( '/changePass', function( req, res, next ) {
 		}						 	
 	});
 });
+
+app.post( '/changeEmail', function( req, res, next ) {
+	req.user.comparePassword( req.body.pass, req.user.password, function( err, isMatch ) {
+		if( err ) {
+			console.log( 'error: ' + err );
+			res.send( 'bad pass' );
+		} else if( !isMatch ) {
+			res.send( 'bad pass' );
+		} else {
+			req.user.email = req.body.new;
+			req.user.save();
+			return res.send( 'success' );
+		}						 	
+	});
+});
+
 
 
 app.get( '/isLogged', function( req, res, next ) {

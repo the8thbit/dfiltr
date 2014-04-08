@@ -1,7 +1,8 @@
 #options
 	#options-logout( class='options-faded' ) logout
-	form#options-pass
-		#options-pass-header( class='options-header' ) change password
+
+	form#options-pass( class='options-form' )
+		#options-pass-header( class='options-header' ) change your password
 		#options-pass-new( class='options-item' )
 			#options-pass-new-text( class='options-subhead' ) enter new password
 			input#options-pass-new-input( class='options-input' type='password' name='new' )
@@ -14,4 +15,16 @@
 			#options-pass-old-text( class='options-subhead' ) enter old password
 			input#options-pass-old-input( class='options-input' type='password' name='old' )
 			#options-pass-old-error( class='options-error' )
-		button#options-pass-submit( class='options-faded options-item' type='submit' ) submit
+		button#options-pass-submit( class='options-faded options-item options-submit' type='submit' ) submit
+
+	form#options-email( class='options-form options-form-bottom' )
+		#options-email-header( class='options-header' ) change your email address
+		#options-email-new( class='options-item' )
+			#options-email-new-text( class='options-subhead' ) enter new email
+			input#options-email-new-input( class='options-input' type='text' name='new' )
+			#options-email-new-error( class='options-error' )
+		#options-email-pass( class='options-item' )
+			#options-email-pass-text( class='options-subhead' ) enter password
+			input#options-email-pass-input( class='options-input' type='password' name='pass' )
+			#options-email-pass-error( class='options-error' )
+		button#options-email-submit( class='options-faded options-item options-submit' type='submit' ) submit

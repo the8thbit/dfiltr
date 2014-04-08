@@ -63,4 +63,39 @@ options.init = function() {
 			});
 		};
 	});
+
+	$( '#options-email' ).on( 'submit', function( event ) { 
+		event.preventDefault();
+
+		$( '#options-email-new-input'  ).css( 'border-color', 'grey' )
+		$( '#options-email-new-error'  ).html( '' );
+		$( '#options-email-pass-input' ).css( 'border-color', 'grey' )
+		$( '#options-email-pass-error' ).html( '' );
+
+		var validationFail = false;
+	
+		if( $( '#options-email-new-input' ).prop( 'value' ) == '' ) {
+			validationFail = true;
+			$( '#options-email-new-input' ).css(  'border-color', '#FF4C00' );
+			$( '#options-email-new-error' ).html( 'you forgot to enter a new email address' );
+		};
+
+		if( $( '#options-email-pass-input' ).prop( 'value' ) == '' ) {
+			validationFail = true;
+			$( '#options-email-pass-input' ).css(  'border-color', '#FF4C00' );
+			$( '#options-email-pass-error' ).html( 'please enter your old password' );
+		};
+
+		if( !validationFail ) {
+			$.post( '/changeEmail', $( this ).serialize(), function( res ) {
+				if( res == 'bad pass' ) {
+					$( '#options-email-pass-input' ).css(  'border-color', '#FF4C00' );
+					$( '#options-email-pass-error' ).html( 'the password you entered is incorrect' );
+				} else if( res == 'success' ) {
+					$( '#options-email-header' ).html( 'Your email has been reset.' );
+					$( '#options-email' ).html( $( '#options-email-header' ) );
+				}
+			});
+		};
+	});
 }

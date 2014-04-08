@@ -37,6 +37,10 @@ window.onload = function() {
 		profile.viewer.load( '/profile/badges/', function() { badges.init(); } );
 	});
 
+	$( '#profile-headerbar-tabs-mail' ).click( function() { 
+		profile.viewer.load( '/profile/mail/', function() { mail.init( $( '#profile-headerbar-name-table-cell' ).html() ); } );
+	});
+
 	$( '#profile-headerbar-tabs-options' ).click( function() { 
 		profile.viewer.load( '/profile/options/', function() { options.init(); } );
 	});
