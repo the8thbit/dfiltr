@@ -1,6 +1,8 @@
 var badges = $( '#badges'  );
 
 badges.init = function() {
+	$( '#profile-input' ).html( '' );
+	profile.resize();
 	for( var i=0; i < 300; i++ ) {
 		var colorClass
 		var colorId = Math.floor( Math.random() * 3 )

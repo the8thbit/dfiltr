@@ -1,20 +1,28 @@
 var process = 'CLIENT'; //necessary hacky code for the unified config file to work
 document.write( '<script type="text/javascript" src="../../config.js"><\/script>' )
 
+var profile = $( '#profile' );
+
 window.onload = function() {
-	var profile       = $( '#profile' )
-	profile.dock      = $( '#profile-dock' )     //the place where the user dock goes
-	profile.content   = $( '#profile-content' )
-	profile.headerbar = $( '#profile-headerbar' )
-	profile.viewer    = $( '#profile-viewer' )
-	
+	profile.socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/mail' );
+	profile.dock      = $( '#profile-dock' );     //the place where the user dock goes
+	profile.content   = $( '#profile-content' );
+	profile.headerbar = $( '#profile-headerbar' );
+	profile.input     = $( '#profile-input' );
+	profile.viewer    = $( '#profile-viewer' );
+
+	profile.socket.on( 'message', function( data ) {
+		console.log( data );
+		mail_convo.add( { message: data.message, type:'partner' } );
+	});	
+
 	window.onresize = function( event ) {
 		profile.resize();
 	};
 
 	profile.resize = function() {
 		profile.content.css( { 'height': $( window ).height() - ( profile.dock.outerHeight() + 10 ) } ) 
-		profile.viewer.css( { 'height': $( window ).height() - ( profile.dock.outerHeight() + 17 + profile.headerbar.outerHeight() ) } )
+		profile.viewer.css( { 'height': $( window ).height() - ( profile.dock.outerHeight() + 17 + profile.headerbar.outerHeight() + profile.input.outerHeight() ) } )
 	};
 
 	$( '.profile-faded' ).hover(

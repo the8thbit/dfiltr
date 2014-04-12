@@ -1,6 +1,8 @@
 var delta = $( '#delta'  );
 
 delta.init = function( username ) {
+	$( '#profile-input' ).html( '' );
+	profile.resize();
 	$.get( '/modules/convols/', function( data ) {
 		var template = data;
 

@@ -23,4 +23,5 @@ User   = require( './user-schema.js'   );
 Client = require( './client-schema.js' );
 Topic  = require( './topic-schema.js'  );
 Convo  = require( './convo-schema.js'  );
+Mail   = require( './mail-schema.js'   );
 Index  = require( './index-schema.js'  );

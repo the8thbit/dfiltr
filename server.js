@@ -57,20 +57,24 @@ app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
-app.get( '/',                    function( req, res ) { res.render( 'chat/chat'                ); } );
-app.get( '/user',                function( req, res ) { res.render( 'profile/profile'          ); } );
-app.get( '/profile/delta',       function( req, res ) { res.render( 'profile/delta/delta'      ); } );
-app.get( '/profile/badges',      function( req, res ) { res.render( 'profile/badges/badges'    ); } );
-app.get( '/profile/badges/view', function( req, res ) { res.render( 'profile/badges/view/view' ); } );
-app.get( '/profile/options',     function( req, res ) { res.render( 'profile/options/options'  ); } );
-app.get( '/profile/mail',        function( req, res ) { res.render( 'profile/mail/mail'        ); } );
+app.get( '/',                    function( req, res ) { res.render( 'chat/chat'                     ); } );
+app.get( '/user',                function( req, res ) { res.render( 'profile/profile'               ); } );
+app.get( '/profile/delta',       function( req, res ) { res.render( 'profile/delta/delta'           ); } );
+app.get( '/profile/badges',      function( req, res ) { res.render( 'profile/badges/badges'         ); } );
+app.get( '/profile/badges/view', function( req, res ) { res.render( 'profile/badges/view/view'      ); } );
+app.get( '/profile/options',     function( req, res ) { res.render( 'profile/options/options'       ); } );
+app.get( '/profile/mail',        function( req, res ) { res.render( 'profile/mail/mail'             ); } );
 
-app.get( '/modules/ratings',     function( req, res ) { res.render( 'modules/ratings/ratings'  ); } );
-app.get( '/modules/dock/auth',   function( req, res ) { res.render( 'modules/dock/dock_in'     ); } );
-app.get( '/modules/dock',        function( req, res ) { res.render( 'modules/dock/dock_out'    ); } );
-app.get( '/modules/login',       function( req, res ) { res.render( 'modules/login/login'      ); } );
-app.get( '/modules/convo',       function( req, res ) { res.render( 'modules/convo/convo'      ); } );
-app.get( '/modules/convols',     function( req, res ) { res.render( 'modules/convols/convols'  ); } );
+app.get( '/modules/ratings',     function( req, res ) { res.render( 'modules/ratings/ratings'       ); } );
+app.get( '/modules/dock/auth',   function( req, res ) { res.render( 'modules/dock/dock_in'          ); } );
+app.get( '/modules/dock',        function( req, res ) { res.render( 'modules/dock/dock_out'         ); } );
+app.get( '/modules/login',       function( req, res ) { res.render( 'modules/login/login'           ); } );
+app.get( '/modules/convo',       function( req, res ) { res.render( 'modules/convo/convo'           ); } );
+app.get( '/modules/convols',     function( req, res ) { res.render( 'modules/convols/convols'       ); } );
+app.get( '/modules/mail_ls',     function( req, res ) { res.render( 'modules/mail_ls/mail_ls'       ); } );
+app.get( '/modules/mail_convo',  function( req, res ) { res.render( 'modules/mail_convo/mail_convo' ); } );
+app.get( '/modules/mail_input',  function( req, res ) { res.render( 'modules/mail_input/mail_input' ); } );
+
 
 app.get('/user/:username',       function( req, res ) {
 	User.findOne( { username: req.params.username }, function( err, user ) {
@@ -109,29 +113,74 @@ console.log( 'listening at ' + config.SERVER_IP + ' on port ' + config.SERVER_PO
 // CHAT PROTOCOL
 //=============================================================================
 //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-var ptcl = new Object()
-ptcl.pool = [] //pool of unpaired users
+var chat = new Object()
+var mail = new Object()
+chat.pool = [] //pool of unpaired users
 
 //-----------------------------------------------------------------------------
 // what to do when the socket connects
 // this also bootstraps the rest of the protocol
 //-----------------------------------------------------------------------------
-io.of( '/main' ).on( 'connection', function( socket ) { ptcl.connect( socket ) } )
+io.of( '/main' ).on( 'connection', function( socket ) { chat.connect( socket ) } )
+io.of( '/mail' ).on( 'connection', function( socket, partner ) { mail.connect( socket ) } )
 
 //-----------------------------------------------------------------------------
-// what to do when bot sockets connect
-// this also bootstraps the rest of the protocol
+// create our socket and connect to the server
 //-----------------------------------------------------------------------------
-for( var i=0; i < 100; i++ ) {
-	io.of( '/sim/' + i ).on( 'connection', function( socket ) {
-		ptcl.connect( socket )
+mail.connect = function( socket ) {
+	socket.user = socket.handshake.user;
+
+	socket.on( 'partner', function( name ) {
+		socket.partner = name;
+		socket.room = socket.user.username + '@' + socket.partner;
+		socket.join( socket.room ); //the socket joins a room identified by the combination of its username and its partners name
+	});
+
+	socket.on( 'disconnect', function() {
+		socket.leave( socket.room );
+		socket.partner = null;
+		socket.room = null;
+		socket = null;
 	})
+
+	socket.on( 'send', function( data ) {        	//when server recieves 'send' relay 'message' to client
+		data.type = 'partner'                       	//'send' is a mail message coming from a client, and
+		if( socket.partner ) {                       //'message' is a mail message being sent from the server to a client.
+			socket.broadcast.to( socket.partner + '@' + socket.user.username ).emit( 'message', data );
+			Mail.findOne( { to: socket.partner, from: socket.user.username }, function( err, mail ) {
+				if( !mail ) {
+					mail = new Mail( {
+						to: socket.partner,
+						from: socket.user.username
+					});
+				};
+				mail.messages.push( {
+					userId: 0,
+					message: data.message
+				});
+				mail.save();
+			});
+			Mail.findOne( { to: socket.user.username, from: socket.partner }, function( err, mail ) {
+				if( !mail ) {
+					mail = new Mail( {
+						to: socket.user.username,
+						from: socket.partner
+					});
+				};
+				mail.messages.push( {
+					userId: 1,
+					message: data.message
+				});
+				mail.save();
+			});
+		};		
+	});
 }
 
 //-----------------------------------------------------------------------------
 // create our socket and connect to the server
 //-----------------------------------------------------------------------------
-ptcl.connect = function( socket ) {
+chat.connect = function( socket ) {
 	socket.user = socket.handshake.user
 	Client.findOne( { ip: socket.handshake.address.address }, function( err, res ) { socket.client = res } )
 
@@ -143,10 +192,10 @@ ptcl.connect = function( socket ) {
 		socket.client.save()
 	}
 
-	ptcl.virtualConnect( socket )
-	socket.on( 'virtual connection', function() { ptcl.virtualConnect( socket )    } )
-	socket.on( 'disconnect',         function() { ptcl.virtualDisconnect( socket ) } ) //user disconnects through leaving the page: full disconnect
-	socket.on( 'virtual disconnect', function() { ptcl.virtualDisconnect( socket ) } ) //user disconnects through hitting the disconnect button: virtual disconnect
+	chat.virtualConnect( socket )
+	socket.on( 'virtual connection', function() { chat.virtualConnect( socket )    } )
+	socket.on( 'disconnect',         function() { chat.virtualDisconnect( socket ) } ) //user disconnects through leaving the page: full disconnect
+	socket.on( 'virtual disconnect', function() { chat.virtualDisconnect( socket ) } ) //user disconnects through hitting the disconnect button: virtual disconnect
 		
 	socket.on( 'send', function( data ) {        	//when server recieves 'send' relay 'message' to client
 		data.type = 'partner'                       	//'send' is a chat message coming from a client, and
@@ -166,10 +215,10 @@ ptcl.connect = function( socket ) {
 					userId: 1,
 					message: data.message,
 					sentiment: speakeasy.sentiment.analyze( data.message ).comparitive
-			});
+				});
+			};
 		};
-	};
-});
+	});
 
 	//what to do when the user provides a rating
 	socket.on( 'rate', function( data ) {
@@ -222,27 +271,27 @@ ptcl.connect = function( socket ) {
 //-----------------------------------------------------------------------------
 // add user to pool and start attempts to connect to a partner
 //-----------------------------------------------------------------------------
-ptcl.virtualConnect = function( socket ) {
+chat.virtualConnect = function( socket ) {
 	//throw the user in the pool
 	socket.emit( 'message', { message: 'Looking for a partner...', type: 'server' } )
-	socket.inPool = ptcl.pool.push( socket )
-	var recommends = ptcl.getRecommends( socket.user.pio_user )
+	socket.inPool = chat.pool.push( socket )
+	var recommends = chat.getRecommends( socket.user.pio_user )
 	var pickiness = 0.96
 	//periodically scan pool for matches
 	socket.retry = setInterval( function() {
 		pickiness -= 1.00 - pickiness
-		ptcl.scanPool( socket, recommends, pickiness )
+		chat.scanPool( socket, recommends, pickiness )
 	}, 1000 )
 }
 
 //-----------------------------------------------------------------------------
 // create our socket and connect to the server
 //-----------------------------------------------------------------------------
-ptcl.virtualDisconnect = function( socket ) {		
+chat.virtualDisconnect = function( socket ) {		
 	clearInterval( socket.retry )
-	for( var j=0; j < ptcl.pool.length; j++ ) {
-		if( ptcl.pool[j].id == socket.id ) {
-			ptcl.pool.splice( j - 1, 1 )
+	for( var j=0; j < chat.pool.length; j++ ) {
+		if( chat.pool[j].id == socket.id ) {
+			chat.pool.splice( j - 1, 1 )
 			socket.inPool = null
 		}
 	}
@@ -250,9 +299,9 @@ ptcl.virtualDisconnect = function( socket ) {
 	if( socket.partner ) {
 		clearInterval( socket.partner.retry )
 
-		for( var j=0; j < ptcl.pool.length; j++ ) {
-			if( ptcl.pool[j].id == socket.partner.id ) {
-				ptcl.pool.splice( j - 1, 1 )
+		for( var j=0; j < chat.pool.length; j++ ) {
+			if( chat.pool[j].id == socket.partner.id ) {
+				chat.pool.splice( j - 1, 1 )
 				socket.inPool = null
 			}
 		}
@@ -289,18 +338,18 @@ ptcl.virtualDisconnect = function( socket ) {
 //-----------------------------------------------------------------------------
 // try to connect to a partner
 //-----------------------------------------------------------------------------
-ptcl.scanPool = function( socket, recommends, pickiness ) {
+chat.scanPool = function( socket, recommends, pickiness ) {
 	socket.emit( 'message', { message: '...', type: 'debug' } )
-	if( partner = ptcl.findPartner( socket, recommends, pickiness ) ) { //set partner equal to ptcl.findPartner() and then check if partner exists
-		ptcl.handshake( socket, partner );
+	if( partner = chat.findPartner( socket, recommends, pickiness ) ) { //set partner equal to chat.findPartner() and then check if partner exists
+		chat.handshake( socket, partner );
 	}	
 }
 
 //-----------------------------------------------------------------------------
 // scan the pool for a suitable partner
 //-----------------------------------------------------------------------------
-ptcl.findPartner = function( socket, recommends, pickiness ) {
-	if( !socket.partner && socket.inPool && ptcl.pool.length > 1 ) {
+chat.findPartner = function( socket, recommends, pickiness ) {
+	if( !socket.partner && socket.inPool && chat.pool.length > 1 ) {
 		var partner
 
 		if( recommends && !recommends.message && recommends.length > 0 && pickiness >= 0 && Math.random < 0.9 ) {
@@ -310,11 +359,11 @@ ptcl.findPartner = function( socket, recommends, pickiness ) {
 			} else { var matches = recommends }
 
 			var cannidates = [] //users that are both in the pool and matches
-			for( var i=0; i < ptcl.pool.length; i++ ) {
+			for( var i=0; i < chat.pool.length; i++ ) {
 				for( var j=0; j < matches.length; j++ ) {
-					for( var k=0; k < ptcl.pool[i].pio_items.length; k++ ) {
-						if( ptcl.pool[i].pio_items[k] == matches[j] ) {
-							cannidates.push( ptcl.pool[i] )
+					for( var k=0; k < chat.pool[i].pio_items.length; k++ ) {
+						if( chat.pool[i].pio_items[k] == matches[j] ) {
+							cannidates.push( chat.pool[i] )
 						}
 					}
 				}
@@ -324,7 +373,7 @@ ptcl.findPartner = function( socket, recommends, pickiness ) {
 				partner = cannidates[Math.floor( Math.random() * cannidates.length ) + 1]
 			}
 		} else { //if you don't have a suitable list of recommendations, just pick the user which has been waiting the longest
-			partner = ptcl.pool[0]
+			partner = chat.pool[0]
 		}
 	}
 
@@ -334,7 +383,7 @@ ptcl.findPartner = function( socket, recommends, pickiness ) {
 //-----------------------------------------------------------------------------
 // get a list of recommended user items for the user based on ratings history
 //-----------------------------------------------------------------------------
-ptcl.getRecommends = function( pio_user ) {
+chat.getRecommends = function( pio_user ) {
 	pio.items.recommendation( {
 		pio_engine: 'engine',
 		pio_uid: pio_user,
@@ -348,18 +397,18 @@ ptcl.getRecommends = function( pio_user ) {
 //-----------------------------------------------------------------------------
 // once a partner has been found, set up the connection between socket and partner
 //-----------------------------------------------------------------------------
-ptcl.handshake = function( socket, partner ) {
+chat.handshake = function( socket, partner ) {
 	if( partner && !partner.partner && partner != socket ) {
 		socket.partner = partner
 		clearInterval( socket.partner.retry )
 		clearInterval( socket.retry )
 		
-		for( var j=0; j < ptcl.pool.length; j++ ) {
-			if( ptcl.pool[j].id == socket.id ) {
-				ptcl.pool.splice( j-1, 1 )
+		for( var j=0; j < chat.pool.length; j++ ) {
+			if( chat.pool[j].id == socket.id ) {
+				chat.pool.splice( j-1, 1 )
 				socket.inPool = null
-			} else if( ptcl.pool[j].id == socket.partner.id ) {
-				ptcl.pool.splice( j-1, 1 )
+			} else if( chat.pool[j].id == socket.partner.id ) {
+				chat.pool.splice( j-1, 1 )
 				socket.partner.inPool = null
 			}
 		}
@@ -547,5 +596,32 @@ app.get( '/logout', function( req, res, next ) {
 app.get( '/mongo/profile/delta', function( req, res, next ) {
 	Convo.find( { users: {$in: [req.query.name]} } ).sort( '-date' ).exec( function( err, convos ) {
 		res.send( convos );
+	})
+})
+
+app.get( '/mongo/profile/mail', function( req, res, next ) {
+	Mail.find( { to: req.query.name } ).sort( '-date' ).exec( function( err, mail ) {
+		res.send( mail );
+	})
+})
+
+app.get( '/mongo/profile/mail2', function( req, res, next ) {
+	Mail.findOne( { to: req.query.to, from: req.query.from }, function( err, mail ) {
+		if( !mail ) { 
+			var newMail = new Mail( {
+				to: req.query.to,
+				from: req.query.from
+			});
+			newMail.save();
+
+			var newMail2 = new Mail( {
+				to: req.query.from,
+				from: req.query.to
+			});
+			newMail2.save();
+			res.send( newMail );
+		} else {
+			res.send( mail );
+		}
 	})
 })

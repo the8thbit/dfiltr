@@ -13,11 +13,15 @@ html( lang='en' )
 		link( rel='stylesheet' type='text/css' href='/client/profile/mail/mail.css' )
 		link( rel='stylesheet' type='text/css' href='/client/profile/options/options.css' )
 		link( rel='stylesheet' type='text/css' href='/client/profile/badges/view/view.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/mail_ls/mail_ls.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/mail_convo/mail_convo.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/mail_input/mail_input.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/convols/convols.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/convo/convo.css' )
 		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
 		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
 		script( src='/client/modules/isotope/isotope.js' )
+		script( src='/socket.io/socket.io.js' )
 		script( src='/client/profile/profile.js' )
 		script( src='/client/modules/convo/convo.js' )
 		script( src='/client/profile/delta/delta.js' )
@@ -25,6 +29,9 @@ html( lang='en' )
 		script( src='/client/profile/mail/mail.js' )
 		script( src='/client/profile/options/options.js' )
 		script( src='/client/profile/badges/view/view.js' )
+		script( src='/client/modules/mail_convo/mail_convo.js' )
+		script( src='/client/modules/mail_ls/mail_ls.js' )
+		script( src='/client/modules/mail_input/mail_input.js' )
 	body
 		#profile-dock
 		#profile
@@ -53,4 +60,5 @@ html( lang='en' )
 							td( class='profile-headerbar-tab-space' )
 							td#profile-headerbar-tabs-options( class='profile-headerbar-tab' class='profile-faded' )
 								#profile-headerbar-tabs-options-text( class='profile-headerbar-tab-text' ) ⚙
-				div#profile-viewer
+				#profile-viewer
+				#profile-input

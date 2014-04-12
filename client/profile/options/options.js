@@ -1,6 +1,8 @@
 var options = $( '#options'  );
 
-options.init = function() {	
+options.init = function() {
+	$( '#profile-input' ).html( '' );
+	profile.resize();
 	$( '.options-faded' ).fadeTo( 0, 0.6 );
 	$( '.options-faded' ).hover(
 		function() { //hover enter
