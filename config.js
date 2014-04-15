@@ -66,7 +66,7 @@ if( process.env ) {                           //
 //PORT NUMBER                                 //
   var CLIENT_PORT =                           //
 //8080                                        // toggle on for local testing
-  8000                                        // neccessary for openshift, as websockets is restricted to this port
+8000                                        // neccessary for openshift, as websockets is restricted to this port
 //============================================//
 
 
