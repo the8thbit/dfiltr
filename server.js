@@ -131,9 +131,11 @@ mail.connect = function( socket ) {
 	socket.user = socket.handshake.user;
 
 	socket.on( 'partner', function( name ) {
-		socket.partner = name;
-		socket.room = socket.user.username + '@' + socket.partner;
-		socket.join( socket.room ); //the socket joins a room identified by the combination of its username and its partners name
+		User.findOne( { username: name }, function( err, user ) {
+			socket.partner = user;
+			socket.room = socket.user.username + '@' + socket.partner.username;
+			socket.join( socket.room ); //the socket joins a room identified by the combination of its username and its partners name
+		});
 	});
 
 	socket.on( 'disconnect', function() {
@@ -143,14 +145,22 @@ mail.connect = function( socket ) {
 		socket = null;
 	})
 
-	socket.on( 'send', function( data ) {        	//when server recieves 'send' relay 'message' to client
-		data.type = 'partner'                       	//'send' is a mail message coming from a client, and
-		if( socket.partner ) {                       //'message' is a mail message being sent from the server to a client.
-			socket.broadcast.to( socket.partner + '@' + socket.user.username ).emit( 'message', data );
-			Mail.findOne( { to: socket.partner, from: socket.user.username }, function( err, mail ) {
+	socket.on( 'virtual disconnect', function() {
+		socket.leave( socket.room );
+		socket.partner = null;
+		socket.room = null;
+	})
+
+	//when server recieves 'send' relay 'message' to client 'send' is a mail message coming from a client, and 'message' is a mail message being sent from the server to a client.
+	socket.on( 'send', function( data ) {
+		if( socket.partner ) {
+			data.type = 'partner';
+			data.to = socket.user.username;
+			socket.broadcast.to( socket.partner.username + '@' + socket.user.username ).emit( 'message', data );
+			Mail.findOne( { to: socket.partner.username, from: socket.user.username }, function( err, mail ) {
 				if( !mail ) {
 					mail = new Mail( {
-						to: socket.partner,
+						to: socket.partner.username,
 						from: socket.user.username
 					});
 				};
@@ -160,21 +170,32 @@ mail.connect = function( socket ) {
 				});
 				mail.save();
 			});
-			Mail.findOne( { to: socket.user.username, from: socket.partner }, function( err, mail ) {
+			Mail.findOne( { to: socket.user.username, from: socket.partner.username }, function( err, mail ) {
 				if( !mail ) {
 					mail = new Mail( {
 						to: socket.user.username,
-						from: socket.partner
+						from: socket.partner.username
 					});
 				};
 				mail.messages.push( {
 					userId: 1,
 					message: data.message
 				});
+				mail.new++;
 				mail.save();
 			});
 		};		
 	});
+
+	socket.on( 'clear new', function( to ) {
+		Mail.findOne( { to: to, from: socket.user.username }, function( err, mail ) {
+			if( mail ) {
+				mail.date_accessed = Date.now();
+				mail.new = 0;
+				mail.save();
+			}
+		})
+	})
 }
 
 //-----------------------------------------------------------------------------
@@ -207,15 +228,15 @@ chat.connect = function( socket ) {
 				socket.convo.messages.push( {
 					userId: 0,
 					message: data.message,
-					sentiment: speakeasy.sentiment.analyze( data.message ).comparitive
 				});
+				socket.convo.size++;
 			} else if( socket.partner.convo ) {
 				socket.partner.convo.users[1] = socket.user.username;
 				socket.partner.convo.messages.push( {
 					userId: 1,
 					message: data.message,
-					sentiment: speakeasy.sentiment.analyze( data.message ).comparitive
 				});
+				socket.partner.convo.size++;
 			};
 		};
 	});
@@ -333,7 +354,7 @@ chat.virtualDisconnect = function( socket ) {
 		socket.convoId = null;
 		socket.partner = null;
 	};
-}
+};
 
 //-----------------------------------------------------------------------------
 // try to connect to a partner
@@ -342,20 +363,20 @@ chat.scanPool = function( socket, recommends, pickiness ) {
 	socket.emit( 'message', { message: '...', type: 'debug' } )
 	if( partner = chat.findPartner( socket, recommends, pickiness ) ) { //set partner equal to chat.findPartner() and then check if partner exists
 		chat.handshake( socket, partner );
-	}	
-}
+	};
+};
 
 //-----------------------------------------------------------------------------
 // scan the pool for a suitable partner
 //-----------------------------------------------------------------------------
 chat.findPartner = function( socket, recommends, pickiness ) {
 	if( !socket.partner && socket.inPool && chat.pool.length > 1 ) {
-		var partner
+		var partner;
 
 		if( recommends && !recommends.message && recommends.length > 0 && pickiness >= 0 && Math.random < 0.9 ) {
-			var matchNum = Math.floor( ( 1 - pickiness ) * 50 ) //the total number of matches to compare against, as determined by our current pickiness
+			var matchNum = Math.floor( ( 1 - pickiness ) * 50 ); //the total number of matches to compare against, as determined by our current pickiness
 			if( matchNum < recommends.length ) {
-				var matches = recommends.slice( 0, matchNum )
+				var matches = recommends.slice( 0, matchNum );
 			} else { var matches = recommends }
 
 			var cannidates = [] //users that are both in the pool and matches
@@ -363,15 +384,15 @@ chat.findPartner = function( socket, recommends, pickiness ) {
 				for( var j=0; j < matches.length; j++ ) {
 					for( var k=0; k < chat.pool[i].pio_items.length; k++ ) {
 						if( chat.pool[i].pio_items[k] == matches[j] ) {
-							cannidates.push( chat.pool[i] )
-						}
-					}
-				}
-			}
+							cannidates.push( chat.pool[i] );
+						};
+					};
+				};
+			};
 
 			if( cannidates.length > 0 ) {
-				partner = cannidates[Math.floor( Math.random() * cannidates.length ) + 1]
-			}
+				partner = cannidates[Math.floor( Math.random() * cannidates.length ) + 1];
+			};
 		} else { //if you don't have a suitable list of recommendations, just pick the user which has been waiting the longest
 			partner = chat.pool[0]
 		}
@@ -590,38 +611,74 @@ app.get( '/logout', function( req, res, next ) {
 	res.redirect( '/' );
 })
 
-/////////////////////////////
-//Mongo queries
-/////////////////////////////
-app.get( '/mongo/profile/delta', function( req, res, next ) {
-	Convo.find( { users: {$in: [req.query.name]} } ).sort( '-date' ).exec( function( err, convos ) {
-		res.send( convos );
-	})
-})
+///////////////////////////////////////////////////////////////////////////////
+// Mongo queries
+///////////////////////////////////////////////////////////////////////////////
+app.get( '/mongo/profile/delta/list', function( req, res, next ) {
+	var pageNumber = req.query.pageNum * req.query.pageSize;
+	if( req.query.sort == 'most deltas' ) {
+		Convo.find( { users: { $in: [req.query.name] } } )
+			.sort( { deltas: -1 } )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, convos ) { 
+			res.send( convos ); 
+		});
+	} else if( req.query.sort == 'length' ) {
+		Convo.find( { users: { $in: [req.query.name] } } )
+			.sort( '-size' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, convos ) { 
+			res.send( convos ); 
+		});
+	} else {
+		Convo.find( { users: { $in: [req.query.name] } } )
+			.sort( '-date' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, convos ) { 
+			res.send( convos ); 
+		});
+	}
+});
 
-app.get( '/mongo/profile/mail', function( req, res, next ) {
-	Mail.find( { to: req.query.name } ).sort( '-date' ).exec( function( err, mail ) {
+app.get( '/mongo/profile/mail/list', function( req, res, next ) {
+	var pageNumber = req.query.pageNum * req.query.pageSize;
+	Mail.find( { from: req.user.username } ).sort( '-date' ).skip( pageNumber ).limit( req.query.pageSize ).exec( function( err, mail ) {
 		res.send( mail );
-	})
-})
+	});
+});
 
-app.get( '/mongo/profile/mail2', function( req, res, next ) {
-	Mail.findOne( { to: req.query.to, from: req.query.from }, function( err, mail ) {
+app.get( '/mongo/profile/mail/convo', function( req, res, next ) {
+	Mail.findOne( { to: req.query.from, from: req.user.username }, function( err, mail ) {
 		if( !mail ) { 
 			var newMail = new Mail( {
-				to: req.query.to,
-				from: req.query.from
+				to: req.query.from,
+				from: req.user.username
 			});
 			newMail.save();
-
 			var newMail2 = new Mail( {
-				to: req.query.from,
-				from: req.query.to
+				to: req.user.username,
+				from: req.query.from
 			});
 			newMail2.save();
 			res.send( newMail );
 		} else {
 			res.send( mail );
+		};
+	});
+});
+
+app.get( '/mongo/profile/mail/access', function( req, res, next ) {
+	Mail.findOne( { to: req.query.to, from: req.user.username }, function( err, mail ) {
+		console.log( 'username ' + req.user.username );
+		console.log( 'to ' + req.query.to );
+		if( mail ) {
+			console.log( 'success!' );
+			mail.date_accessed = Date.now();
+			mail.new = 0;
+			mail.save();
 		}
 	})
 })

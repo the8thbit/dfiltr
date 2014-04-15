@@ -11,10 +11,10 @@ $( '.mail_convo-faded' ).hover(
 );
 
 mail_convo.add = function( data ) {
+	console.log( data ); 
 	if( data && data.message && data.message != '' && data.type ) {
 		if( data.type == 'partner' ) { var text = '<div class="mail_convo-message mail_convo-red">'  + data.message + '</span>'; } else
 		if( data.type == 'self'    ) { var text = '<div class="mail_convo-message mail_convo-blue">' + data.message + '</span>'; }
-		console.log( text )
 		$( '#mail_convo-content' ).append( text );
 		$( '#mail_convo-content' ).scrollTop( 99999999 );
 	};
@@ -29,6 +29,7 @@ mail_convo.init = function() {
 		profile.resize();
 		mail_input.init();
 	});
+	$( '#mail_convo-content' ).scrollTop( 99999999 );
 
 	setInterval( function() {
 		mail_convo.resize();

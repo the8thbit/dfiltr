@@ -18,6 +18,7 @@ var convoSchema = new schema( {
 
 	topic:     { type: String, required: true },
    messages:  { type: [msgSchema], required: false },
+	size:      { type: Number, required: true, default: 0 },
 
 	date:      { type: Date, required: true, default: Date.now }
 });

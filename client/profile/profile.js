@@ -12,8 +12,8 @@ window.onload = function() {
 	profile.viewer    = $( '#profile-viewer' );
 
 	profile.socket.on( 'message', function( data ) {
-		console.log( data );
-		mail_convo.add( { message: data.message, type:'partner' } );
+		profile.socket.emit( 'clear new', data.to );
+		mail_convo.add( data );
 	});	
 
 	window.onresize = function( event ) {
@@ -37,19 +37,23 @@ window.onload = function() {
 		$( this ).css( 'background-color', '#FF4C00' );
 	});
 
-	$( '#profile-headerbar-tabs-delta' ).click( function() { 
+	$( '#profile-headerbar-tabs-delta' ).click( function() {
+		profile.socket.emit( 'virtual disconnect' ); 
 		profile.viewer.load( '/profile/delta/', function() { delta.init( $( '#profile-headerbar-name-table-cell' ).html() ); } );
 	});
 
 	$( '#profile-headerbar-tabs-badges' ).click( function() { 
+		profile.socket.emit( 'virtual disconnect' );
 		profile.viewer.load( '/profile/badges/', function() { badges.init(); } );
 	});
 
-	$( '#profile-headerbar-tabs-mail' ).click( function() { 
+	$( '#profile-headerbar-tabs-mail' ).click( function() {
+		profile.socket.emit( 'virtual disconnect' );
 		profile.viewer.load( '/profile/mail/', function() { mail.init( $( '#profile-headerbar-name-table-cell' ).html() ); } );
 	});
 
 	$( '#profile-headerbar-tabs-options' ).click( function() { 
+		profile.socket.emit( 'virtual disconnect' );
 		profile.viewer.load( '/profile/options/', function() { options.init(); } );
 	});
 
