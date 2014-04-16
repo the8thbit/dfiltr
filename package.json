@@ -5,6 +5,7 @@
 	"private": true,
 	"dependencies": {
 		"express": "latest",
+		"body-parser": "latest",
 		"jade": "latest",
 		"stylus": "latest",
 		"socket.io": "latest",

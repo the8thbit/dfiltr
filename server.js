@@ -3,6 +3,7 @@
 //=============================================================================
 var config       = require( './config.js' );
 var express      = require( 'express' );
+var bodyParser   = require( 'body-parser' );
 var stylus       = require( 'stylus' );
 var passport     = require( 'passport' );
 var passportSIO  = require( 'passport.socketio' );
@@ -24,9 +25,9 @@ new Index( { name: 'pio_users' } ).save( function() {
 });
 
 //use the express app engine
-var app = express()
-app.use( express.urlencoded() )
-app.use( express.cookieParser() )
+var app = express();
+app.use( bodyParser() );
+app.use( express.cookieParser() );
 sessionStore.mongo = sessionStore.createSessionStore( {
 	type:     'mongoDb',
 	username: config.MONGO_USER,
