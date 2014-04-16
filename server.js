@@ -3,9 +3,6 @@
 //=============================================================================
 var config       = require( './config.js' );
 var express      = require( 'express' );
-var bodyParser   = require( 'body-parser' );
-var cookieParser = require( 'cookie-parser' );
-var session      = require( 'express-sessions' );
 var stylus       = require( 'stylus' );
 var passport     = require( 'passport' );
 var passportSIO  = require( 'passport.socketio' );
@@ -27,14 +24,9 @@ new Index( { name: 'pio_users' } ).save( function() {
 });
 
 //use the express app engine
-var app = express();
-app.use( bodyParser() );
-app.use( cookieParser() );
-app.use( session( { 
-	key: '435.sid',
-	secret: config.COOKIE_SECRET,
-	store: sessionStore.mongo
-}));
+var app = express()
+app.use( express.urlencoded() )
+app.use( express.cookieParser() )
 sessionStore.mongo = sessionStore.createSessionStore( {
 	type:     'mongoDb',
 	username: config.MONGO_USER,
@@ -44,6 +36,11 @@ sessionStore.mongo = sessionStore.createSessionStore( {
 	dbName:   config.MONGO_DB_NAME,
 	collectionName: 'sessions'
 });
+app.use( express.session( { 
+	key: '435.sid',
+	secret: config.COOKIE_SECRET,
+	store: sessionStore.mongo
+}));
 
 //use stylus templates for CSS
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
