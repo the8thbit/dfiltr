@@ -5,6 +5,7 @@ var config       = require( './config.js' );
 var express      = require( 'express' );
 var bodyParser   = require( 'body-parser' );
 var cookieParser = require( 'cookie-parser' );
+var session      = require( 'session' );
 var stylus       = require( 'stylus' );
 var passport     = require( 'passport' );
 var passportSIO  = require( 'passport.socketio' );
@@ -38,7 +39,7 @@ sessionStore.mongo = sessionStore.createSessionStore( {
 	dbName:   config.MONGO_DB_NAME,
 	collectionName: 'sessions'
 });
-app.use( express.session( { 
+app.use( session( { 
 	key: '435.sid',
 	secret: config.COOKIE_SECRET,
 	store: sessionStore.mongo
