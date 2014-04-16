@@ -1,5 +1,4 @@
 var config        = require( './../../config.js' );
-var autoIncrement = require( 'mongoose-auto-increment' );
 
 //=============================================================================
 //ESTABLISH CONNECTION
