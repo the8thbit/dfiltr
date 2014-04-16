@@ -30,6 +30,11 @@ new Index( { name: 'pio_users' } ).save( function() {
 var app = express();
 app.use( bodyParser() );
 app.use( cookieParser() );
+app.use( session( { 
+	key: '435.sid',
+	secret: config.COOKIE_SECRET,
+	store: sessionStore.mongo
+}));
 sessionStore.mongo = sessionStore.createSessionStore( {
 	type:     'mongoDb',
 	username: config.MONGO_USER,
@@ -39,11 +44,6 @@ sessionStore.mongo = sessionStore.createSessionStore( {
 	dbName:   config.MONGO_DB_NAME,
 	collectionName: 'sessions'
 });
-app.use( session( { 
-	key: '435.sid',
-	secret: config.COOKIE_SECRET,
-	store: sessionStore.mongo
-}));
 
 //use stylus templates for CSS
 function compile( str, path ) { return stylus( str ).set( 'filename', path ); } 
