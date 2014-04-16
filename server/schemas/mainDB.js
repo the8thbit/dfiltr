@@ -25,3 +25,4 @@ Topic  = require( './topic-schema.js'  );
 Convo  = require( './convo-schema.js'  );
 Mail   = require( './mail-schema.js'   );
 Index  = require( './index-schema.js'  );
+Badges = require( './badges-schema.js' );

@@ -8,6 +8,5 @@ message:  { type: String, required: true },
 date:     { type: Date}
 });
 
-
 // Use the schema to register a model with MongoDb
 module.exports = mongoose.model( 'Message', MessageSchema )
