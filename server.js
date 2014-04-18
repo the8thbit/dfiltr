@@ -615,30 +615,43 @@ app.get( '/logout', function( req, res, next ) {
 // Mongo queries
 ///////////////////////////////////////////////////////////////////////////////
 app.get( '/mongo/profile/delta/list', function( req, res, next ) {
+	console.log( req.query );
 	var pageNumber = req.query.pageNum * req.query.pageSize;
 	if( req.query.sort == 'most deltas' ) {
-		Convo.find( { users: { $in: [req.query.name] } } )
+		Convo.find( { users: { $in: [req.query.username] } } )
 			.sort( { deltas: -1 } )
 			.skip( pageNumber )
 			.limit( req.query.pageSize )
-		.exec( function( err, convos ) { 
-			res.send( convos ); 
+		.exec( function( err, convos ) {
+			if( convos != '' ) { 
+				res.send( convos );
+			} else {
+				res.send( null );
+			}
 		});
 	} else if( req.query.sort == 'length' ) {
-		Convo.find( { users: { $in: [req.query.name] } } )
+		Convo.find( { users: { $in: [req.query.username] } } )
 			.sort( '-size' )
 			.skip( pageNumber )
 			.limit( req.query.pageSize )
-		.exec( function( err, convos ) { 
-			res.send( convos ); 
+		.exec( function( err, convos ) {
+			if( convos != '' ) { 
+				res.send( convos );
+			} else {
+				res.send( null );
+			}
 		});
 	} else {
-		Convo.find( { users: { $in: [req.query.name] } } )
+		Convo.find( { users: { $in: [req.query.username] } } )
 			.sort( '-date' )
 			.skip( pageNumber )
 			.limit( req.query.pageSize )
-		.exec( function( err, convos ) { 
-			res.send( convos ); 
+		.exec( function( err, convos ) {
+			if( convos != '' ) { 
+				res.send( convos );
+			} else {
+				res.send( null );
+			}
 		});
 	}
 });

@@ -2,9 +2,10 @@
 	#delta-options
 		#delta-options-sort sort by: 
 			select#delta-options-sort-select
-				option newest
-				option most deltas
-				option most personal deltas
+				option( value='new' ) newest
+				option( value='most deltas' ) most deltas
+				option( value='length' ) longest
 	#delta-content
 
 script( src='/client/modules/convo/convo.js' )
+link( rel='stylesheet' type='text/css' href='/client/modules/convols/convols.css' )
