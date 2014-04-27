@@ -1,7 +1,7 @@
 //============================================//
 //            SERVER CONFIGURATION            //
 //============================================//
-if( process.env ) {                           //
+if( typeof( window ) === 'undefined' ) {     //
 //============================================//
 //IP ADDRESS                                  //
   var SERVER_IP =                             //
@@ -72,8 +72,8 @@ if( process.env ) {                           //
 
 
 
-
-if( process.env ) {
+//serverside exports
+if( typeof( window ) === 'undefined' ) {
 	module.exports.CLIENT_IP     = CLIENT_IP;
 	module.exports.CLIENT_PORT   = CLIENT_PORT;
 	module.exports.SERVER_IP     = SERVER_IP;

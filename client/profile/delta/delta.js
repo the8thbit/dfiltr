@@ -19,7 +19,7 @@ delta.getDeltas = function() {
 
 		$.get( '/mongo/profile/delta/list', { username: delta.username, pageSize: delta.pageSize, pageNum: delta.pageNum, sort: delta.sort }, function( data ) {
 			if( data ) {
-				delta.pageNum++;
+				delta.pageNum += 1;
 				$( '#delta-content' ).append(
 					$.map( data, function( conversation, i ) {
 						var target = $( '<div>', { id: 'delta-content' + i, class: 'delta-content' } ).html( template );
@@ -29,25 +29,12 @@ delta.getDeltas = function() {
 	
 						//when the user clicks the topic title, load the conversation view page
 						target.find( '.convols-topic' ).click( function() {
-							$( '#delta' ).load( '/modules/convo/', function() {
-								convo.init();
-								$( '#convo-content' ).append( '<div class="convo-message convo-topic">' + conversation.topic + '</div>' );
-								for( var i=0; i < conversation.messages.length; i++ ) {
-									if( conversation.messages[i].userId == 0 ) {
-										$( '#convo-content' ).append( '<div class="convo-message convo-blue">' + conversation.messages[i].message + '</div>' );
-									} else {
-										$( '#convo-content' ).append( '<div class="convo-message convo-red">'  + conversation.messages[i].message + '</div>' );
-									}
-								}
-								$( '#convo-stats-blue-name span'  ).html( conversation.users[0] );
-								$( '#convo-stats-red-name span'   ).html( conversation.users[1] );
-								$( '#convo-stats-blue-score span' ).html( conversation.deltas[0] + ' ∆' );
-								$( '#convo-stats-red-score span'  ).html( conversation.deltas[1] + ' ∆' );
-							});
-						});
+							profile.history.pushState( { view: 'convo', convo: conversation }, 'conversation', '/user/'+delta.username+'/convo/'+conversation._id );
+						});	
 						return target[0];
 					})
 				);
+				convols.init();
 				delta.endlessScroll();
 			}
 		});
@@ -64,7 +51,7 @@ delta.init = function( username ) {
 
 	delta.username = username;
 	delta.pageNum = 0;
-	delta.pageSize = 10;
+	delta.pageSize = 50;
 	delta.sort = 'new';
 
 	delta.getDeltas();
@@ -77,7 +64,7 @@ delta.init = function( username ) {
 
 	$( '#delta-options-sort-select' ).change( function() {
 		delta.pageNum = 0;
-		delta.pageSize = 10;
+		delta.pageSize = 50;
 		delta.sort = $( this ).val();
 		$( '#delta-content' ).html( '' );
 		$( '#delta-content' ).unbind( 'scroll' );

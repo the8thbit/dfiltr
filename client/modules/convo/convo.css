@@ -41,10 +41,16 @@
 }
 #convo-stats-blue-name {
   text-align: left;
-  color: #0b5fa5;
 }
 #convo-stats-red-name {
   text-align: right;
+}
+#convo-stats-blue-name a {
+  text-decoration: none;
+  color: #0b5fa5;
+}
+#convo-stats-red-name a {
+  text-decoration: none;
   color: #ff4c00;
 }
 #convo-stats-blue-score {

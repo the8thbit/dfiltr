@@ -10,7 +10,8 @@ var topicSchema = new schema( {
 	tags:     { type: Array,  required: false },
 	deltas:   { type: String, required: true, default: 0 },
 	sames:    { type: String, required: true, default: 0 },
-	flags:    { type: String, required: true, default: 0 }
+	flags:    { type: String, required: true, default: 0 },
+	date:     { type: Date,   required: true, default: Date.now }
 });
 
 var Topic = mongoose.model( 'topic', topicSchema )

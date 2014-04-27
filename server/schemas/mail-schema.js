@@ -8,12 +8,13 @@ var msgSchema = new schema( {
 });
 
 var mailSchema = new schema( {
-	to:            { type: String, required: true },
-	from:          { type: String, required: true },
-   messages:      { type: [msgSchema], required: false },
-	new:           { type: Number, required: true, default: 0 },
-	date_created:  { type: Date, required: true, default: Date.now() },
-	date_accessed: { type: Date, required: true, default: Date.now() }
+	to:           { type: String,      required: true  },
+	from:         { type: String,      required: true  },
+   messages:     { type: [msgSchema], required: false },
+	messageNum:   { type: Number,      required: true, default: 0 },
+	newMessages:  { type: Number,      required: true, default: 0 },
+	dateAccessed: { type: Date,        required: true, default: Date.now() },
+	date:         { type: Date,        required: true, default: Date.now() }
 });
 
 //export this model

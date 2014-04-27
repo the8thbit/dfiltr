@@ -1,6 +1,3 @@
-var process = 'CLIENT'; //necessary hacky code for the unified config file to work
-document.write( '<script type="text/javascript" src="../../config.js"><\/script>' );
-
 window.onload = function() {
 	var chat      = $( '#chat-wrapper' );
 	chat.socket   = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/main' );

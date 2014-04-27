@@ -18,10 +18,10 @@ mongo.on( 'error', console.error.bind( console, 'mongo error:' ) );
 //=============================================================================
 //LOAD SCHEMAS
 //=============================================================================
+Index  = require( './index-schema.js'  );
 User   = require( './user-schema.js'   );
 Client = require( './client-schema.js' );
 Topic  = require( './topic-schema.js'  );
 Convo  = require( './convo-schema.js'  );
 Mail   = require( './mail-schema.js'   );
-Index  = require( './index-schema.js'  );
-Badges = require( './badges-schema.js' );
+Badge  = require( './badge-schema.js' );
