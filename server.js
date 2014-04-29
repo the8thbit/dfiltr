@@ -65,23 +65,23 @@ app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
-app.get( '/',                    function( req, res ){ res.render( 'chat/chat'                     ); } );
-app.get( '/user',                function( req, res ){ res.render( 'profile/profile'               ); } );
-app.get( '/profile/delta',       function( req, res ){ res.render( 'profile/delta/delta'           ); } );
-app.get( '/profile/badges',      function( req, res ){ res.render( 'profile/badges/badges'         ); } );
-app.get( '/profile/badges/view', function( req, res ){ res.render( 'profile/badges/view/view'      ); } );
-app.get( '/profile/options',     function( req, res ){ res.render( 'profile/options/options'       ); } );
-app.get( '/profile/mail',        function( req, res ){ res.render( 'profile/mail/mail'             ); } );
+app.get( '/',                            function( req, res ){ res.render( 'chat/chat'                                ); } );
+app.get( '/user',                        function( req, res ){ res.render( 'profile/profile'                          ); } );
+app.get( '/profile/convos',              function( req, res ){ res.render( 'profile/convos/convos'                    ); } );
+app.get( '/profile/convos/convoListElm', function( req, res ){ res.render( 'profile/convos/convoListElm/convoListElm' ); } );
+app.get( '/profile/convos/convo',        function( req, res ){ res.render( 'profile/convos/convo/convo'               ); } );
+app.get( '/profile/badges',              function( req, res ){ res.render( 'profile/badges/badges'                    ); } );
+app.get( '/profile/badges/badgeView',    function( req, res ){ res.render( 'profile/badges/badgeView/badgeView'       ); } );
+app.get( '/profile/options',             function( req, res ){ res.render( 'profile/options/options'                  ); } );
+app.get( '/profile/mail',                function( req, res ){ res.render( 'profile/mail/mail'                        ); } );
+app.get( '/profile/mail/mailListElm',    function( req, res ){ res.render( 'profile/mail/mailListElm/mailListElm'     ); } );
+app.get( '/profile/mail/mailConvo',      function( req, res ){ res.render( 'profile/mail/mailConvo/mailConvo'         ); } );
+app.get( '/profile/mail/mailInput',      function( req, res ){ res.render( 'profile/mail/mailInput/mailInput'         ); } );
 
-app.get( '/modules/ratings',     function( req, res ){ res.render( 'modules/ratings/ratings'       ); } );
-app.get( '/modules/dock/auth',   function( req, res ){ res.render( 'modules/dock/dock_in'          ); } );
-app.get( '/modules/dock',        function( req, res ){ res.render( 'modules/dock/dock_out'         ); } );
-app.get( '/modules/login',       function( req, res ){ res.render( 'modules/login/login'           ); } );
-app.get( '/modules/convo',       function( req, res ){ res.render( 'modules/convo/convo'           ); } );
-app.get( '/modules/convols',     function( req, res ){ res.render( 'modules/convols/convols'       ); } );
-app.get( '/modules/mail_ls',     function( req, res ){ res.render( 'modules/mail_ls/mail_ls'       ); } );
-app.get( '/modules/mail_convo',  function( req, res ){ res.render( 'modules/mail_convo/mail_convo' ); } );
-app.get( '/modules/mail_input',  function( req, res ){ res.render( 'modules/mail_input/mail_input' ); } );
+app.get( '/modules/ratings',             function( req, res ){ res.render( 'modules/ratings/ratings'                  ); } );
+app.get( '/modules/dock/auth',           function( req, res ){ res.render( 'modules/dock/dock_in'                     ); } );
+app.get( '/modules/dock',                function( req, res ){ res.render( 'modules/dock/dock_out'                    ); } );
+app.get( '/modules/login',               function( req, res ){ res.render( 'modules/login/login'                      ); } );
 
 // create the paths for all of the user profile pages
 app.get( '/user/:username', function( req, res ){
@@ -117,7 +117,7 @@ app.get( '/user/:username/convos', function( req, res ){
 	});
 });
 
-app.get( '/user/:username/convo/:convo', function( req, res ){
+app.get( '/user/:username/convos/:convo', function( req, res ){
 	User.findOne( { username: req.params.username }, function( err, user ){
 		Convo.findOne( { _id: req.params.convo }, function( err, convo ){
 			if( user && convo ){
@@ -728,7 +728,7 @@ app.get( '/logout', function( req, res, next ){
 ///////////////////////////////////////////////////////////////////////////////
 // Mongo queries
 ///////////////////////////////////////////////////////////////////////////////
-app.get( '/mongo/profile/delta/list', function( req, res, next ){
+app.get( '/mongo/profile/convos/list', function( req, res, next ){
 	var pageNumber = req.query.pageNum * req.query.pageSize;
 	if( req.query.sort == 'most deltas' ){
 		Convo.find( { users: { $in: [req.query.username] } } )
@@ -813,8 +813,57 @@ app.get( '/mongo/profile/mail/access', function( req, res, next ){
 	});
 });
 
-app.get( '/mongo/profile/badges', function( req, res, next ){
-	Badge.find( { "owners.username": req.query.username }, function( err, badges ){
+app.get( '/mongo/profile/badges/list', function( req, res, next ){
+	Badge.find( { "owners.username": req.query.username } ).sort( 'ownerNum' ).exec( function( err, badges ){
+		//do client-side sorting for everything except for sort by rarity (ownerNum): hacky solution because I don't understand aggregation
+		res.send( badges );
+	});
+});
+
+app.get( '/mongo/stats/convos/list', function( req, res, next ){
+	var pageNumber = req.query.pageNum * req.query.pageSize;
+	if( req.query.sort == 'most deltas' ){
+		Convo.find()
+			.sort( { deltas: -1 } )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, convos ){
+			if( convos !== '' ){ 
+				res.send( convos );
+			} else {
+				res.send( null );
+			}
+		});
+	} else if( req.query.sort == 'length' ){
+		Convo.find()
+			.sort( '-size' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, convos ){
+			if( convos !== '' ){ 
+				res.send( convos );
+			} else {
+				res.send( null );
+			}
+		});
+	} else {
+		Convo.find()
+			.sort( '-date' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, convos ){
+			if( convos !== '' ){ 
+				res.send( convos );
+			} else {
+				res.send( null );
+			}
+		});
+	}
+});
+
+app.get( '/mongo/stats/badges/list', function( req, res, next ){
+	Badge.find().sort( 'ownerNum' ).exec( function( err, badges ){
+		//do client-side sorting for everything except for sort by rarity (ownerNum): hacky solution because I don't understand aggregation
 		res.send( badges );
 	});
 });

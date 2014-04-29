@@ -1,0 +1,46 @@
+.mailListElm {
+  display: table;
+  table-layout: fixed;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  opacity: 0.6;
+  cursor: pointer;
+}
+.mailListElm:hover {
+  opacity: 1;
+}
+.mailListElm-text {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  padding: 5px;
+}
+.mailListElm-name {
+  display: table-cell;
+  width: 20%;
+  text-align: left;
+  font-size: 23px;
+  color: #0b5fa5;
+  font-weight: bold;
+}
+.mailListElm-preview {
+  display: table-cell;
+  width: 60%;
+  text-align: center;
+  font-size: 23px;
+  color: #0b5fa5;
+  font-weight: bold;
+}
+.mailListElm-newMessages {
+  display: table-cell;
+  width: 20%;
+  text-align: right;
+  font-size: 23px;
+  color: #ff4c00;
+  font-weight: bold;
+}

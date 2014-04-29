@@ -1,0 +1,44 @@
+doctype html
+html( lang='en' )
+	head
+		title= 'Stats Page'
+		link( rel='stylesheet' type='text/css' href='/client/modules/reset/reset.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/newpage/newpage.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/colorbox/colorbox.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )
+		link( rel='stylesheet' type='text/css' href='/client/stats/stats.css' )
+		link( rel='stylesheet' type='text/css' href='/client/stats/convos/convos.css' )
+		link( rel='stylesheet' type='text/css' href='/client/stats/convos/convoListElm/convoListElm.css' )
+		link( rel='stylesheet' type='text/css' href='/client/stats/convos/convo/convo.css' )
+		link( rel='stylesheet' type='text/css' href='/client/stats/badges/badges.css' )
+		link( rel='stylesheet' type='text/css' href='/client/stats/badges/badgeView/badgeView.css' )
+		script( src='/config.js' )
+		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
+		script( src='/client/modules/history.js/scripts/bundled/html4+html5/jquery.history.js' )
+		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
+		script( src='/client/modules/isotope/isotope.js' )
+		script( src='/socket.io/socket.io.js' )
+		script( src='/client/stats/stats.js' )
+		script( src='/client/stats/convos/convos.js' )
+		script( src='/client/stats/convos/convoListElm/convoListElm.js' )
+		script( src='/client/stats/convos/convo/convo.js' )
+		script( src='/client/stats/badges/badges.js' )
+		script( src='/client/stats/badges/badgeView/badgeView.js' )
+	body
+		#stats-dock
+		#stats
+			#stats-meta
+				input#stats-meta-view( type='hidden' value='#{ statsData.view }' )
+				input#stats-meta-convo( type='hidden' value='#{ statsData.convo }' )
+			#stats-content
+				table#stats-headerbar
+					td#stats-headerbar-tabs( class='stats-headerbar-cell' )
+						table#stats-headerbar-tabs-table( class='stats-headerbar-subtable' )
+							tr#stats-headerbar-tabs-row
+								td#stats-headerbar-tabs-convos( class='stats-headerbar-tab' class='stats-faded' )
+									#stats-headerbar-tabs-convos-text( class='stats-headerbar-tab-text' ) ∆
+								td#stats-headerbar-tabs-badges( class='stats-headerbar-tab' class='stats-faded' )
+									#stats-headerbar-tabs-badges-text( class='stats-headerbar-tab-text' ) ☆
+				#stats-viewer
+				#stats-input

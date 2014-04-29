@@ -95,6 +95,7 @@ options.createChangeEmailEvent = function(){
 }
 
 options.createHoverFadeEvent = function(){
+	$( '.options-faded' ).fadeTo( 0, 0.6 );
 	$( '.options-faded' ).hover(
 		function(){ //hover enter
 			$( this ).fadeTo( 'fast', 1.0 );
@@ -112,12 +113,5 @@ options.createEvents = function(){
 }
 
 options.init = function(){
-	profile.socket.emit( 'virtual disconnect' );
-	profile.viewer.load( '/profile/options/', function(){
-		$( '#profile-input' ).html( '' );
-		profile.resize();
-		$( '.options-faded' ).fadeTo( 0, 0.6 );
-
-		options.createEvents();
-	});
+	options.createEvents();
 }

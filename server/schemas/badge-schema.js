@@ -10,10 +10,11 @@ var ownerSchema = new schema( {
 });
 
 var badgesSchema = new schema( {
-	name:        { type: String,        required: true, unique: true },
+	title:       { type: String,        required: true, unique: true },
 	image:       { type: String,        required: true  },
 	difficulty:  { type: String,        required: true  },
-	description: { type: String,        required: true  },
+	description: { type: String,        required: false },
+	custom:      { type: String,        required: false },
 	ownerNum:    { type: Number,        required: true  },
 	owners:      { type: [ownerSchema], required: false },
 	date:        { type: Date, required: false, default: Date.now }
@@ -22,7 +23,7 @@ var badgesSchema = new schema( {
 var Badge = mongoose.model( 'badges', badgesSchema );
 
 var newBadge = new Badge( {
-	name: 'testName',
+	title: 'Test Badge',
 	image: 'T',
 	difficulty: 'easy',
 	description: 'this is a test badge',

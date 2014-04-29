@@ -1,0 +1,34 @@
+.convoListElm {
+  margin: 15px;
+}
+.convoListElm-topic {
+  float: left;
+  width: 85%;
+  height: 100%;
+  font-size: 23px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  color: #0b5fa5;
+  font-weight: bold;
+  cursor: pointer;
+}
+.convoListElm-deltas {
+  display: table;
+  float: right;
+  width: 15%;
+  font-size: 25px;
+  overflow: hidden;
+  text-align: center;
+}
+.convoListElm-deltas-blue {
+  display: table-cell;
+  text-align: center;
+  color: #0b5fa5;
+}
+.convoListElm-deltas-red {
+  display: table-cell;
+  text-align: center;
+  color: #ff4c00;
+}
