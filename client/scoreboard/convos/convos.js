@@ -1,5 +1,4 @@
 var convos = $( '#convos'  );
-convos.username;
 convos.pageNum;
 convos.pageSize;
 convos.sortBy;
@@ -17,9 +16,9 @@ convos.endlessScroll = function(){
 	});
 }
 
-convos.getConvos = function( callback ){
-	$.get( '/profile/convos/convoListElm', function( template ){
-		$.get( '/mongo/profile/convos/list', { username: convos.username, pageSize: convos.pageSize, pageNum: convos.pageNum, sort: convos.sortBy }, function( data ){
+convos.getConvos = function(){
+	$.get( '/scoreboard/convos/convoListElm', function( template ){
+		$.get( '/mongo/scoreboard/convos/list', { pageSize: convos.pageSize, pageNum: convos.pageNum, sort: convos.sortBy }, function( data ){
 			if( data ){
 				convos.pageNum += 1;
 				$( '#convos-content' ).append(
@@ -31,7 +30,7 @@ convos.getConvos = function( callback ){
 
 						//when the user clicks the topic title, load the convo view page
 						target.find( '.convoListElm-topic' ).click( function(){
-							profile.history.pushState( { view: 'convo', convo: conversation }, 'convo', '/user/'+convos.username+'/convos/'+conversation._id );
+							scoreboard.history.pushState( { view: 'convo', convo: conversation }, 'convo', '/stats/convos/'+conversation._id );
 						});	
 						return target[0];
 					})
@@ -39,7 +38,6 @@ convos.getConvos = function( callback ){
 				convoListElm.init();
 				convos.endlessScroll();
 			}
-			callback();
 		});
 	});
 };
@@ -66,18 +64,17 @@ convos.createSortEvent = function(){
 
 convos.createEvents = function(){
 	convos.createResizeEvent();
+	convos.createSortEvent();
 }
 
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
-convos.init = function( username ){
-	convos.username = username;
+convos.init = function(){
 	convos.pageNum = 0;
 	convos.pageSize = 50;
 	convos.sortBy = 'new';
 
-	convos.getConvos( function(){
-		convos.createEvents();
-	});
+	convos.createEvents();
+	convos.getConvos();
 }

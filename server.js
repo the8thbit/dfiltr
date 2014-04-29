@@ -65,24 +65,29 @@ app.set( 'view engine', 'jade' );
 app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
-app.get( '/',                            function( req, res ){ res.render( 'chat/chat'                                ); } );
-app.get( '/user',                        function( req, res ){ res.render( 'profile/profile'                          ); } );
-app.get( '/profile/convos',              function( req, res ){ res.render( 'profile/convos/convos'                    ); } );
-app.get( '/profile/convos/convoListElm', function( req, res ){ res.render( 'profile/convos/convoListElm/convoListElm' ); } );
-app.get( '/profile/convos/convo',        function( req, res ){ res.render( 'profile/convos/convo/convo'               ); } );
-app.get( '/profile/badges',              function( req, res ){ res.render( 'profile/badges/badges'                    ); } );
-app.get( '/profile/badges/badgeView',    function( req, res ){ res.render( 'profile/badges/badgeView/badgeView'       ); } );
-app.get( '/profile/options',             function( req, res ){ res.render( 'profile/options/options'                  ); } );
-app.get( '/profile/mail',                function( req, res ){ res.render( 'profile/mail/mail'                        ); } );
-app.get( '/profile/mail/mailListElm',    function( req, res ){ res.render( 'profile/mail/mailListElm/mailListElm'     ); } );
-app.get( '/profile/mail/mailConvo',      function( req, res ){ res.render( 'profile/mail/mailConvo/mailConvo'         ); } );
-app.get( '/profile/mail/mailInput',      function( req, res ){ res.render( 'profile/mail/mailInput/mailInput'         ); } );
+app.get( '/',                               function( req, res ){ res.render( 'chat/chat'                                   ); } );
+app.get( '/profile/convos',                 function( req, res ){ res.render( 'profile/convos/convos'                       ); } );
+app.get( '/profile/convos/convoListElm',    function( req, res ){ res.render( 'profile/convos/convoListElm/convoListElm'    ); } );
+app.get( '/profile/convos/convo',           function( req, res ){ res.render( 'profile/convos/convo/convo'                  ); } );
+app.get( '/profile/badges',                 function( req, res ){ res.render( 'profile/badges/badges'                       ); } );
+app.get( '/profile/badges/badgeView',       function( req, res ){ res.render( 'profile/badges/badgeView/badgeView'          ); } );
+app.get( '/profile/options',                function( req, res ){ res.render( 'profile/options/options'                     ); } );
+app.get( '/profile/mail',                   function( req, res ){ res.render( 'profile/mail/mail'                           ); } );
+app.get( '/profile/mail/mailListElm',       function( req, res ){ res.render( 'profile/mail/mailListElm/mailListElm'        ); } );
+app.get( '/profile/mail/mailConvo',         function( req, res ){ res.render( 'profile/mail/mailConvo/mailConvo'            ); } );
+app.get( '/profile/mail/mailInput',         function( req, res ){ res.render( 'profile/mail/mailInput/mailInput'            ); } );
+app.get( '/scoreboard/convos',              function( req, res ){ res.render( 'scoreboard/convos/convos'                    ); } );
+app.get( '/scoreboard/convos/convoListElm', function( req, res ){ res.render( 'scoreboard/convos/convoListElm/convoListElm' ); } );
+app.get( '/scoreboard/convos/convo',        function( req, res ){ res.render( 'scoreboard/convos/convo/convo'               ); } );
+app.get( '/scoreboard/badges',              function( req, res ){ res.render( 'scoreboard/badges/badges'                    ); } );
+app.get( '/scoreboard/badges/badgeView',    function( req, res ){ res.render( 'scoreboard/badges/badgeView/badgeView'       ); } );
+app.get( '/modules/ratings',                function( req, res ){ res.render( 'modules/ratings/ratings'                     ); } );
+app.get( '/modules/dock/auth',              function( req, res ){ res.render( 'modules/dock/dock_in'                        ); } );
+app.get( '/modules/dock',                   function( req, res ){ res.render( 'modules/dock/dock_out'                       ); } );
+app.get( '/modules/login',                  function( req, res ){ res.render( 'modules/login/login'                         ); } );
 
-app.get( '/modules/ratings',             function( req, res ){ res.render( 'modules/ratings/ratings'                  ); } );
-app.get( '/modules/dock/auth',           function( req, res ){ res.render( 'modules/dock/dock_in'                     ); } );
-app.get( '/modules/dock',                function( req, res ){ res.render( 'modules/dock/dock_out'                    ); } );
-app.get( '/modules/login',               function( req, res ){ res.render( 'modules/login/login'                      ); } );
 
+app.get( '/user', function( req, res ){ res.render( 'profile/profile' ); } );
 // create the paths for all of the user profile pages
 app.get( '/user/:username', function( req, res ){
 	User.findOne( { username: req.params.username }, function( err, user ){
@@ -205,6 +210,39 @@ app.get('/user/:username/options', function( req, res ){
 		} else {
 			res.render( 'chat/chat' );
 		}
+	});
+});
+
+app.get( '/stats', function( req, res ){
+	res.render('scoreboard/scoreboard', {
+		scoreboardData: {}
+	});
+});
+
+app.get( '/stats/convos', function( req, res ){
+	res.render('scoreboard/scoreboard', {
+		scoreboardData: { view: 'convos' }
+	});
+});
+
+app.get( '/stats/convos/:convo', function( req, res ){
+	Convo.findOne( { _id: req.params.convo }, function( err, convo ){
+		if( convo ){
+			res.render('scoreboard/scoreboard', {
+				scoreboardData: {
+					view: 'convo',
+					convo: JSON.stringify( convo )
+				}
+			});
+		} else {
+			res.render( 'chat/chat' );
+		}
+	});
+});
+
+app.get( '/stats/badges', function( req, res ){
+	res.render('scoreboard/scoreboard', {
+		scoreboardData: { view: 'badges' }
 	});
 });
 
@@ -820,7 +858,7 @@ app.get( '/mongo/profile/badges/list', function( req, res, next ){
 	});
 });
 
-app.get( '/mongo/stats/convos/list', function( req, res, next ){
+app.get( '/mongo/scoreboard/convos/list', function( req, res, next ){
 	var pageNumber = req.query.pageNum * req.query.pageSize;
 	if( req.query.sort == 'most deltas' ){
 		Convo.find()
@@ -861,7 +899,7 @@ app.get( '/mongo/stats/convos/list', function( req, res, next ){
 	}
 });
 
-app.get( '/mongo/stats/badges/list', function( req, res, next ){
+app.get( '/mongo/scoreboard/badges/list', function( req, res, next ){
 	Badge.find().sort( 'ownerNum' ).exec( function( err, badges ){
 		//do client-side sorting for everything except for sort by rarity (ownerNum): hacky solution because I don't understand aggregation
 		res.send( badges );

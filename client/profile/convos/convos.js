@@ -39,7 +39,7 @@ convos.getConvos = function( callback ){
 				convoListElm.init();
 				convos.endlessScroll();
 			}
-			callback();
+			if( callback){ callback(); }
 		});
 	});
 };
@@ -65,6 +65,7 @@ convos.createSortEvent = function(){
 }
 
 convos.createEvents = function(){
+	convos.createSortEvent();
 	convos.createResizeEvent();
 }
 

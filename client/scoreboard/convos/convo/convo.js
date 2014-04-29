@@ -16,8 +16,8 @@ convo.populateConvo = function( conversation ){
 }
 
 convo.populateStats = function( conversation ){
-	$( '#convo-stats-blue-name span'  ).html( '<a href="/user/'+conversation.users[0]+'/">'+conversation.users[0]+'</a>' );
-	$( '#convo-stats-red-name span'   ).html( '<a href="/user/'+conversation.users[1]+'/">'+conversation.users[1]+'</a>' );
+	if( conversation.users[0] ){ $( '#convo-stats-blue-name span'  ).html( '<a href="/user/'+conversation.users[0]+'/">'+conversation.users[0]+'</a>' ); }
+	if( conversation.users[1] ){ $( '#convo-stats-red-name span'   ).html( '<a href="/user/'+conversation.users[1]+'/">'+conversation.users[1]+'</a>' ); }
 	$( '#convo-stats-blue-score span' ).html( conversation.deltas[0] + ' ∆' );
 	$( '#convo-stats-red-score span'  ).html( conversation.deltas[1] + ' ∆' );
 }

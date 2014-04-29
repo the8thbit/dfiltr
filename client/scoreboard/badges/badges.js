@@ -1,5 +1,4 @@
 var badges = $( '#badges'  );
-badges.username; 
 badges.sortBy;
 
 badges.resize = function(){
@@ -9,24 +8,13 @@ badges.resize = function(){
 badges.formatDate = function( date ){
 	var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 	var rawDate = new Date( date );
-	var finalDate = 'acquired on ' + months[rawDate.getMonth()] + ' ' + rawDate.getDate() + ', ' + rawDate.getFullYear();
+	var finalDate = 'created on ' + months[rawDate.getMonth()] + ' ' + rawDate.getDate() + ', ' + rawDate.getFullYear();
 	return finalDate;
-}
-
-badges.addDateAcquired = function( data ){
-	for( var i=0; i < data.length; i+=1 ){
-		for( var j=0; j < data[i].owners.length; j+=1 ){
-			if( data[i].owners[j].username === badges.username ){
-				data[i].dateAcquired = data[i].owners[j].date;
-			}
-		}
-	}
-	return data;
 }
 
 badges.sortByDate = function( sortedBadges ){
 	sortedBadges.sort(function (a, b){
-		if( a.dateAcquired < b.dateAcquired ){
+		if( a.date < b.date ){
 			return 1;
 		} else {
 			return -1;
@@ -55,10 +43,9 @@ badges.sortByDifficulty = function( data ){
 
 //grab the badges from the server and place them into the HTML, putting metadata into the .data field
 badges.getBadges = function( onComplete ){
-	$.get( '/mongo/profile/badges/list', { username: badges.username }, function( data ) {
+	$.get( '/mongo/scoreboard/badges/list', function( data ) {
 		var template = [];
 		if( data ){
-			data = badges.addDateAcquired( data );
 			if( badges.sortBy === 'new' ){ data = badges.sortByDate( data ); }
 			if( badges.sortBy === 'difficulty' ){ data = badges.sortByDifficulty( data ); }
 
@@ -74,7 +61,7 @@ badges.getBadges = function( onComplete ){
 				$( '#badges-list' + i ).data( 'difficulty',  data[i].difficulty );
 				$( '#badges-list' + i ).data( 'custom',      data[i].custom );
 				$( '#badges-list' + i ).data( 'image',       data[i].image );
-				$( '#badges-list' + i ).data( 'date',        badges.formatDate( data[i].dateAcquired ) );
+				$( '#badges-list' + i ).data( 'date',        badges.formatDate( data[i].date ) );
 			}
 		}
 		onComplete();
@@ -97,7 +84,7 @@ badges.createBadgeClickEvent = function(){
 		$( '#badges-viewer' ).css( 'height', '160px' );
 		$( '#badges-viewer' ).css( 'border-bottom-width', '1px' );
 
-		$( '#badges-viewer' ).load( '/profile/badges/badgeView/', function() { 
+		$( '#badges-viewer' ).load( '/scoreboard/badges/badgeView/', function() { 
 			badgeView.init(
 				badgeData.image,
 				badgeData.difficulty,
@@ -142,10 +129,8 @@ badges.createEvents = function(){
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
-badges.init = function( username ){
-	badges.username = username;
+badges.init = function(){
 	badges.sortBy = 'new';
-	profile.removeInput();
 
 	badges.getBadges( function(){ 
 		badges.createEvents();
