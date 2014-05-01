@@ -36,6 +36,7 @@ mailInput.createSendEvent = function(){
 }
 
 mailInput.createHoverFadeEvent = function(){
+	$( '#mailInput-send' ).fadeTo( 0, 0.6 );
 	$( '#mailInput-send' ).hover(
 		function(){ //on enter
 			$( this ).fadeTo( 'fast' , 1.0 );
@@ -57,7 +58,6 @@ mailInput.createEvents = function(){
 mailInput.load = function(){
 	$( '#profile-input' ).load( '/profile/mail/mailInput/', function(){
 		profile.resize();
-		$( '#mailInput-send' ).fadeTo( 0, 0.6 );
 		mailInput.createEvents();
 	});
 }
@@ -66,6 +66,8 @@ mailInput.load = function(){
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
-mailInput.init = function(){
+mailInput.init = function( conversation ){
+	profile.socket.emit( 'partner', conversation.to );
+	profile.socket.emit( 'clear new', conversation.to );
 	mailInput.load();
 };

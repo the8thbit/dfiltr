@@ -25,7 +25,9 @@ mail.getMailList = function(){
 				$.map( data, function( conversation, i ){
 					var target = $( '<div>', { id: 'mail-content' + i, class: 'mail-content' } ).html( template );
 					target.find( '.mailListElm-name-text'    ).html( conversation.to );
-					target.find( '.mailListElm-preview-text' ).html( conversation.messages[conversation.messages.length-1].message );
+					if( conversation.messages[conversation.messages.length-1] ){
+						target.find( '.mailListElm-preview-text' ).html( conversation.messages[conversation.messages.length-1].message );
+					}
 			
 					//check to see if new messages exist
 					if( conversation.newMessages == 1 ){
@@ -46,22 +48,10 @@ mail.getMailList = function(){
 	});
 }
 
-mail.getMailConvo = function( callback ){
+mail.getMailConvo = function(){
 	$.get( '/mongo/profile/mail/convo', { from: mail.username, pageNum: mail.pageNum, pageSize: mail.pageSize, sort: mail.sortBy }, function( conversation ){
 		$( '#profile-viewer' ).load( '/profile/mail/mailConvo/', function(){
-			var template = '';
-			profile.socket.emit( 'partner', conversation.to );
-			$( '#mailConvo-name' ).html( '<a href="/user/'+ conversation.to +'" class="mailConvo-faded">' + conversation.to + '</a>' );
 			mailConvo.init( conversation );
-			for( var i=0; i < conversation.messages.length; i+=1 ){
-				if( conversation.messages[i].userId == 0 ){
-					template += '<div class="convo-message convo-blue">' + conversation.messages[i].message + '</div>';
-				} else {
-					template += '<div class="convo-message convo-red">'  + conversation.messages[i].message + '</div>';
-				}
-			}
-			$( '#mailConvo-content' ).append( template );
-			if( callback ){ callback(); }
 		});
 	});
 }
@@ -111,6 +101,5 @@ mail.init = function( username ){
 	mail.sortBy = 'new';
 
 	mail.createEvents();
-
 	mail.getMail();
 }

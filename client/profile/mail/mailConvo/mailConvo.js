@@ -14,11 +14,6 @@ mailConvo.addMessage = function( data ){
 	};
 };
 
-mailConvo.connect = function( conversation ){
-	profile.socket.emit( 'partner', conversation.to );
-	profile.socket.emit( 'clear new', conversation.to );
-}
-
 mailConvo.populate = function( conversation ){
 	$( '#mailConvo-name' ).html( '<a href="/user/'+ conversation.to +'" class="mailConvo-faded">' + conversation.to + '</a>' );
 	for( var i=0; i < conversation.messages.length; i+=1 ){
@@ -61,17 +56,14 @@ mailConvo.createEvents = function(){
 // page load
 //-----------------------------------------------------------------------------
 mailConvo.load = function( conversation ){
-	$( '#profile-viewer' ).load( '/profile/mail/mailConvo/', function(){
-		mailConvo.connect( conversation )
-		mailConvo.populate( conversation );
-		mailConvo.createEvents();
-	});
+	mailConvo.populate( conversation );
+	mailConvo.createEvents();
 }
 
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
 mailConvo.init = function( conversation ){
-	mailInput.init();
+	mailInput.init( conversation );
 	mailConvo.load( conversation );
 }

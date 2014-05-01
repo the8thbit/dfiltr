@@ -135,12 +135,6 @@ window.onload = function() {
 			e.preventDefault();
 			chat.input.connectButton.toggle();
 		};
-
-		if( e.keyCode == 17 ) {
-			e.preventDefault();
-			chat.createSim();
-		};
-
 	});
 
 	chat.input.sendButton.on( 'click', function() {

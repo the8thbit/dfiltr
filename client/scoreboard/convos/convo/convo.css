@@ -6,6 +6,7 @@
   height: 100%;
 }
 #convo-options {
+  display: table;
   width: 100%;
   border-bottom: 1px #999 solid;
 }
@@ -74,19 +75,31 @@
 }
 .convo-options-rating {
   display: table-cell;
-  text-align: left;
-  padding: 4px;
-  padding-bottom: 5px;
+  padding-top: 3px;
+  padding-bottom: 4px;
   padding-right: 12px;
   padding-left: 12px;
-  border: 4px #fff solid;
-  border-right: none;
+  border: 5px #fff solid;
+  cursor: pointer;
+}
+#convo-options-share {
+  display: table-cell;
+  margin: 0 auto;
+  vertical-align: middle;
+}
+.convo-options-share-button {
+  margin: 0 auto;
+  margin-left: 10px;
+  margin-right: 10px;
+  vertical-align: middle;
   cursor: pointer;
 }
 #convo-options-blue-rating {
+  width: 95px;
   background-color: #0b5fa5;
 }
 #convo-options-red-rating {
+  width: 95px;
   background-color: #ff4c00;
 }
 .convo-options-rating span {

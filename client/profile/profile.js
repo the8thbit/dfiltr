@@ -1,4 +1,6 @@
-var profile       = $( '#profile' );
+var profile = $( '#profile' );
+profile.socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/mail' );
+profile.username;
 
 profile.resize = function(){
 	$( '#profile-content' ).css( { 'height': $( window ).height() - ( $( '#profile-dock' ).outerHeight() + 10 ) } ) 
@@ -53,7 +55,7 @@ profile.createResizeEvent = function(){
 profile.createMessageEvent = function(){
 	profile.socket.on( 'message', function( data ){
 		profile.socket.emit( 'clear new', data.to );
-		mail_convo.add( data );
+		mailConvo.addMessage( data );
 	});
 }
 
@@ -119,7 +121,6 @@ profile.createEvents = function(){
 // initialization
 //--------------------------------------------------------------------------
 window.onload = function(){
-	profile.socket    = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/mail' );
 	profile.history   = window.History;
 	profile.username  = $( '#profile-headerbar-name-table-cell' ).html();
 
