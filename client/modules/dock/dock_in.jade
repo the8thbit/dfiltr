@@ -9,7 +9,7 @@ table#dock
 					| home
 				a#dock-links-score( class='dock-link' class='dock-faded' href='/stats' )
 					| stats
-				a#dock-links-faq( class='dock-link' class='dock-faded' href='#' )
+				a#dock-links-faq( class='dock-link' class='dock-faded' href='/help' )
 					| help			
 		td#dock-row1-col3
 			div#dock-stats
@@ -17,9 +17,9 @@ table#dock
 					| 0 ∆ &nbsp; 
 				a#dock-stats-badges( href = '#' class='dock-faded' )
 					| 0 ☆ &nbsp; 
-				a#dock-stats-messages( href = '#' class='dock-faded' )
+				a#dock-stats-mail( href = '#' class='dock-faded' )
 					| 0 ✉
 			div#dock-username
 
-script( src='/client/modules/dock/dock.js' )
+script( src='/client/modules/dock/dock_in.js' )
 link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )

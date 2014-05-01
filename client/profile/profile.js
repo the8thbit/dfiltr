@@ -54,8 +54,9 @@ profile.createResizeEvent = function(){
 
 profile.createMessageEvent = function(){
 	profile.socket.on( 'message', function( data ){
-		profile.socket.emit( 'clear new', data.to );
 		mailConvo.addMessage( data );
+		console.log( data.from );
+		profile.socket.emit( 'clear new', data.from );
 	});
 }
 
@@ -102,10 +103,10 @@ profile.createStateChangeEvent = function(){
 }
 
 profile.createNewStateEvent = function(){
-	$( '#profile-headerbar-tabs-convos'  ).click( function(){ profile.history.pushState( { view: 'convos'  }, 'conversations', '/user/'+profile.username+'/convos'  ); } );
-	$( '#profile-headerbar-tabs-badges'  ).click( function(){ profile.history.pushState( { view: 'badges'  }, 'badges',        '/user/'+profile.username+'/badges'  ); } );
-	$( '#profile-headerbar-tabs-mail'    ).click( function(){ profile.history.pushState( { view: 'mail'    }, 'mail',          '/user/'+profile.username+'/mail'    ); } );
-	$( '#profile-headerbar-tabs-options' ).click( function(){ profile.history.pushState( { view: 'options' }, 'options',       '/user/'+profile.username+'/options' ); } );
+	$( '#profile-headerbar-tabs-convos'  ).click( function(){ profile.history.pushState( { view: 'convos'  }, 'dfiltr.com - popping filter bubbles', '/user/'+profile.username+'/convos'  ); } );
+	$( '#profile-headerbar-tabs-badges'  ).click( function(){ profile.history.pushState( { view: 'badges'  }, 'dfiltr.com - popping filter bubbles', '/user/'+profile.username+'/badges'  ); } );
+	$( '#profile-headerbar-tabs-mail'    ).click( function(){ profile.history.pushState( { view: 'mail'    }, 'dfiltr.com - popping filter bubbles', '/user/'+profile.username+'/mail'    ); } );
+	$( '#profile-headerbar-tabs-options' ).click( function(){ profile.history.pushState( { view: 'options' }, 'dfiltr.com - popping filter bubbles', '/user/'+profile.username+'/options' ); } );
 }
 
 profile.createEvents = function(){

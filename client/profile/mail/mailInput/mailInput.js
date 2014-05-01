@@ -7,7 +7,7 @@ mailInput.resize = function(){
 mailInput.sendMessage = function( text ){
 	if( text != '' ){
 		$( '#mailInput-field' ).prop( 'value', '' );
-		profile.socket.emit( 'send', { message: text } );
+		profile.socket.emit( 'send', { message: text, to: mailInput.to, from: profile.username } );
 	};
 };
 
@@ -67,6 +67,7 @@ mailInput.load = function(){
 // initialization
 //-----------------------------------------------------------------------------
 mailInput.init = function( conversation ){
+	mailInput.to = conversation.to;
 	profile.socket.emit( 'partner', conversation.to );
 	profile.socket.emit( 'clear new', conversation.to );
 	mailInput.load();

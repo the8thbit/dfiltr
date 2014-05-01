@@ -1,0 +1,32 @@
+body {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+#help-dock {
+  position: relative;
+  height: 40px;
+  background-color: #fff;
+}
+#help {
+  background: -webkit-linear-gradient(#e6eaee, #fff);
+/* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#e6eaee, #fff);
+/* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#e6eaee, #fff);
+/* For Firefox 3.6 to 15 */
+  background: linear-gradient(#e6eaee, #fff);
+/* Standard syntax */
+  border-top: solid 1px #999;
+}
+#help-ifihadone-margin {
+  height: 50px;
+}
+#help-ifihadone {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+#help-dock {
+  visibility: hidden;
+}

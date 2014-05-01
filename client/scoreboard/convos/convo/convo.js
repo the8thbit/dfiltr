@@ -41,9 +41,9 @@ convo.createHoverFadeEvent = function(){
 	$( '.convo-faded' ).fadeTo( 0, 0.6 );
 	$( '.convo-faded' ).hover(
 		function(){ //hover enter
-			$( this ).fadeTo( 0, 1.0 );
+			$( this ).fadeTo( 'fast', 1.0 );
 		}, function(){ //hover exit
-			$( this ).fadeTo( 0, 0.6 );
+			$( this ).fadeTo( 'fast', 0.6 );
 		}
 	);
 }
@@ -57,6 +57,51 @@ convo.createEvents = function(){
 // initialization
 //-----------------------------------------------------------------------------
 convo.init = function( conversation ){
+	$.get( '/isLogged', function( user ){
+		var hideBlue = false;
+		var hideRed  = false;
+		if( user ){
+			for( var i=0; i < conversation.blueDeltas.length; i+=1 ){
+				if( conversation.blueDeltas[i] === user.username ){
+					hideBlue = true;
+					break;
+				}
+			}
+			for( var i=0; i < conversation.redDeltas.length; i+=1 ){
+				if( conversation.redDeltas[i] === user.username ){
+					hideRed = true;
+					break;
+				}
+			}
+			if( !hideBlue ){ $( '#convo-options-blue-rating' ).css( 'visibility', 'visible' ); }
+			if( !hideRed  ){ $( '#convo-options-red-rating'  ).css( 'visibility', 'visible' ); }			
+		}
+	});
+
+	$( '#convo-options-blue-rating' ).click( function(){
+		$( '#convo-options-blue-rating' ).fadeTo( 'fast', 0, function(){
+			$( '#convo-options-blue-rating' ).css( 'visibility', 'hidden' );
+		})
+		$( '#convo-options-blue-rating' ).unbind( 'click mouseenter mouseleave' );
+		$( '#convo-options-blue-rating' ).css( 'cursor', 'default' );
+		conversation.deltas[0] += 1;
+		conversation.deltas[2] += 1;
+		convo.populateStats( conversation );
+		$.post( '/giveDelta', { convo: conversation._id, color: 'blue' } );
+	});
+
+	$( '#convo-options-red-rating' ).click( function(){
+		$( '#convo-options-red-rating' ).fadeTo( 'fast', 0, function(){
+			$( '#convo-options-red-rating' ).css( 'visibility', 'none' );
+		})
+		$( '#convo-options-red-rating' ).unbind( 'click mouseenter mouseleave' );
+		$( '#convo-options-red-rating' ).css( 'cursor', 'default' );
+		conversation.deltas[1] += 1;
+		conversation.deltas[2] += 1;
+		convo.populateStats( conversation );
+		$.post( '/giveDelta', { convo: conversation._id, color: 'red' } );
+	});
+
 	convo.populate( conversation );
 	convo.createEvents();
 }

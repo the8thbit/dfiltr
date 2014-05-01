@@ -16,10 +16,13 @@ scoreboard.loadReqView = function(){
 	} else if( $( '#scoreboard-meta-view' ).val() === 'convo' ){
 		$( '#scoreboard-viewer' ).load( '/scoreboard/convos/convo', function(){ convo.init( JSON.parse( $( '#scoreboard-meta-convo' ).val()) ); } );
 		scoreboard.selectTab( 'convos' );
-	} else { //loading the convos tab is the default state
+	} else if( $( '#scoreboard-meta-view' ).val() === 'convos' ){  //loading the convos tab is the default state
 		$( '#scoreboard-viewer' ).load( '/scoreboard/convos',       function(){ convos.init(); } );
 		scoreboard.selectTab( 'convos' );
-	};
+	} else {
+		$( '#scoreboard-viewer' ).load( '/scoreboard/users',       function(){ users.init(); } );
+		scoreboard.selectTab( 'users' );
+	}
 }
 
 //--------------------------------------------------------------------------
@@ -51,7 +54,9 @@ scoreboard.createClickSelectEvent = function(){
 scoreboard.createStateChangeEvent = function(){
 	scoreboard.history.Adapter.bind( window, 'statechange', function(){
 		var historyState = scoreboard.history.getState();
-		if( historyState.data.view === 'convos' ){
+		if( historyState.data.view === 'users' ){
+			$( '#scoreboard-viewer' ).load( '/scoreboard/users/',         function(){ users.init(); } );
+		} else if( historyState.data.view === 'convos' ){
 			$( '#scoreboard-viewer' ).load( '/scoreboard/convos/',        function(){ convos.init(); } );
 		} else if( historyState.data.view === 'badges' ){
 			$( '#scoreboard-viewer' ).load( '/scoreboard/badges/',        function(){ badges.init(); } );
@@ -62,8 +67,9 @@ scoreboard.createStateChangeEvent = function(){
 }
 
 scoreboard.createNewStateEvent = function(){
-	$( '#scoreboard-headerbar-tabs-convos'  ).click( function(){ scoreboard.history.pushState( { view: 'convos'  }, 'conversations', '/stats/convos'  ); } );
-	$( '#scoreboard-headerbar-tabs-badges'  ).click( function(){ scoreboard.history.pushState( { view: 'badges'  }, 'badges',        '/stats/badges'  ); } );
+	$( '#scoreboard-headerbar-tabs-users'   ).click( function(){ scoreboard.history.pushState( { view: 'users'  },  'dfiltr.com - popping filter bubbles', '/stats/users'    ); } );
+	$( '#scoreboard-headerbar-tabs-convos'  ).click( function(){ scoreboard.history.pushState( { view: 'convos'  }, 'dfiltr.com - popping filter bubbles', '/stats/convos'   ); } );
+	$( '#scoreboard-headerbar-tabs-badges'  ).click( function(){ scoreboard.history.pushState( { view: 'badges'  }, 'dfiltr.com - popping filter bubbles', '/stats/badges'   ); } );
 }
 
 scoreboard.createEvents = function(){

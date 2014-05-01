@@ -66,6 +66,7 @@ app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
 app.get( '/',                               function( req, res ){ res.render( 'chat/chat'                                   ); } );
+app.get( '/help',                           function( req, res ){ res.render( 'help/help'                                   ); } );
 app.get( '/profile/convos',                 function( req, res ){ res.render( 'profile/convos/convos'                       ); } );
 app.get( '/profile/convos/convoListElm',    function( req, res ){ res.render( 'profile/convos/convoListElm/convoListElm'    ); } );
 app.get( '/profile/convos/convo',           function( req, res ){ res.render( 'profile/convos/convo/convo'                  ); } );
@@ -76,6 +77,8 @@ app.get( '/profile/mail',                   function( req, res ){ res.render( 'p
 app.get( '/profile/mail/mailListElm',       function( req, res ){ res.render( 'profile/mail/mailListElm/mailListElm'        ); } );
 app.get( '/profile/mail/mailConvo',         function( req, res ){ res.render( 'profile/mail/mailConvo/mailConvo'            ); } );
 app.get( '/profile/mail/mailInput',         function( req, res ){ res.render( 'profile/mail/mailInput/mailInput'            ); } );
+app.get( '/scoreboard/users',               function( req, res ){ res.render( 'scoreboard/users/users'                      ); } );
+app.get( '/scoreboard/users/userListElm',   function( req, res ){ res.render( 'scoreboard/users/userListElm/userListElm'    ); } );
 app.get( '/scoreboard/convos',              function( req, res ){ res.render( 'scoreboard/convos/convos'                    ); } );
 app.get( '/scoreboard/convos/convoListElm', function( req, res ){ res.render( 'scoreboard/convos/convoListElm/convoListElm' ); } );
 app.get( '/scoreboard/convos/convo',        function( req, res ){ res.render( 'scoreboard/convos/convo/convo'               ); } );
@@ -219,6 +222,12 @@ app.get( '/stats', function( req, res ){
 	});
 });
 
+app.get( '/stats/users', function( req, res ){
+	res.render('scoreboard/scoreboard', {
+		scoreboardData: { view: 'users' }
+	});
+});
+
 app.get( '/stats/convos', function( req, res ){
 	res.render('scoreboard/scoreboard', {
 		scoreboardData: { view: 'convos' }
@@ -308,8 +317,7 @@ mail.connect = function( socket ){
 	//when server recieves 'send' relay 'message' to client 'send' is a mail message coming from a client, and 'message' is a mail message being sent from the server to a client.
 	socket.on( 'send', function( data ){
 		if( socket.partner ){
-			data.type = 'partner';
-			data.to = socket.user.username;
+			data.type = 'partner';			
 			socket.broadcast.to( socket.partner.username + '@' + socket.user.username ).emit( 'message', data );
 			Mail.findOne( { to: socket.partner.username, from: socket.user.username }, function( err, mail ){
 				if( !mail ){
@@ -340,7 +348,7 @@ mail.connect = function( socket ){
 				mail.newMessages += 1;
 				mail.save();
 			});
-		}	
+		}
 	});
 
 	socket.on( 'clear new', function( to ){
@@ -349,6 +357,7 @@ mail.connect = function( socket ){
 				mail.dateAccessed = Date.now();
 				mail.newMessages = 0;
 				mail.save();
+				Convo.findByIdAndUpdate( mail._id, { newMessages: 0 }, function( err ){ if( err ){ console.log( err ); } } );
 			}
 		});
 	});
@@ -412,14 +421,16 @@ chat.connect = function( socket ){
 					});
 				}
 
-				if( socket.prev_convo ){
+				if( socket.prev_convo && socket.prev_convo.users[0] ){
 					socket.prev_convo.deltas[1] += 1;
 					socket.prev_convo.deltas[2] += 1;
-					Convo.findByIdAndUpdate( socket.prev_convo._id, { deltas: socket.prev_convo.deltas }, function( err ){ if( err ){ console.log( err ); } } );
-				} else if( socket.prev_partner.prev_convo ){
+					socket.prev_convo.redDeltas.push( socket.prev_convo.users[0] );
+					Convo.findByIdAndUpdate( socket.prev_convo._id, { deltas: socket.prev_convo.deltas, redDeltas: socket.prev_convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );
+				} else if( socket.prev_partner.prev_convo && socket.prev_partner.prev_convo.users[1] ){
 					socket.prev_partner.prev_convo.deltas[0] += 1;
 					socket.prev_partner.prev_convo.deltas[2] += 1;
-					Convo.findByIdAndUpdate( socket.prev_partner.prev_convo._id, { deltas: socket.prev_partner.prev_convo.deltas }, function( err ){ if( err ){ console.log( err ); } } );
+					socket.prev_partner.prev_convo.blueDeltas.push( socket.prev_partner.prev_convo.users[1] );
+					Convo.findByIdAndUpdate( socket.prev_partner.prev_convo._id, { deltas: socket.prev_partner.prev_convo.deltas, blueDeltas: socket.prev_partner.prev_convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );
 				}
 				
 				socket.prev_partner.user.deltas += 1;
@@ -486,16 +497,28 @@ chat.virtualDisconnect = function( socket ){
 		}
 
 		if( socket.convo ){
-			if( socket.convo.users[1] ) socket.emit( 'message', { message:
-				'You were talking to ' + '<a href="/user/' + socket.convo.users[1] + '">' + socket.convo.users[1] + '</a>.',
-			type: 'server' } );
+			if( socket.convo.users[0] ){
+				socket.convo.blueDeltas.push( socket.convo.users[0] );
+				Convo.findByIdAndUpdate( socket.convo._id, { blueDeltas: socket.convo.blueDeltas }, function( err ){ if( err ){ console.log( err ); } } );
+				socket.partner.emit( 'message', { message: 'You were talking to ' + '<a href="/user/' + socket.convo.users[0] + '">' + socket.convo.users[0] + '</a>.', type: 'server' } );
+			}
+			if( socket.convo.users[1] ){
+				socket.convo.redDeltas.push( socket.convo.users[1] );
+				Convo.findByIdAndUpdate( socket.convo._id, { redDeltas: socket.convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );
+				socket.emit( 'message', { message: 'You were talking to ' + '<a href="/user/' + socket.convo.users[1] + '">' + socket.convo.users[1] + '</a>.', type: 'server' } );
+			}
 			socket.convo.save();
 		}
 
 		if( socket.partner.convo ){
-			if( socket.partner.convo.users[0] ) socket.emit( 'message', { message: 
-				'You were talking to ' + '<a href="/user/' + socket.partner.convo.users[0] + '">' + socket.partner.convo.users[0] + '</a>' + '.',
-			type: 'server' } );
+			if( socket.partner.convo.users[0] ){
+				socket.partner.convo.blueDeltas.push( socket.partner.convo.users[0] );
+				Convo.findByIdAndUpdate( socket.partner.convo._id, { blueDeltas: socket.partner.convo.blueDeltas }, function( err ){ if( err ){ console.log( err ); } } );
+			}
+			if( socket.partner.convo.users[1] ){
+				socket.partner.convo.redDeltas.push( socket.partner.convo.users[1] );
+				Convo.findByIdAndUpdate( socket.partner.convo._id, { redDeltas: socket.partner.convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );
+			}
 			socket.partner.convo.save();
 		}
 		
@@ -592,20 +615,14 @@ chat.handshake = function( socket, partner ){
 				socket.convo = new Convo( { topic: topics[Math.floor( Math.random() * count )].text } );
 
 				socket.convoId = 0;
-				if( socket.partner ){ socket.partner.convoId = 1; }
-		
-				socket.emit( 'partner connected' );
-				socket.emit( 'message', { message: 'You\'ve found a partner.',            type: 'server' } );
-				socket.emit( 'message', { message: 'partner\'s ID: ' + socket.partner.id, type: 'debug'  } );
-				socket.emit( 'message', { message: 'You were the picker.',                type: 'debug'  } );
-				socket.emit( 'message', { message: socket.convo.topic,                    type: 'server' } );
-
 				if( socket.partner ){ 
+					socket.partner.convoId = 1;		
+					socket.emit( 'partner connected' );
+					socket.emit( 'message', { message: 'You\'ve found a partner.',               type: 'server' } );
+					socket.emit( 'message', { message: socket.convo.topic,                       type: 'server' } );
 					socket.partner.emit( 'partner connected' );
-					socket.partner.emit( 'message', { message: 'You\'ve found a partner.',            type: 'server' } );
-					socket.partner.emit( 'message', { message: 'partner\'s ID: ' + socket.id,         type: 'debug'  } );
-					socket.partner.emit( 'message', { message: 'You were picked from the pool.',      type: 'debug'  } );
-					socket.partner.emit( 'message', { message: socket.convo.topic,                    type: 'server' } );
+					socket.partner.emit( 'message', { message: 'You\'ve found a partner.',       type: 'server' } );
+					socket.partner.emit( 'message', { message: socket.convo.topic,               type: 'server' } );
 				}
 			});
 		});
@@ -911,6 +928,48 @@ app.get( '/mongo/profile/badges/list', function( req, res, next ){
 	});
 });
 
+app.get( '/mongo/scoreboard/users/list', function( req, res, next ){
+	var pageNumber = req.query.pageNum * req.query.pageSize;
+	if( req.query.sort == 'most deltas' ){
+		User.find()
+			.sort( '-deltas' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, users ){
+			if( users !== '' ){ 
+				res.send( users );
+			} else {
+				res.send( null );
+			}
+		});
+	} else if( req.query.sort == 'most badges' ){
+		User.find()
+			.sort( '-badges' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, users ){
+			if( users !== '' ){ 
+				res.send( users );
+			} else {
+				res.send( null );
+			}
+		});
+	} else {
+		User.find()
+			.sort( '-date' )
+			.skip( pageNumber )
+			.limit( req.query.pageSize )
+		.exec( function( err, users ){
+			if( users !== '' ){ 
+				res.send( users );
+			} else {
+				res.send( null );
+			}
+		});
+	}
+});
+
+
 app.get( '/mongo/scoreboard/convos/list', function( req, res, next ){
 	var pageNumber = req.query.pageNum * req.query.pageSize;
 	if( req.query.sort == 'most deltas' ){
@@ -956,5 +1015,17 @@ app.get( '/mongo/scoreboard/badges/list', function( req, res, next ){
 	Badge.find().sort( 'ownerNum' ).exec( function( err, badges ){
 		//do client-side sorting for everything except for sort by rarity (ownerNum): hacky solution because I don't understand aggregation
 		res.send( badges );
+	});
+});
+
+app.get( '/mongo/dock/mailCount', function( req, res, next ){
+	var newMessageCount = 0;
+	Mail.find( { from: req.user.username } ).exec( function( err, mail ){
+		if( mail ){
+			for( var i=0; i < mail.length; i+=1 ){
+				newMessageCount += mail[i].newMessages;
+			}
+			res.send( '' + newMessageCount + '' );
+		}
 	});
 });

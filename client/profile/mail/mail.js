@@ -38,7 +38,7 @@ mail.getMailList = function(){
 
 					//when the user clicks the topic title, load the conversation view page
 					target.find( '.mailListElm' ).click( function(){
-						profile.history.pushState( { view: 'mailConvo', convo: conversation }, 'mail', '/user/'+mail.username+'/mail/'+conversation.to );
+						profile.history.pushState( { view: 'mailConvo', convo: conversation }, 'dfiltr.com - popping filter bubbles', '/user/'+mail.username+'/mail/'+conversation.to );
 					});
 					return target[0];
 				})

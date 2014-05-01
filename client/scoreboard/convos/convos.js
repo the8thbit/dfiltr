@@ -23,16 +23,18 @@ convos.getConvos = function(){
 				convos.pageNum += 1;
 				$( '#convos-content' ).append(
 					$.map( data, function( conversation, i ){
-						var target = $( '<div>', { id: 'convos-content' + i, class: 'convos-content' } ).html( template );
-						target.find( '.convoListElm-topic' ).html( conversation.topic );
-						target.find( '.convoListElm-deltas-blue' ).html( conversation.deltas[0] + ' ∆' );
-						target.find( '.convoListElm-deltas-red' ).html( conversation.deltas[1] + ' ∆' );
-
-						//when the user clicks the topic title, load the convo view page
-						target.find( '.convoListElm-topic' ).click( function(){
-							scoreboard.history.pushState( { view: 'convo', convo: conversation }, 'convo', '/stats/convos/'+conversation._id );
-						});	
-						return target[0];
+						if( conversation.messages.length > 0 ){
+							var target = $( '<div>', { id: 'convos-content' + i, class: 'convos-content' } ).html( template );
+							target.find( '.convoListElm-topic' ).html( conversation.topic );
+							target.find( '.convoListElm-deltas-blue' ).html( conversation.deltas[0] + ' ∆' );
+							target.find( '.convoListElm-deltas-red' ).html( conversation.deltas[1] + ' ∆' );
+	
+							//when the user clicks the topic title, load the convo view page
+							target.find( '.convoListElm-topic' ).click( function(){
+								scoreboard.history.pushState( { view: 'convo', convo: conversation }, 'convo', '/stats/convos/'+conversation._id );
+							});	
+							return target[0];
+						}
 					})
 				);
 				convoListElm.init();
@@ -73,7 +75,7 @@ convos.createEvents = function(){
 convos.init = function(){
 	convos.pageNum = 0;
 	convos.pageSize = 50;
-	convos.sortBy = 'new';
+	convos.sortBy = 'most deltas';
 
 	convos.createEvents();
 	convos.getConvos();

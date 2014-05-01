@@ -64,6 +64,7 @@ mailConvo.load = function( conversation ){
 // initialization
 //-----------------------------------------------------------------------------
 mailConvo.init = function( conversation ){
+	dock.getMail();
 	mailInput.init( conversation );
 	mailConvo.load( conversation );
 }

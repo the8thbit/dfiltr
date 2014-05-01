@@ -19,7 +19,8 @@ var userSchema = new schema( {
 	
 	deltas:    { type: Number, default: 0, required: true },
 	badges:    { type: Number, default: 0, required: true },
-	flags:     { type: Number, default: 0, required: true }
+	flags:     { type: Number, default: 0, required: true },
+	date:      { type: Number, default: Date.now, required: false }
 });
 
 //mongoose middleware automatically hashes passsword before saving to mongodb

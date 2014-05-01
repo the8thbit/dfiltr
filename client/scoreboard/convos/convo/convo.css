@@ -97,10 +97,12 @@
 #convo-options-blue-rating {
   width: 95px;
   background-color: #0b5fa5;
+  visibility: hidden;
 }
 #convo-options-red-rating {
   width: 95px;
   background-color: #ff4c00;
+  visibility: hidden;
 }
 .convo-options-rating span {
   display: block;
@@ -108,4 +110,12 @@
   color: #fff;
   font-size: 15pt;
   font-weight: bold;
+}
+.convo-fake-image {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

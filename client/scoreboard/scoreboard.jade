@@ -1,13 +1,16 @@
 doctype html
 html( lang='en' )
 	head
-		title= 'Stats Page'
+		title='dfiltr.com - popping filter bubbles'
+		link( rel='icon'       type='img/ico'  href='/assets/logo/favicon.png' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/reset/reset.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/newpage/newpage.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/colorbox/colorbox.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )
 		link( rel='stylesheet' type='text/css' href='/client/scoreboard/scoreboard.css' )
+		link( rel='stylesheet' type='text/css' href='/client/scoreboard/users/users.css' )
+		link( rel='stylesheet' type='text/css' href='/client/scoreboard/users/userListElm/userListElm.css' )
 		link( rel='stylesheet' type='text/css' href='/client/scoreboard/convos/convos.css' )
 		link( rel='stylesheet' type='text/css' href='/client/scoreboard/convos/convoListElm/convoListElm.css' )
 		link( rel='stylesheet' type='text/css' href='/client/scoreboard/convos/convo/convo.css' )
@@ -19,6 +22,8 @@ html( lang='en' )
 		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
 		script( src='/client/modules/isotope/isotope.js' )
 		script( src='/client/scoreboard/scoreboard.js' )
+		script( src='/client/scoreboard/users/users.js' )
+		script( src='/client/scoreboard/users/userListElm/userListElm.js' )
 		script( src='/client/scoreboard/convos/convos.js' )
 		script( src='/client/scoreboard/convos/convoListElm/convoListElm.js' )
 		script( src='/client/scoreboard/convos/convo/convo.js' )
@@ -36,6 +41,8 @@ html( lang='en' )
 					td#scoreboard-headerbar-tabs( class='scoreboard-headerbar-cell' )
 						table#scoreboard-headerbar-tabs-table( class='scoreboard-headerbar-subtable' )
 							tr#scoreboard-headerbar-tabs-row
+								td#scoreboard-headerbar-tabs-users( class='scoreboard-headerbar-tab' class='scoreboard-faded' )
+									#scoreboard-headerbar-tabs-users-text( class='scoreboard-headerbar-tab-text' ) ☺
 								td#scoreboard-headerbar-tabs-convos( class='scoreboard-headerbar-tab' class='scoreboard-faded' )
 									#scoreboard-headerbar-tabs-convos-text( class='scoreboard-headerbar-tab-text' ) ∆
 								td#scoreboard-headerbar-tabs-badges( class='scoreboard-headerbar-tab' class='scoreboard-faded' )

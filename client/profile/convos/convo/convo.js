@@ -57,9 +57,30 @@ convo.createEvents = function(){
 // initialization
 //-----------------------------------------------------------------------------
 convo.init = function( conversation ){
+	$.get( '/isLogged', function( user ){
+		var hideBlue = false;
+		var hideRed  = false;
+		if( user ){
+			for( var i=0; i < conversation.blueDeltas.length; i+=1 ){
+				if( conversation.blueDeltas[i] === user.username ){
+					hideBlue = true;
+					break;
+				}
+			}
+			for( var i=0; i < conversation.redDeltas.length; i+=1 ){
+				if( conversation.redDeltas[i] === user.username ){
+					hideRed = true;
+					break;
+				}
+			}
+			if( !hideBlue ){ $( '#convo-options-blue-rating' ).css( 'visibility', 'visible' ); }
+			if( !hideRed  ){ $( '#convo-options-red-rating'  ).css( 'visibility', 'visible' ); }			
+		}
+	});
+
 	$( '#convo-options-blue-rating' ).click( function(){
 		$( '#convo-options-blue-rating' ).fadeTo( 'fast', 0, function(){
-			$( '#convo-options-blue-rating' ).css( 'visibility', 'none' );
+			$( '#convo-options-blue-rating' ).css( 'visibility', 'hidden' );
 		})
 		$( '#convo-options-blue-rating' ).unbind( 'click mouseenter mouseleave' );
 		$( '#convo-options-blue-rating' ).css( 'cursor', 'default' );

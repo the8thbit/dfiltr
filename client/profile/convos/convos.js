@@ -31,7 +31,7 @@ convos.getConvos = function( callback ){
 
 						//when the user clicks the topic title, load the convo view page
 						target.find( '.convoListElm-topic' ).click( function(){
-							profile.history.pushState( { view: 'convo', convo: conversation }, 'convo', '/user/'+convos.username+'/convos/'+conversation._id );
+							profile.history.pushState( { view: 'convo', convo: conversation }, 'dfiltr.com - popping filter bubbles', '/user/'+convos.username+'/convos/'+conversation._id );
 						});	
 						return target[0];
 					})
