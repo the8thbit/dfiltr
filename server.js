@@ -499,11 +499,13 @@ chat.virtualDisconnect = function( socket ){
 		}
 
 		if( socket.convo ){
+			console.log( 'A: ' + socket.convo.users[0] );
 			if( socket.convo.users[0] ){
 				socket.convo.blueDeltas.push( socket.convo.users[0] );
 				Convo.findByIdAndUpdate( socket.convo._id, { blueDeltas: socket.convo.blueDeltas }, function( err ){ if( err ){ console.log( err ); } } );
 				socket.partner.emit( 'message', { message: 'You were talking to ' + '<a href="/user/' + socket.convo.users[0] + '">' + socket.convo.users[0] + '</a>.', type: 'server' } );
 			}
+			console.log( 'B: ' + socket.convo.users[1] );
 			if( socket.convo.users[1] ){
 				socket.convo.redDeltas.push( socket.convo.users[1] );
 				Convo.findByIdAndUpdate( socket.convo._id, { redDeltas: socket.convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );

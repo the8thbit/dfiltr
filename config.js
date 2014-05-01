@@ -61,7 +61,7 @@ if( typeof( window ) === 'undefined' ) {     //
 //IP ADDRESS                                  //
   var CLIENT_IP =                             //
 //'localhost'                                 // toggle on for local testing
-  '435-teamnoname.rhcloud.com'                // toggle on for openshift deploy
+  'dfiltr.com'                                // toggle on for openshift deploy
 //============================================//
 //PORT NUMBER                                 //
   var CLIENT_PORT =                           //
