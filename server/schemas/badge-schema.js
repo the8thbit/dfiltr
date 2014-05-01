@@ -23,16 +23,28 @@ var badgesSchema = new schema( {
 var Badge = mongoose.model( 'badges', badgesSchema );
 
 var newBadge = new Badge( {
-	title: 'Test Badge',
-	image: 'T',
+	title: 'An Easy Badge',
+	image: 'E',
 	difficulty: 'easy',
-	description: 'this is a test badge',
-	ownerNum: 1,
-	owners: [{
-		username: 'dave'
-	}]
+	description: 'this is a test badge to show you what badges look like',
 });
 newBadge.save();
+var newBadge = new Badge( {
+	title: 'A Medium Badge',
+	image: 'M',
+	difficulty: 'medium',
+	description: 'this is a test badge to show you what badges look like',
+});
+newBadge.save();
+var newBadge = new Badge( {
+	title: 'A Hard Badge',
+	image: 'H',
+	difficulty: 'hard',
+	description: 'this is a test badge to show you what badges look like',
+});
+newBadge.save();
+
+
 
 module.exports = mongoose.model( 'badges', badgesSchema );
 
