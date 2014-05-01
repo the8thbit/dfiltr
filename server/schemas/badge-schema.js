@@ -26,21 +26,24 @@ var newBadge = new Badge( {
 	title: 'An Easy Badge',
 	image: 'E',
 	difficulty: 'easy',
-	description: 'this is an easy test badge to show you what badges look like',
+	ownerNum: 0,
+	description: 'this is an easy test badge to show you what badges look like'
 });
 newBadge.save();
 var newBadge = new Badge( {
 	title: 'A Medium Badge',
 	image: 'M',
 	difficulty: 'medium',
-	description: 'this is a medium test badge to show you what badges look like',
+	ownerNum: 0,
+	description: 'this is a medium test badge to show you what badges look like'
 });
 newBadge.save();
 var newBadge = new Badge( {
 	title: 'A Hard Badge',
 	image: 'H',
 	difficulty: 'hard',
-	description: 'this is a hard test badge to show you what badges look like',
+	ownerNum: 0,
+	description: 'this is a hard test badge to show you what badges look like'
 });
 newBadge.save();
 
