@@ -424,11 +424,13 @@ chat.connect = function( socket ){
 				if( socket.prev_convo && socket.prev_convo.users[0] ){
 					socket.prev_convo.deltas[1] += 1;
 					socket.prev_convo.deltas[2] += 1;
+					console.log( 'red: ' + socket.prev_convo.users[0] );
 					socket.prev_convo.redDeltas.push( socket.prev_convo.users[0] );
 					Convo.findByIdAndUpdate( socket.prev_convo._id, { deltas: socket.prev_convo.deltas, redDeltas: socket.prev_convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );
 				} else if( socket.prev_partner.prev_convo && socket.prev_partner.prev_convo.users[1] ){
 					socket.prev_partner.prev_convo.deltas[0] += 1;
 					socket.prev_partner.prev_convo.deltas[2] += 1;
+					console.log( 'blue: ' + socket.prev_partner.prev_convo.users[1] );
 					socket.prev_partner.prev_convo.blueDeltas.push( socket.prev_partner.prev_convo.users[1] );
 					Convo.findByIdAndUpdate( socket.prev_partner.prev_convo._id, { deltas: socket.prev_partner.prev_convo.deltas, blueDeltas: socket.prev_partner.prev_convo.redDeltas }, function( err ){ if( err ){ console.log( err ); } } );
 				}
