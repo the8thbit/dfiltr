@@ -1,4 +1,7 @@
-Simple chat application using node.js, socket.io, jade, and express.
+What is dfiltr?
+====
+
+dfiltr is a social media platform created with the aim of breaking down filter bubbles using the same class of algorithm that is used to generate them. By rewarding users for challenging the views of other users in constructive ways, we hope to open minds and generate productive dialectics.
 
 Style Guide
 ============
