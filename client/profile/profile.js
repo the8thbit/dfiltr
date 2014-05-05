@@ -1,6 +1,4 @@
 var profile = $( '#profile' );
-profile.socket = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/mail' );
-profile.username;
 
 profile.resize = function(){
 	$( '#profile-content' ).css( { 'height': $( window ).height() - ( $( '#profile-dock' ).outerHeight() + 10 ) } ) 
@@ -42,6 +40,20 @@ profile.loadReqView = function(){
 		$( '#profile-viewer' ).load( '/profile/convos/',         function(){ convos.init(    profile.username ); } );
 		profile.selectTab( 'convos' );
 	};
+}
+
+profile.authorize = function(){
+	$.get( '/isLogged', function( user ){
+		if( user ){
+			$( '#profile-dock' ).load( '/modules/dock/auth' );
+			profile.unhideTab( 'mail' );
+			if( user.username === profile.username ){
+				profile.unhideTab( 'options' );
+			}
+		} else {
+			$( '#profile-dock' ).load( '/modules/dock/' );
+		}
+	});
 }
 
 //--------------------------------------------------------------------------
@@ -122,6 +134,7 @@ profile.createEvents = function(){
 // initialization
 //--------------------------------------------------------------------------
 window.onload = function(){
+	profile.socket    = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/mail' );
 	profile.history   = window.History;
 	profile.username  = $( '#profile-headerbar-name-table-cell' ).html();
 
@@ -131,15 +144,5 @@ window.onload = function(){
 	profile.unhideTab( 'convos' );
 	profile.unhideTab( 'badges' );
 
-	$.get( '/isLogged', function( user ){
-		if( user ){
-			$( '#profile-dock' ).load( '/modules/dock/auth' );
-			profile.unhideTab( 'mail' );
-			if( user.username === profile.username ){
-				profile.unhideTab( 'options' );
-			}
-		} else {
-			$( '#profile-dock' ).load( '/modules/dock/' );
-		}
-	});
+	profile.authorize();
 }

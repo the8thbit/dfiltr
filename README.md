@@ -1,10 +1,10 @@
 What is dfiltr?
-====
+===============
 
 dfiltr is a social media platform created with the aim of breaking down filter bubbles using the same class of algorithm which is used to create them. By rewarding users for challenging the views of other users in constructive ways, we hope to open minds and generate productive dialectics.
 
 Style Guide
-============
+===========
 
 * Use tabs for indentation.
 * In general, use the [One True Brace Style](http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS). Occasionally reducing a block to a single line is okay, if it improves the readability of the code.
@@ -19,8 +19,8 @@ Style Guide
 * Don't rely on semicolon insertion! It was a horrible idea that shouldn't have made it into the language spec.
 * The reserved word in a statement (if, for, while, etc...) should touch the opening parenthesis of the expression, and the closing parenthesis of the expression should touch the opening brace of the statement body.
 * In general, place a space between any parentheses/braces and their contents. Don't do this if there aren't any contents (e.g., dumb parens) and use discretion for mathematical expressions.
-* Try to keep functions small. Any function that's over 20 lines is too long, unless it contains repeated code which isn't trivially reduced with loops. Even 20 lines is pushing it.
-* Keep code modular and in separate files. A file that grows beyond 200 lines is getting bulky, and needs to be split up. (Unless doing so would significantly compromise the readability of the code.)
+* Try to keep functions small. Any function that's over 30 lines is too long, unless it contains repeated code which isn't trivially reduced with loops. Even 30 lines is pushing it.
+* Keep code modular and in separate files. A file that grows beyond 300 lines is getting bulky, and needs to be split up. (Unless doing so would significantly compromise the readability of the code.)
 * Use [jshint.com](http://jshint.com) to check your code.
 * When in doubt, consult the existing code.
 * When still in doubt, consult lectures/texts by Douglas Crockford.
@@ -30,7 +30,7 @@ Installation
 ============
 
 Debian/Ubuntu/Mint/Elementary (Debian downstream)
-------------------
+-------------------------------------------------
 
 Install mongodb, node.js and dependencies:
     
@@ -98,11 +98,11 @@ Follow the same procedure as above, but instead of pulling down packages from ap
     make install
     
 Windows
------------------------
+-------
 
 Install GNU/Linux and then follow one of the two procedures above. If you're looking for a distribution to install, I recommend choosing one of the distros listed on [DistroWatch's top list.](http://distrowatch.com/dwres.php?resource=major) The one's near the top of that list tend to be more user friendly. You can then replace your Windows install with your chosen GNU/Linux distribution by creating a LiveCD/DVD/USB, or, if you'd like to keep Windows installed, you can install GNU/Linux to a virtual machine, such as [VirtualBox](https://www.virtualbox.org/).
 
 License
 =======
 
-This project is licensed under the GNU AGPL v3. More information can be found [here.](https://github.com/the8thbit/dfiltr/blob/master/LICENSE.md) If you're unfamiliar with the GNU AGPL, it's basically the same as the GNU GPL, except that the AGPL considers serving output of code remotely (such as from a web server) to be a form of distribution.
+This project is licensed under the GNU AGPL v3. More information can be found [here.](https://github.com/the8thbit/dfiltr/blob/master/LICENSE.md) If you're unfamiliar with the GNU AGPL, it's basically the same as the GNU GPL, except that the AGPL considers serving output of code remotely (such as from a web server) to be a form of distribution. A human readable description of the AGPL can be found [here.](https://www.gnu.org/licenses/why-affero-gpl.html)

@@ -36,18 +36,18 @@ var app = express();
 app.use( express.urlencoded() );
 app.use( express.cookieParser() );
 sessionStore.mongo = sessionStore.createSessionStore( {
-	type:     'mongoDb',
-	username: config.MONGO_USER,
-	password: config.MONGO_PASS,
-	host:     config.MONGO_IP,
-	port:     config.MONGO_PORT,
-	dbName:   config.MONGO_DB_NAME,
+	type:           'mongoDb',
+	username:       config.MONGO_USER,
+	password:       config.MONGO_PASS,
+	host:           config.MONGO_IP,
+	port:           config.MONGO_PORT,
+	dbName:         config.MONGO_DB_NAME,
 	collectionName: 'sessions'
 });
 app.use( express.session( { 
-	key: '435.sid',
+	key:    '435.sid',
 	secret: config.COOKIE_SECRET,
-	store: sessionStore.mongo
+	store:  sessionStore.mongo
 }));
 
 //use stylus templates for CSS
@@ -66,6 +66,7 @@ app.engine( 'jade', require( 'jade' ).__express );
 
 //get the JADE template pages used in the project
 app.get( '/',                               function( req, res ){ res.render( 'chat/chat'                                   ); } );
+app.get( '/chat/ratings',                   function( req, res ){ res.render( 'chat/ratings/ratings'                        ); } );
 app.get( '/help',                           function( req, res ){ res.render( 'help/help'                                   ); } );
 app.get( '/profile/convos',                 function( req, res ){ res.render( 'profile/convos/convos'                       ); } );
 app.get( '/profile/convos/convoListElm',    function( req, res ){ res.render( 'profile/convos/convoListElm/convoListElm'    ); } );
@@ -84,7 +85,6 @@ app.get( '/scoreboard/convos/convoListElm', function( req, res ){ res.render( 's
 app.get( '/scoreboard/convos/convo',        function( req, res ){ res.render( 'scoreboard/convos/convo/convo'               ); } );
 app.get( '/scoreboard/badges',              function( req, res ){ res.render( 'scoreboard/badges/badges'                    ); } );
 app.get( '/scoreboard/badges/badgeView',    function( req, res ){ res.render( 'scoreboard/badges/badgeView/badgeView'       ); } );
-app.get( '/modules/ratings',                function( req, res ){ res.render( 'modules/ratings/ratings'                     ); } );
 app.get( '/modules/dock/auth',              function( req, res ){ res.render( 'modules/dock/dock_in'                        ); } );
 app.get( '/modules/dock',                   function( req, res ){ res.render( 'modules/dock/dock_out'                       ); } );
 app.get( '/modules/login',                  function( req, res ){ res.render( 'modules/login/login'                         ); } );

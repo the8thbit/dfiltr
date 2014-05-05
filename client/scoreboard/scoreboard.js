@@ -25,6 +25,16 @@ scoreboard.loadReqView = function(){
 	}
 }
 
+scoreboard.authorize = function(){
+	$.get( '/isLogged', function( user ){
+		if( user ){
+			$( '#scoreboard-dock' ).load( '/modules/dock/auth' );
+		} else {
+			$( '#scoreboard-dock' ).load( '/modules/dock/' );
+		}
+	});
+}
+
 //--------------------------------------------------------------------------
 // events
 //--------------------------------------------------------------------------
@@ -89,11 +99,5 @@ window.onload = function(){
 	scoreboard.createEvents();
 	scoreboard.loadReqView();
 
-	$.get( '/isLogged', function( user ){
-		if( user ){
-			$( '#scoreboard-dock' ).load( '/modules/dock/auth' );
-		} else {
-			$( '#scoreboard-dock' ).load( '/modules/dock/' );
-		}
-	});
+	scoreboard.authorize();
 }

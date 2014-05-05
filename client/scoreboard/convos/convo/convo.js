@@ -4,27 +4,50 @@ convo.resize = function(){
 	$( '#convo-content' ).css( { 'height' :  $( '#convo' ).height() - ( $( '#convo-stats' ).outerHeight() + $( '#convo-options' ).outerHeight() ) } );
 }
 
-convo.populateConvo = function( conversation ){
-	$( '#convo-content' ).append( '<div class="convo-message convo-topic">' + conversation.topic + '</div>' );
-	for( var i=0; i < conversation.messages.length; i++ ){
-		if( conversation.messages[i].userId == 0 ){
-			$( '#convo-content' ).append( '<div class="convo-message convo-blue">' + conversation.messages[i].message + '</div>' );
+convo.unhideRatings = function(){
+	$.get( '/isLogged', function( user ){
+		var hideBlue = false;
+		var hideRed  = false;
+		if( user ){
+			for( var i=0; i < convo.content.blueDeltas.length; i+=1 ){
+				if( convo.content.blueDeltas[i] === user.username ){
+					hideBlue = true;
+					break;
+				}
+			}
+			for( var i=0; i < convo.content.redDeltas.length; i+=1 ){
+				if( convo.content.redDeltas[i] === user.username ){
+					hideRed = true;
+					break;
+				}
+			}
+			if( !hideBlue ){ $( '#convo-options-blue-rating' ).css( 'visibility', 'visible' ); }
+			if( !hideRed  ){ $( '#convo-options-red-rating'  ).css( 'visibility', 'visible' ); }			
+		}
+	});
+}
+
+convo.populateConvo = function(){
+	$( '#convo-content' ).append( '<div class="convo-message convo-topic">' + convo.content.topic + '</div>' );
+	for( var i=0; i < convo.content.messages.length; i++ ){
+		if( convo.content.messages[i].userId == 0 ){
+			$( '#convo-content' ).append( '<div class="convo-message convo-blue">' + convo.content.messages[i].message + '</div>' );
 		} else {
-			$( '#convo-content' ).append( '<div class="convo-message convo-red">'  + conversation.messages[i].message + '</div>' );
+			$( '#convo-content' ).append( '<div class="convo-message convo-red">'  + convo.content.messages[i].message + '</div>' );
 		}
 	}
 }
 
-convo.populateStats = function( conversation ){
-	if( conversation.users[0] ){ $( '#convo-stats-blue-name span'  ).html( '<a href="/user/'+conversation.users[0]+'/">'+conversation.users[0]+'</a>' ); }
-	if( conversation.users[1] ){ $( '#convo-stats-red-name span'   ).html( '<a href="/user/'+conversation.users[1]+'/">'+conversation.users[1]+'</a>' ); }
-	$( '#convo-stats-blue-score span' ).html( conversation.deltas[0] + ' ∆' );
-	$( '#convo-stats-red-score span'  ).html( conversation.deltas[1] + ' ∆' );
+convo.populateStats = function(){
+	if( convo.content.users[0] ){ $( '#convo-stats-blue-name span'  ).html( '<a href="/user/'+convo.content.users[0]+'/">'+convo.content.users[0]+'</a>' ); }
+	if( convo.content.users[1] ){ $( '#convo-stats-red-name span'   ).html( '<a href="/user/'+convo.content.users[1]+'/">'+convo.content.users[1]+'</a>' ); }
+	$( '#convo-stats-blue-score span' ).html( convo.content.deltas[0] + ' ∆' );
+	$( '#convo-stats-red-score span'  ).html( convo.content.deltas[1] + ' ∆' );
 }
 
-convo.populate = function( conversation ){
-	convo.populateConvo( conversation );
-	convo.populateStats( conversation );
+convo.populate = function(){
+	convo.populateConvo();
+	convo.populateStats();
 }
 
 //-----------------------------------------------------------------------------
@@ -48,7 +71,27 @@ convo.createHoverFadeEvent = function(){
 	);
 }
 
+convo.createRateEvent = function( color ){
+	$( '#convo-options-'+color+'-rating' ).click( function(){
+		$( '#convo-options-'+color+'-rating' ).fadeTo( 'fast', 0, function(){
+			$( '#convo-options-'+color+'-rating' ).css( 'visibility', 'hidden' );
+		})
+		$( '#convo-options-'+color+'-rating' ).unbind( 'click mouseenter mouseleave' );
+		$( '#convo-options-'+color+'-rating' ).css( 'cursor', 'default' );
+		if( color === 'blue' ){
+			convo.content.deltas[0] += 1;
+		} else if( color === 'red' ){
+			convo.content.deltas[1] += 1;
+		}
+		convo.content.deltas[2] += 1;
+		convo.populateStats( convo.content );
+		$.post( '/giveDelta', { convo: convo.content._id, color: color } );
+	});
+}
+
 convo.createEvents = function(){
+	convo.createRateEvent( 'blue' );
+	convo.createRateEvent( 'red' );
 	convo.createResizeEvent();
 	convo.createHoverFadeEvent();
 }
@@ -56,52 +99,9 @@ convo.createEvents = function(){
 //-----------------------------------------------------------------------------
 // initialization
 //-----------------------------------------------------------------------------
-convo.init = function( conversation ){
-	$.get( '/isLogged', function( user ){
-		var hideBlue = false;
-		var hideRed  = false;
-		if( user ){
-			for( var i=0; i < conversation.blueDeltas.length; i+=1 ){
-				if( conversation.blueDeltas[i] === user.username ){
-					hideBlue = true;
-					break;
-				}
-			}
-			for( var i=0; i < conversation.redDeltas.length; i+=1 ){
-				if( conversation.redDeltas[i] === user.username ){
-					hideRed = true;
-					break;
-				}
-			}
-			if( !hideBlue ){ $( '#convo-options-blue-rating' ).css( 'visibility', 'visible' ); }
-			if( !hideRed  ){ $( '#convo-options-red-rating'  ).css( 'visibility', 'visible' ); }			
-		}
-	});
-
-	$( '#convo-options-blue-rating' ).click( function(){
-		$( '#convo-options-blue-rating' ).fadeTo( 'fast', 0, function(){
-			$( '#convo-options-blue-rating' ).css( 'visibility', 'hidden' );
-		})
-		$( '#convo-options-blue-rating' ).unbind( 'click mouseenter mouseleave' );
-		$( '#convo-options-blue-rating' ).css( 'cursor', 'default' );
-		conversation.deltas[0] += 1;
-		conversation.deltas[2] += 1;
-		convo.populateStats( conversation );
-		$.post( '/giveDelta', { convo: conversation._id, color: 'blue' } );
-	});
-
-	$( '#convo-options-red-rating' ).click( function(){
-		$( '#convo-options-red-rating' ).fadeTo( 'fast', 0, function(){
-			$( '#convo-options-red-rating' ).css( 'visibility', 'none' );
-		})
-		$( '#convo-options-red-rating' ).unbind( 'click mouseenter mouseleave' );
-		$( '#convo-options-red-rating' ).css( 'cursor', 'default' );
-		conversation.deltas[1] += 1;
-		conversation.deltas[2] += 1;
-		convo.populateStats( conversation );
-		$.post( '/giveDelta', { convo: conversation._id, color: 'red' } );
-	});
-
-	convo.populate( conversation );
+convo.init = function( content ){
+	convo.content = content;
+	convo.unhideRatings();
+	convo.populate();
 	convo.createEvents();
 }

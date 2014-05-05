@@ -8,16 +8,11 @@ html( lang='en' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/colorbox/colorbox.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )
-		link( rel='stylesheet' type='text/css' href='/client/modules/ratings/ratings.css' )
+		link( rel='stylesheet' type='text/css' href='/client/chat/ratings/ratings.css' )
 		link( rel='stylesheet' type='text/css' href='/client/chat/chat.css' )
-		script( src='/config.js' )
-		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
-		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
-		script( src='/socket.io/socket.io.js' )
-		script( src='/client/chat/chat.js' )
 	body
 		#chat-dock
-		#chat-wrapper
+		#chat
 			#chat-output-wrapper
 				#chat-output  
 			#chat-input-wrapper
@@ -27,3 +22,9 @@ html( lang='en' )
 						#chat-input-field-container
 							textarea#chat-input-field
 					input#chat-input-send( class='chat-input-button' type='button' value='send' )
+
+		script( src='/config.js' )
+		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
+		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
+		script( src='/socket.io/socket.io.js' )
+		script( src='/client/chat/chat.js' )

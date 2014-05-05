@@ -24,7 +24,7 @@ users.getUsers = function(){
 				$( '#users-content' ).append(
 					$.map( data, function( userObj, i ){
 						var target = $( '<div>', { id: 'users-content' + i, class: 'users-content' } ).html( template );
-						target.find( '.userListElm-topic' ).html( userObj.username );
+						target.find( '.userListElm-username' ).html( userObj.username );
 						target.find( '.userListElm-stats-deltas' ).html( userObj.deltas + ' ∆' );
 						target.find( '.userListElm-stats-badges' ).html( userObj.badges + ' ☆' );
 	
