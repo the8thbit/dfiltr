@@ -47,8 +47,6 @@ userSchema.pre( 'save', function( next ) {
 //password verification
 userSchema.methods.comparePassword = function( candidatePassword, hash, cb ) {
 	bcrypt.compare( candidatePassword, hash, function( err, isMatch ) {
-		console.log( 'cannidate: ' + candidatePassword );
-		console.log( 'this hash: ' + hash );
 		if( err ) { return cb( err ) };
 		cb( null, isMatch );
 	});

@@ -1,4 +1,4 @@
-var config        = require( './../../config.js' );
+var config = require( './../../config.js' );
 
 //=============================================================================
 //ESTABLISH CONNECTION
@@ -24,4 +24,4 @@ Client = require( './client-schema.js' );
 Topic  = require( './topic-schema.js'  );
 Convo  = require( './convo-schema.js'  );
 Mail   = require( './mail-schema.js'   );
-Badge  = require( './badge-schema.js' );
+Badge  = require( './badge-schema.js'  );
