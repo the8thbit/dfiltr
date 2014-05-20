@@ -1,12 +1,12 @@
 module.exports = function( app ){
 	app.post( '/giveDelta', function( req, res, next ){
 		if( req.user && req.user.username && req.body.convo && req.body.color ){
-			giveDelta( req.user.username, req.body.convo, req.body.color );
+			this.giveDelta( req.user.username, req.body.convo, req.body.color );
 		}
 		res.send( null );
 	});
 
-	var giveDelta = function( username, convo_id, color ){
+	this.giveDelta = function( username, convo_id, color ){
 		var failure = false;	
 
 		Convo.findById( convo_id, function( err, convo ){		
@@ -52,4 +52,6 @@ module.exports = function( app ){
 		});
 		app.handleErr( err );
 	}
+
+	return this;
 }
