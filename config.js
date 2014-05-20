@@ -61,7 +61,7 @@ if( typeof( window ) === 'undefined' ) {     // if there isn't a window, then th
 //IP ADDRESS                                  //
   var CLIENT_IP =                             //
 //'localhost'                                 // toggle on for local testing
-  dfiltr.com                                  // toggle on for openshift deploy (swap in your own domain)
+  'dfiltr.com'                                // toggle on for openshift deploy (swap in your own domain)
 //============================================//
 //PORT NUMBER                                 //
   var CLIENT_PORT =                           //
