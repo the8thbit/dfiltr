@@ -45,7 +45,7 @@ profile.loadReqView = function(){
 profile.authorize = function(){
 	$.get( '/isLogged', function( user ){
 		if( user ){
-			$( '#profile-dock' ).load( '/modules/dock/auth' );
+			$( '#profile-dock' ).load( '/modules/dock/auth', function(){ dock.getMail(); } );
 			profile.unhideTab( 'mail' );
 			if( user.username === profile.username ){
 				profile.unhideTab( 'options' );

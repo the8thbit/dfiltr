@@ -9,6 +9,7 @@ body {
 /* For Firefox 3.6 to 15 */
   background: linear-gradient(#e6eaee, #fff);
 /* Standard syntax */
+  overflow: hidden;
 }
 #chat-dock {
   position: relative;

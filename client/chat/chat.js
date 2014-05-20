@@ -214,7 +214,8 @@ window.onload = function(){
 	chat.socket     = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/main' );
 	chat.inputField = $( '#chat-input-field' );
 	chat.messages   = []; //the list of all messages to the user
-	chat.margin     = $( '#chat' ).css( 'margin-left' )[0];
+	chat.margin     = $( '#chat' ).css( 'margin-right' )[0];
+	console.log( chat.margin );
 
 	chat.authorize();
 	chat.createEvents();

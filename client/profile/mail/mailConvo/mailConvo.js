@@ -64,7 +64,7 @@ mailConvo.load = function( conversation ){
 // initialization
 //-----------------------------------------------------------------------------
 mailConvo.init = function( conversation ){
-	dock.getMail();
-	mailInput.init( conversation );
+	if(  typeof( dock ) != 'undefined' ){ dock.getMail(); }
 	mailConvo.load( conversation );
+	$( '#profile-input' ).load( '/profile/mail/mailInput/', function(){ mailInput.init( conversation ); } );
 }
