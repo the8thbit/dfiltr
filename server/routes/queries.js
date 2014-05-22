@@ -14,7 +14,7 @@ module.exports = function( app ){
 	//--------------------------------------------------------------------------
 	// profile routes
 	//--------------------------------------------------------------------------
-	this.getProfileConvosList = function( req, res, next ){
+	this.getProfileConvoList = function( req, res, next ){
 		var pageNumber = req.query.pageNum * req.query.pageSize;
 		if( req.query.sort == 'most deltas' ){
 			Convo.find( { users: { $in: [req.query.username] } } )
