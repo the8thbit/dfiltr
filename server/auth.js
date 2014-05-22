@@ -52,12 +52,13 @@ module.exports = function( app ){
 		app.pio.users.create( {
 			pio_uid: app.pio.users.index.value,
 			pio_inactive: false
-		}).exec( function( res ){ //when the user has been created, create its items: Each user has app.pio.ITEMS_PER_USER items associated with it
+		}, function( err, res ){ //when the user has been created, create its items: Each user has app.pio.ITEMS_PER_USER items associated with it
 			newUser.pio_user = app.pio.users.index.value;
 			User.findByIdAndUpdate(  newUser._id,             { pio_user: newUser.pio_user          } ).error( app.handleErr );
 			Index.findByIdAndUpdate( app.pio.users.index._id, { value:    app.pio.users.index.value } ).error( app.handleErr );
 			if( app.pioMode ){ createPioItems( newUser ) };
-		}).error( app.handleErr );
+			app.handleErr;
+		})
 	}
 
 	var createPioItems = function( newUser ){
@@ -67,14 +68,15 @@ module.exports = function( app ){
 				pio_iid: pio.items.index.value,
 				pio_itypes: 'uitem',
 				pio_inactive: false
-			}).exec( function( res ){
+			}, function( err, res ){
 				pioItemNum += 1;
 				newUser.pio_items.push( pioItemNum );
 				if( newUser.pio_items.length == app.pio.ITEMS_PER_USER ){
 					User.findByIdAndUpdate(  newUser._id,             { pio_items: newUser.pio_items         } ).error( app.handleErr );
 					Index.findByIdAndUpdate( app.pio.items.index._id, { value:     app.pio.items.index.value } ).error( app.handleErr );
 				}
-			}).error( app.handleErr );
+				app.handleErr;
+			});
 		}
 	}
 
