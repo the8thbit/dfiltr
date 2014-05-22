@@ -58,7 +58,7 @@ users.createSortEvent = function(){
 		users.sortBy = $( this ).val();
 		$( '#users-content' ).html( '' );
 		$( '#users-content' ).unbind( 'scroll' );
-		users.getUsers();
+
 	});
 }
 
