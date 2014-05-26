@@ -30,6 +30,8 @@ chat.authorize = function(){
 //adds a new line to the output field
 chat.addMessage = function( data ){
 	if( data && data.message && data.message != '' && data.type ){
+		data.message = data.message.replace( /\n/g, '<br />' ); //translates newlines from javascript to html
+		data.message = data.message.replace( /\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;' ); //translates tabs from javascript to html
 		if( data.type == 'server'  ){ var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
 		if( data.type == 'partner' ){ var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
 		if( data.type == 'self'    ){ var text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
@@ -47,6 +49,7 @@ chat.addMessage = function( data ){
 //sends a message to the partner
 chat.sendMessage = function( text ){
 	if( text != '' ){
+		chat.addMessage( { message: text, type:'self' } );
 		chat.inputField.prop( 'value', '' );
 		chat.socket.emit( 'send', { message: text } );
 	};
@@ -136,12 +139,10 @@ chat.createSendEvent = function(){
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ){
 			e.preventDefault();
-			chat.addMessage( { message: chat.inputField.prop( 'value' ), type:'self' } );
 			chat.sendMessage( chat.inputField.prop( 'value' ) );
 		};
 	});
 	$( '#chat-input-send' ).on( 'click', function(){
-		chat.addMessage( { message: chat.inputField.prop( 'value' ), type:'self' } );
 		chat.sendMessage( chat.inputField.prop( 'value' ) );
 	});
 }
