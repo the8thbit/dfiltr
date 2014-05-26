@@ -6,6 +6,7 @@ mailInput.resize = function(){
 
 mailInput.sendMessage = function( text ){
 	if( text != '' ){
+		mailConvo.addMessage( { message: $( '#mailInput-field' ).prop( 'value' ), type:'self' } );
 		$( '#mailInput-field' ).prop( 'value', '' );
 		profile.socket.emit( 'send', { message: text, to: mailInput.to, from: profile.username } );
 	};
@@ -24,13 +25,11 @@ mailInput.createSendEvent = function(){
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ){
 			e.preventDefault();
-			mailConvo.addMessage( { message: $( '#mailInput-field' ).prop( 'value' ), type:'self' } );
 			mailInput.sendMessage( $( '#mailInput-field' ).prop( 'value' ) );
 		};
 	});
 
 	$( '#mailInput-send' ).on( 'click', function(){
-		mailConvo.addMessage( { message: $( '#mailInput-field' ).prop( 'value' ), type:'self' } );
 		mailInput.sendMessage( $( '#mailInput-field' ).prop( 'value' ) );
 	});
 }

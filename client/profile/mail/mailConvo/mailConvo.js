@@ -7,6 +7,7 @@ mailConvo.resize = function(){
 
 mailConvo.addMessage = function( data ){
 	if( data && data.message && data.message != '' && data.type ){
+		data.message = data.message.replace( /\n/g, '<br />' ); //translates newlines from javascript to html
 		if( data.type == 'partner' ){ var text = '<div class="mailConvo-message mailConvo-red">'  + data.message + '</span>'; } else
 		if( data.type == 'self'    ){ var text = '<div class="mailConvo-message mailConvo-blue">' + data.message + '</span>'; }
 		$( '#mailConvo-content' ).append( text );

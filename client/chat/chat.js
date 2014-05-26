@@ -31,7 +31,6 @@ chat.authorize = function(){
 chat.addMessage = function( data ){
 	if( data && data.message && data.message != '' && data.type ){
 		data.message = data.message.replace( /\n/g, '<br />' ); //translates newlines from javascript to html
-		data.message = data.message.replace( /\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;' ); //translates tabs from javascript to html
 		if( data.type == 'server'  ){ var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
 		if( data.type == 'partner' ){ var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
 		if( data.type == 'self'    ){ var text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
