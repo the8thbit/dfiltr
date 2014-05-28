@@ -29,11 +29,16 @@ chat.authorize = function(){
 	
 //adds a new line to the output field
 chat.addMessage = function( data ){
+	var text;
 	if( data && data.message && data.message != '' && data.type ){
-		data.message = data.message.replace( /\n/g, '<br />' ); //translates newlines from javascript to html
-		if( data.type == 'server'  ){ var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
-		if( data.type == 'partner' ){ var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
-		if( data.type == 'self'    ){ var text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
+		data.message = chat.showdown.makeHtml( data.message ); //markdown conversion (js string to html)
+		data.message = data.message.replace( /\n/g, '<br/>' ); //translates newlines from javascript to html
+		data.message = data.message.replace( /<p>/g, '' );
+		data.message = data.message.replace( /<\/p>/g, '' );
+		console.log( data.message );
+		if( data.type == 'server'  ){ text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
+		if( data.type == 'partner' ){ text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
+		if( data.type == 'self'    ){ text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
 		//if( data.type == 'debug'   ){ var text = '<span class="chat-message-debug">'   + data.message + '</span>'; }
 		if( text ){ chat.messages.push( text ); }
 		var html = '';
@@ -212,6 +217,7 @@ chat.createProtocols = function(){
 //-----------------------------------------------------------------------------
 window.onload = function(){
 	chat.socket     = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/main' );
+	chat.showdown   = new Showdown.converter();
 	chat.inputField = $( '#chat-input-field' );
 	chat.messages   = []; //the list of all messages to the user
 	chat.margin     = $( '#chat' ).css( 'margin-right' )[0];
