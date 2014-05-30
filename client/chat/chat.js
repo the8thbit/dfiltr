@@ -29,16 +29,10 @@ chat.authorize = function(){
 	
 //adds a new line to the output field
 chat.addMessage = function( data ){
-	var text;
 	if( data && data.message && data.message != '' && data.type ){
-		data.message = chat.showdown.makeHtml( data.message ); //markdown conversion (js string to html)
-		data.message = data.message.replace( /\n/g, '<br/>' ); //translates newlines from javascript to html
-		data.message = data.message.replace( /<p>/g, '' );
-		data.message = data.message.replace( /<\/p>/g, '' );
-		console.log( data.message );
-		if( data.type == 'server'  ){ text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
-		if( data.type == 'partner' ){ text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
-		if( data.type == 'self'    ){ text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
+		if( data.type == 'server'  ){ var text = '<span class="chat-message-server">'  + data.message + '</span>'; } else
+		if( data.type == 'partner' ){ var text = '<span class="chat-message-partner">' + data.message + '</span>'; } else
+		if( data.type == 'self'    ){ var text = '<span class="chat-message-self">'    + data.message + '</span>'; } //else
 		//if( data.type == 'debug'   ){ var text = '<span class="chat-message-debug">'   + data.message + '</span>'; }
 		if( text ){ chat.messages.push( text ); }
 		var html = '';
@@ -53,7 +47,6 @@ chat.addMessage = function( data ){
 //sends a message to the partner
 chat.sendMessage = function( text ){
 	if( text != '' ){
-		chat.addMessage( { message: text, type:'self' } );
 		chat.inputField.prop( 'value', '' );
 		chat.socket.emit( 'send', { message: text } );
 	};
@@ -143,10 +136,12 @@ chat.createSendEvent = function(){
 		//ENTER KEY: send message 
 		if( e.keyCode == 13 && !e.shiftKey ){
 			e.preventDefault();
+			chat.addMessage( { message: chat.inputField.prop( 'value' ), type:'self' } );
 			chat.sendMessage( chat.inputField.prop( 'value' ) );
 		};
 	});
 	$( '#chat-input-send' ).on( 'click', function(){
+		chat.addMessage( { message: chat.inputField.prop( 'value' ), type:'self' } );
 		chat.sendMessage( chat.inputField.prop( 'value' ) );
 	});
 }
@@ -217,7 +212,6 @@ chat.createProtocols = function(){
 //-----------------------------------------------------------------------------
 window.onload = function(){
 	chat.socket     = io.connect( 'http://' + CLIENT_IP + ':' + CLIENT_PORT + '/main' );
-	chat.showdown   = new Showdown.converter();
 	chat.inputField = $( '#chat-input-field' );
 	chat.messages   = []; //the list of all messages to the user
 	chat.margin     = $( '#chat' ).css( 'margin-right' )[0];
@@ -227,3 +221,4 @@ window.onload = function(){
 	chat.createEvents();
 	chat.createProtocols();
 };
+
