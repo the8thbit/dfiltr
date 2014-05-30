@@ -56,9 +56,9 @@ app.routes.other    = require( './server/routes/other.js'   )( app );
 
 //use socket.io and give it a location to listen on 
 app.protocol = require( 'socket.io' ).listen( app.listen( app.config.SERVER_PORT, app.config.SERVER_IP ) );
-//app.protocol.set( 'log level', 1 );
-//app.protocol.set( 'browser client minification', true );
-//app.protocol.set( 'browser client etag', true );
+app.protocol.set( 'log level', 1 );
+app.protocol.set( 'browser client minification', true );
+app.protocol.set( 'browser client etag', true );
 
 //use passport.socket.io to link passport sessions with a socket
 app.protocol.set( 'authorization', app.auth.passportSIO.authorize( {

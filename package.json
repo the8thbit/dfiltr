@@ -8,7 +8,7 @@
 		"body-parser": "latest",
 		"jade": "latest",
 		"stylus": "latest",
-		"socket.io": "latest",
+		"socket.io": "0.9.x",
 		"mongodb": "latest",
 		"mongoose": "latest",
 		"passport": "latest",
