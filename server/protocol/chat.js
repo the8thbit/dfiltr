@@ -12,6 +12,7 @@ module.exports = function( app ){
 	// create our socket and connect to the server
 	//-----------------------------------------------------------------------------
 	chat.connect = function( socket ){
+		console.log( socket );
 		socket.user = socket.handshake.user;
 		Client.findOne( { ip: socket.handshake.address.address }, function( err, res ){ 
 			socket.client = res;
