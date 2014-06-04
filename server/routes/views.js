@@ -6,6 +6,9 @@ module.exports = function( app ){
 
 	//get the JADE template pages used in the project
 	app.get( '/',                               function( req, res ){ res.render( 'splash/splash'                               ); } );
+	app.get( '/actions/random',                 function( req, res ){ res.render( 'splash/actions/random/random'                ); } );
+	app.get( '/actions/tags',                   function( req, res ){ res.render( 'splash/actions/tags/tags'                    ); } );
+	app.get( '/actions/custom',                 function( req, res ){ res.render( 'splash/actions/custom/custom'                ); } );
 	app.get( '/chat',                           function( req, res ){ res.render( 'chat/chat'                                   ); } );
 	app.get( '/chat/ratings',                   function( req, res ){ res.render( 'chat/ratings/ratings'                        ); } );
 

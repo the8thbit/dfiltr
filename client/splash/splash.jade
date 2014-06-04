@@ -3,20 +3,36 @@ html( lang='en' )
 	head
 		title='dfiltr.com - popping filter bubbles'
 		link( rel='icon'       type='img/ico'  href='/assets/logo/favicon.png' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/tag-it/css/jquery.tagit.css' )
+		link( rel='stylesheet' type='text/css' href='/client/modules/tag-it/css/tagit.ui-zendesk.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/reset/reset.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/newpage/newpage.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/colorbox/colorbox.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/login/login.css' )
 		link( rel='stylesheet' type='text/css' href='/client/modules/dock/dock.css' )
 		link( rel='stylesheet' type='text/css' href='/client/splash/splash.css' )
+		link( rel='stylesheet' type='text/css' href='/client/splash/actions/random/random.css' )
+		link( rel='stylesheet' type='text/css' href='/client/splash/actions/tags/tags.css' )
+		link( rel='stylesheet' type='text/css' href='/client/splash/actions/custom/custom.css' )
 	body
 		#splash-dock
 		#splash
+			#splash-meta
 			#splash-content
-				#splash-button-wrapper
-					a#splash-button( class='splash-faded' href='/chat' ) start chat
+				#splash-viewer
+					#splash-vertcent
+						img#splash-logo( src='/assets/logo/logo_splash.png' )
+						#splash-options
+							#splash-options-tabs
+								#splash-options-tabs-random.splash-faded random question
+								#splash-options-tabs-tags.splash-faded use tags
+								#splash-options-tabs-custom.splash-faded custom question
+							#splash-options-actions
 
 		script( src='/config.js' )
 		script( src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js' )
+		script( src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js" )
+		script( src='/client/modules/history.js/scripts/bundled/html4+html5/jquery.history.js' )
 		script( src='/client/modules/colorbox/jquery.colorbox-min.js' )
+		script( src='/client/modules/tag-it/js/tag-it.js' )
 		script( src='/client/splash/splash.js' )

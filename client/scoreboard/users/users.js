@@ -28,8 +28,8 @@ users.getUsers = function(){
 						target.find( '.userListElm-stats-deltas' ).html( userObj.deltas + ' ∆' );
 						target.find( '.userListElm-stats-badges' ).html( userObj.badges + ' ☆' );
 	
-						//when the user clicks the topic title, load the user view page
-						target.find( '.userListElm-topic' ).click( function(){
+						//when the user clicks a username, load the user view page
+						target.find( '.userListElm-username' ).click( function(){
 							window.location = '/user/'+userObj.username;
 						});	
 						return target[0];

@@ -12,7 +12,6 @@ body {
   background-color: #fff;
 }
 #splash {
-  width: auto;
   background: -webkit-linear-gradient(#e6eaee, #fff);
 /* For Safari 5.1 to 6.0 */
   background: -o-linear-gradient(#e6eaee, #fff);
@@ -29,22 +28,91 @@ body {
   padding: 5px;
   font-size: 1.5em;
 }
-#splash-button-wrapper {
-  margin-top: 200px;
-  width: 290px;
-  width: auto;
+#splash-viewer {
+  display: table;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border: 1px solid #999;
 }
-#splash-button {
+#splash-vertcent {
+  display: table-cell;
   vertical-align: middle;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  margin: auto;
+}
+#splash-logo {
+  max-width: 70%;
+}
+#splash-options {
+  display: table;
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 15px;
+  background-color: #fff;
+}
+#splash-options-tabs {
+  display: table;
+  height: 50px;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 5px;
+}
+#splash-options-tabs-random {
+  display: table-cell;
+  width: 33.33%;
+  vertical-align: middle;
   background: #0b5fa5;
   color: #fff;
   font-weight: bold;
-  font-size: 30pt;
+  font-size: 18pt;
+  cursor: pointer;
+  -webkit-user-select: none;
+/* Chrome/Safari */
+  -moz-user-select: none;
+/* Firefox */
+  -ms-user-select: none;
+/* IE10+ */
+  -o-user-select: none;
+  user-select: none;
+}
+#splash-options-tabs-tags {
+  display: table-cell;
+  width: 33.33%;
+  vertical-align: middle;
+  background: #0b5fa5;
+  color: #fff;
+  font-weight: bold;
+  font-size: 18pt;
+  cursor: pointer;
+  -webkit-user-select: none;
+/* Chrome/Safari */
+  -moz-user-select: none;
+/* Firefox */
+  -ms-user-select: none;
+/* IE10+ */
+  -o-user-select: none;
+  user-select: none;
+}
+#splash-options-tabs-custom {
+  display: table-cell;
+  width: 33.33%;
+  vertical-align: middle;
+  background: #0b5fa5;
+  color: #fff;
+  font-weight: bold;
+  font-size: 18pt;
+  cursor: pointer;
+  -webkit-user-select: none;
+/* Chrome/Safari */
+  -moz-user-select: none;
+/* Firefox */
+  -ms-user-select: none;
+/* IE10+ */
+  -o-user-select: none;
+  user-select: none;
+}
+#splash-options-actions {
+  height: 60px;
+  width: 100%;
 }
 #splash-dock {
   visibility: hidden;
