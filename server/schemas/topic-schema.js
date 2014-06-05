@@ -17,8 +17,13 @@ var topicSchema = new schema( {
 
 var Topic = mongoose.model( 'topic', topicSchema )
 
-//unhidden (tag liberally)
 var newTopic = new Topic( { text: '' } );
+	newTopic.text     = 'Does gun control have a positive or negative impact?';
+	newTopic.tags     = ['gun control', 'guns', 'weapons', 'politics', 'law', 'crime', 'violence'];
+	newTopic.save();
+
+//unhidden (tag liberally)
+/*var newTopic = new Topic( { text: '' } );
 	newTopic.text     = 'Does human nature make communism impossible?';
 	newTopic.tags     = ['socialism', 'politics', 'economics', 'psychology', 'sociology'];
 	newTopic.save();
@@ -641,7 +646,7 @@ var newTopic = new Topic( { text: '' } );
 var newTopic = new Topic( { text: '' } );
 	newTopic.text     = 'Who was more correct, Huxley or Orwell?';
 	newTopic.tags     = ['literature', 'literary critique', 'literary analysis'];
-	newTopic.save();
+	newTopic.save();*/
 
 
 module.exports = mongoose.model( 'topic', topicSchema );

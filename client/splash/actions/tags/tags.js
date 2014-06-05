@@ -26,12 +26,13 @@ tags.init = function(){
 			'cryptocurrency', 'bitcoin', 'money', 'finance', 'crime', 'death', 'justice', 'feminism',
 			'epistemology', 'science', 'education', 'metaphysics‎', 'art', 'pop culture', 'drugs', 'cannabis',
 			'marijuana', 'LSD', 'psychadelics', 'farming', 'food', 'physics', 'cosmology', 'metaphysics',
-			'medacine', 'labor', 'value', 'sports', 'advertising', 'body image', 'film',
-			'film critique', 'film analysis', 'critique', 'literature', 'literary studies',
-			'literary critique', 'artificial intelligence', 'neurology', 'mathematics', 'metaphilosophy',
-			'climate science', 'philosophy of science', 'video games', 'game critique', 'video game critique',
-			'critique', 'games', 'ludology', 'game studies', 'hypothetical', 'hitler', 'story telling',
-			'health', 'library science', 'wikipedia', 'law'
+			'medacine', 'labor', 'value', 'sports', 'advertising', 'body image', 'film', 'film critique', 
+			'film analysis', 'critique', 'literature', 'literary studies', 'literary critique',
+			'artificial intelligence', 'neurology', 'mathematics', 'metaphilosophy', 'climate science',
+			'philosophy of science', 'video games', 'game critique', 'video game critique', 'critique',
+			'games', 'ludology', 'game studies', 'hypothetical', 'hitler', 'story telling', 'health',
+			'library science', 'wikipedia', 'law', 'gun control', 'guns', 'weapons', 'violence',
+			'gardening', 'graffiti'
 		]
 	}).focus();
 	tags.createEvents();
