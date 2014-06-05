@@ -19,6 +19,7 @@ tags.init = function(){
 	tags.css( 'visibility', 'visible' );
 	$( '#splash-tags-input' ).tagit({
 		caseSensitive: false,
+		allowSpaces: true,
 		autocomplete: { delay: 0, minLength: 1 },
 		availableTags: [
 			'socialism', 'politics', 'economics', 'psychology', 'sociology', 'anarchism', 'capitalism',
