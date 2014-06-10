@@ -1,7 +1,7 @@
 What is dfiltr?
 ===============
 
-dfiltr is a social media platform created with the aim of breaking down filter bubbles using the same class of algorithm which is used to create them. By rewarding users for challenging the views of other users in constructive ways, we hope to open minds and generate productive dialectics.
+dfiltr is a discussion platform created with the aim of breaking down filter bubbles using the same class of algorithm which is used to create them. By rewarding users for challenging the views of other users in constructive ways, we hope to open minds and generate productive dialectics.
 
 Style Guide
 ===========
